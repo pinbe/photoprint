@@ -1,0 +1,101 @@
+<html xmlns="http://www.w3.org/1999/xhtml" metal:use-macro="here/main_template/macros/master">
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  </head>
+
+  <body>
+    <div metal:fill-slot="main_no_tabs" i18n:domain="photoprint">
+      <div tal:define="purl here/portal_url;
+                  mtool here/portal_membership;
+                  member mtool/getAuthenticatedMember;
+                 ">
+        <div tal:condition="python: not( mtool.checkPermission( 'Set own properties'
+                                                        , here ) )">
+          <span id="dummy_for_redirect" tal:define="aurl here/absolute_url;
+                      rurl string:${purl}/login_form?came_from=${aurl};
+                      response request/RESPONSE;
+                      redirect python:response.redirect( rurl )" />
+        </div>
+        <!-- not Set own properties -->
+        <div class="config">
+          <h1 i18n:translate="">Member Preferences</h1>
+          <span tal:condition="request/msg|nothing" tal:replace="request/msg" />
+          <p i18n:translate=""><span i18n:name="link"><a href="password_form" i18n:translate="">Click here</a></span> to change your password.</p>
+          <form action="personalize" method="post" tal:attributes="action string:${purl}/personalize">
+            <table class="TwoColumnForm" cellspacing="0">
+              <tr>
+                <th i18n:translate="">Given Name</th>
+                <td>
+                  <input type="text" name="given_name" tal:attributes="value member/given_name|nothing" />
+                </td>
+              </tr>
+              <tr>
+                <th i18n:translate="">Name</th>
+                <td>
+                  <input type="text" name="name" value="" tal:attributes="value member/name|nothing" />
+                </td>
+              </tr>
+              <tr>
+                <th i18n:translate="">Email address</th>
+                <td>
+                  <input type="text" name="email" value="" tal:attributes="value member/email|nothing" />
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" style="text-align:center">
+                  <h3 i18n:translate="">Billing informations</h3>
+                </td>
+              </tr>
+              <tr>
+                <th i18n:translate="">Address</th>
+                <td>
+                  <textarea name="billing_address" tal:content="member/billing_address"
+                            cols="30" rows="1" style="width:auto"></textarea>
+                </td>
+              </tr>
+              <tr>
+                <th i18n:translate="">City</th>
+                <td>
+                  <input type="text" name="billing_city" size="35" tal:attributes="value member/billing_city"/>
+                </td>
+              </tr>
+              <tr>
+                <th i18n:translate="">Zip code</th>
+                <td>
+                  <input type="text" name="billing_zipcode" size="5" tal:attributes="value member/billing_zipcode"/>
+                </td>
+              </tr>
+              <tr>
+                <th i18n:translate="">Country</th>
+                <td>
+                  <select name="country"
+                          tal:define="countries python:modules['Products.iso_3166_1'].fr.countries"
+                          i18n:domain="iso_3166_1">
+                    <option tal:repeat="c countries" tal:attributes="value python:c[0]; selected python:c[0]==member.country" tal:content="python:c[0]" i18n:translate=""></option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <th i18n:translate="">Phone</th>
+                <td>
+                  <input type="text" name="phone" tal:attributes="value member/phone"/>
+                </td>
+              </tr>
+              <tr>
+                <td><br /></td>
+                <td>
+                  <br />
+                  <input type="submit" value="Change" i18n:attributes="value" />
+                </td>
+              </tr>
+            </table>
+          </form>
+        </div>
+        <!-- class="Desktop" -->
+      </div>
+      <!-- tal:define="mtool" -->
+    </div>
+    <!-- metal:fill-slot="main" -->
+  </body>
+
+</html>

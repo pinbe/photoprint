@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:pp="http://luxia.fr/namespaces/pp/"
+    xmlns="http://purl.org/rss/1.0/">
+  <channel rdf:about="URL"
+      tal:define="channel_info options/channel_info"
+      tal:attributes="rdf:about channel_info/url">
+    <title tal:content="channel_info/title">TITLE</title>
+    <link tal:content="channel_info/url">URL</link>
+    <description
+        tal:content="channel_info/description">DESCRIPTION</description>
+    <image rdf:resource="logo.gif" />
+    <items>
+      <rdf:Seq>
+        <rdf:li resource="URL"
+            tal:repeat="item_info options/listItemInfos"
+            tal:attributes="resource item_info/url" />
+      </rdf:Seq>
+    </items>
+  </channel>
+  <item rdf:about="URL"
+      tal:repeat="item_info options/listItemInfos"
+      tal:attributes="rdf:about item_info/url">
+    <title tal:content="item_info/id">TITLE</title>
+    <link tal:content="string:${item_info/url}/photo_download">URL</link>
+    <pp:title tal:content="item_info/title">TITLE</pp:title>
+    <pp:description
+        tal:condition="item_info/description"
+        tal:content="item_info/description">DESCRIPTION</pp:description>
+    <pp:quantity tal:content="item_info/quantity">QUANTITY</pp:quantity>
+  </item>
+</rdf:RDF>

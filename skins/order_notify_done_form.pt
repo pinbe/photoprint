@@ -1,0 +1,30 @@
+<html metal:use-macro="here/main_template/macros/master">
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+  </head>
+  <body i18n:domain="photoprint">
+    <div metal:fill-slot="main_no_tabs"
+         tal:define="getToolByName python:modules['Products.CMFCore.utils'].getToolByName;
+                     wtool python:getToolByName(here, 'portal_workflow');
+                     review_state python: wtool.getInfoFor(here, 'review_state', wf_id='order_workflow')"
+         tal:omit-tag="">
+      <h2 i18n:translate="">Notify order "<span tal:replace="here/title_or_id" i18n:name="order_reference">Item</span>" done.</h2>
+    	<div i18n:translate="">
+    	  Notify that order has been made.
+    	</div>
+    
+      <form method="post" tal:attributes="action string:${here/absolute_url}/content_status_modify">
+        <p>
+          <span i18n:translate="" tal:omit-tag="">Current state:</span>
+          <span tal:content="review_state" i18n:translate="" tal:omit-tag="">state</span>
+        </p>
+        <h3 i18n:translate="">Comments</h3>
+        <textarea name="comment" cols="60" rows="5"></textarea>
+        <br/>
+        <input type="hidden" name="syncFragments:tokens" value="rightCell" />
+        <input type="hidden" name="workflow_action" value="notify_done" />
+        <input type="submit" value="Notify" i18n:attributes="value" />
+      </form>
+    </div>
+  </body>
+</html>

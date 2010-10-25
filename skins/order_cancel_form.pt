@@ -1,0 +1,66 @@
+<html metal:use-macro="here/main_template/macros/master">
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+  </head>
+  <body i18n:domain="photoprint">
+    <div metal:fill-slot="main_no_tabs"
+         tal:define="getToolByName python:modules['Products.CMFCore.utils'].getToolByName;
+                     wtool python:getToolByName(here, 'portal_workflow');
+                     review_state python: wtool.getInfoFor(here, 'review_state', wf_id='order_workflow')"
+         tal:omit-tag="">
+      <h2 i18n:translate="">Cancel order "<span tal:replace="here/title_or_id" i18n:name="order_reference">Item</span>"</h2>
+    	<div i18n:translate="">
+    	  Cancel the order and relist reserved copies.
+    	</div>
+    
+      <form method="post" tal:attributes="action string:${here/absolute_url}/content_status_modify">
+        <p>
+          <span i18n:translate="" tal:omit-tag="">Current state:</span>
+          <span tal:content="review_state" i18n:translate="" tal:omit-tag="">state</span>
+        </p>
+        <table class="TwoColumnForm">
+          <tr>
+            <th i18n:translate="mail_subject">Subject</th>
+            <td tal:define="_ python:modules['Products.photoprint.utils'].translate">
+              <input type="text" size="58"
+                name="subject"
+                tal:attributes="value python:_('[%s] order %s canceling notification', here) % (here.portal_photo_print.store_name, here.getId())"/>
+            </td>
+          </tr>
+          <tr>
+            <th i18n:translate="">Comments</th>
+            <td>
+              <textarea name="comment" cols="50" rows="8" i18n:translate=""
+               >Due to a lack of payment since <span
+                  tal:content="python:here.created().strftime(locale_date_fmt)"
+                  tal:omit-tag=""
+                  i18n:name="creation_date"/>, your order has been canceled.
+                
+                The <span tal:content="here/portal_photo_print/store_name|nothing"
+                          tal:omit-tag=""
+                          i18n:name="store_name"></span> team.
+              </textarea>
+            </td>
+          </tr>
+          <tr>
+            <th i18n:translate="">Send email</th>
+            <td>
+              <label tal:repeat="member python:mtool.getMembers(here.listCreators())">
+                <input type="checkbox" name="recipients:list" tal:attributes="value member/id" checked="checked" />
+                <span tal:replace="member/getMemberFullName">Membre full name</span>
+                &lt;<span tal:replace="member/email">member email</span>&gt;
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td><br/></td>
+            <td>
+              <input type="hidden" name="syncFragments:tokens" value="rightCell" />
+              <input type="hidden" name="workflow_action" value="cancel" />
+              <input type="submit" value="Cancel the order" i18n:attributes="value" />
+            </td>
+        </table>
+      </form>
+    </div>
+  </body>
+</html>

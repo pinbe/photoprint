@@ -1,0 +1,207 @@
+<html metal:use-macro="here/main_template/macros/master"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+  <head>
+    <title>titre</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    
+  </head>
+  <body i18n:domain="photoprint">
+    <div metal:fill-slot="main_no_tabs" tal:omit-tag="">
+      <div tal:condition="options/orderIsCart" tal:omit-tag="">
+        <div tal:define="step_authentication python:True;
+                         step_shipping python:True;
+                         step_payment python:True;
+                         step_confirmation python:options['wfstate'] != 'recorded'">
+          <div metal:use-macro="here/sell_macros/macros/sell_steps">
+            sell steps macro
+          </div>
+        </div>
+      </div>
+      <h1 i18n:translate="" style="margin-bottom:0">
+        Order Nb. <span tal:content="here/getId" tal:omit-tag="" i18n:name="order_number"/>
+      </h1>
+      <table cellpadding="5">
+        <tr>
+          <td colspan="50%">
+            <h2 i18n:translate="" style="margin:0">Billing</h2>
+            <table tal:define="billing here/billing" class="listing">
+              <tr class="odd">
+                <th i18n:translate="">Name</th>
+                <td tal:content="billing/name">billing name</td>
+              </tr>
+              <tr>
+                <th i18n:translate="">Address</th>
+                <td tal:content="billing/address">billin address</td>
+              </tr>
+              <tr>
+                <th i18n:translate="">City</th>
+                <td tal:content="billing/city">billing city</td>
+              </tr>
+              <tr>
+                <th i18n:translate="">Zip code</th>
+                <td tal:content="billing/zipcode">billing zip code</td>
+              </tr>
+              <tr>
+                <th i18n:translate="">Country</th>
+                <td tal:content="billing/country" i18n:domain="iso_3166_1" i18n:translate="">Country</td>
+              </tr>
+            </table>
+          </td>
+          <td>
+            <h2 i18n:translate="" style="margin:0">Shipping</h2>
+            <table tal:define="shipping here/shipping" class="listing">
+              <tr>
+                <th i18n:translate="">Name</th>
+                <td tal:content="shipping/name">shpping name</td>
+              </tr>
+              <tr>
+                <th i18n:translate="">Address</th>
+                <td tal:content="shipping/address">shpping address</td>
+              </tr>
+              <tr>
+                <th i18n:translate="">City</th>
+                <td tal:content="shipping/city">shipping city</td>
+              </tr>
+              <tr>
+                <th i18n:translate="">Zip code</th>
+                <td tal:content="shipping/zipcode">shipping zip code</td>
+              </tr>
+              <tr>
+                <th i18n:translate="">Country</th>
+                <td tal:content="shipping/country" i18n:domain="iso_3166_1" i18n:translate="">chipping country</td>
+              </tr>
+            </table>
+          </td>
+          <td>
+            <img tal:define="translate nocall:modules/Products/photoprint/utils/translate;
+                             tr python:lambda msg: translate(msg, here)"
+                 tal:attributes="src python:'%s/order_states/%s' % (portal_url, tr('%s-en.gif' % options['wfstate']))"
+                 style="float:right"/>
+          </td>
+          <td tal:condition="workflow_actions" class="boxes_container">
+            <h3 i18n:translate="">Processing</h3>
+            <ul>
+              <li tal:repeat="action workflow_actions">
+                <a tal:attributes="href action/url" tal:content="action/title" i18n:translate=""></a>
+              </li>
+            </ul>
+          </td>
+        </tr>
+      </table>
+      <table class="listing" cellspacing="0">
+        <col span="2"/>
+        <col span="4" style="text-align:right"/>
+        <tr>
+          <th i18n:translate="">Image</th>
+          <th i18n:translate="" style="width:30em">Printing format and type</th>
+          <th i18n:translate="">Quantity</th>
+          <th i18n:translate="">Unit price</th>
+          <th i18n:translate="">VAT (%)</th>
+          <th i18n:translate="">Amount<br/>(tax incl.)</th>
+        </tr>
+        <tr tal:repeat="i options/infos" tal:attributes="class python:repeat['i'].odd() and 'odd' or 'even'">
+          <td>
+            <img border="0" tal:condition="python:i.has_key('thumbUrl')"
+              tal:attributes="src i/thumbUrl;
+                              alt i/title;
+                              height i/thumbHeight;
+                              width  i/thumbWidth"/>
+            <em tal:condition="python:not i.has_key('thumbUrl')" i18n:translate="">image removed</em>
+          </td>
+          <td>
+            <div style="font-weight:bold" tal:content="i/title"></div>
+            <dl class="FieldHelp">
+             <dd tal:content="i/description"></dd>
+            </dl>
+          </td>
+          <td class="num" tal:content="python:i['quantity']">12</td>
+          <td class="num" tal:content="python:'%s €' % i['unit_price'].value"></td>
+          <td class="num" tal:content="python:i['unit_price'].vat"></td>
+          <td class="num" tal:content="python:'%s €' % i['total'].taxed" style="border-right:1px solid black"></td>
+        </tr>
+        <tbody class="total">
+          <tr>
+            <th colspan="2"></th>
+            <th class="num" tal:content="options/quantity"></th>
+            <th class="num">—</th>
+            <th class="num">—</th>
+            <th class="num" tal:content="python:'%s €' % options['pricesSum'].taxed"
+                style="border-right:1px solid black"></th>
+          </tr>
+          <tr>
+            <td class="num" colspan="5" i18n:translate="">Shipping</td>
+            <td class="num" tal:content="python:'%s €' % options['shippingFees'].taxed"></td>
+          </tr>
+          <tr>
+            <td class="num" colspan="5" i18n:translate="">VAT</td>
+            <td class="num" tal:content="python:'%s €' % options['total'].tax"></td>
+          </tr>
+          <tr>
+            <th class="num" colspan="5" i18n:translate="">Total amount to pay</th>
+            <td class="num" style="color:#f28c18"
+                tal:content="python:'%s €' % options['total'].taxed">montant total</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr tal:define="paymentRequest options/paymentRequest|nothing" tal:condition="paymentRequest">
+            <td><br/></td>
+            <td colspan="5">
+              <div style="text-align:right">
+                <form tal:attributes="action paymentRequest/URL" method="post" style="text-align:top">
+                  <input type="hidden" name="DATA" tal:attributes="value paymentRequest/DATA"/>
+                  <span i18n:translate="" style="font-size:110%;font-weight:bold;vertical-align:middle">Use one of these button to pay:</span>
+                  <span tal:repeat="mean paymentRequest/PAYMENT_MEANS">
+                    <input type="image" style="vertical-align:middle"
+                      tal:attributes="src python:'%s/cyberplus_logo/%s.gif' % (portal_url, mean);
+                                      name mean"/>    
+                  </span>
+                  <input type="hidden" name="noAjax" value="1"/>
+                </form>
+              </div>
+              <div>
+                <img tal:attributes="src string:$portal_url/cyberplus_logo/banque_populaire_logo.png"
+                     style="float:left;margin-right:1em"/>
+                <dl class="FieldHelp">
+                  <dd i18n:translate="">
+                    Please click over the button representing your credit card.
+                    You will leave temporarily this web site to pay your order
+                    on our bank partner payment site. After your payment, you
+                    will be able to come back to the store and get an invoice of
+                    your transaction.
+                  </dd>
+                  <dd i18n:translate="">
+                    This secured payment is provided by the Cyberplus™ payment
+                    service of "Banque Populaire".
+                  </dd>
+                </dl>
+              </div>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+      <br/>
+      <h3 i18n:translate="">Order processing history</h3>
+      <table cellspacing="0" class="listing"
+             tal:define="history options/wfhistory"
+             tal:condition="history">
+        <tr>
+          <th i18n:translate="">Date</th>
+          <th i18n:translate="">Actor</th>
+          <th i18n:translate="">Action</th>
+        </tr>
+        <div tal:repeat="item python:history[::-1]" tal:omit-tag="">
+	        <tr tal:define="oddrow repeat/item/odd" tal:attributes="class python:test(oddrow, 'even', 'odd')"
+	        		tal:condition="item/action">
+	        	<td tal:content="python:item['time'].strftime(locale_date_fmt)">time</td>
+	        	<td tal:condition="python:item['action'].startswith('auto_')">Cyberplus</td>
+	        	<td tal:condition="python:not item['action'].startswith('auto_')"
+	        	    tal:content="python:mtool.getMemberFullNameById(item['actor'], nameBefore=0)">actor</td>
+            <td tal:content="item/action" i18n:translate=""></td>
+          </tr>
+        </div>
+      </table>
+    </div>
+  </body>
+</html>

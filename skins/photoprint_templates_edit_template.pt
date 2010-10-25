@@ -1,0 +1,170 @@
+<html metal:use-macro="here/main_template/macros/master"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <metal:block metal:fill-slot="javascript_head_slot">
+      <script type="text/javascript" tal:attributes="src here/widget_form_manager.js/absolute_url"></script>
+    </metal:block>
+  </head>
+  <body i18n:domain="photoprint">
+    <div metal:fill-slot="main"
+         tal:define="pptool nocall:options/pptool;
+                     hasPO python:pptool.hasPrintingOptions(here);
+                     pourl options/pourl">
+      
+      <form tal:attributes="action string:${here/absolute_url}/photoprint_templates_edit_form">
+        <div tal:condition="not:hasPO">
+          <span i18n:translate="" tal:omit-tag="">
+            No printing options are defined at this level.
+          </span><br/>
+          <span tal:condition="pourl" tal:omit-tag="">
+            <span i18n:translate="" tal:omit-tag="">
+              The printing options that apply here are defined above:
+            </span><br/>
+            <a tal:attributes="href pourl" tal:content="pourl"></a><br/>
+          </span>
+          <input type="submit" name="createOptionsContainer"
+                 value="Define printing options" i18n:attributes="value" />
+        </div>
+      </form>
+      
+      <div id="print_order_templates_editing_area" style="padding-top:1em">
+        <form tal:attributes="action string:${here/absolute_url}/photoprint_templates_edit_form"
+              id="print_order_templates_edit_form"
+              tal:condition="hasPO">
+          <table id="print_order_templates_data_area" class="listing" cellspacing="0" style="width:auto">
+            <thead>
+              <tr>
+                <th><br/></th>
+                <th i18n:translate="">Title</th>
+                <th i18n:translate="">Reference</th>
+                <th i18n:translate="">Max. number of copies</th>
+                <th i18n:translate="">Price</th>
+                <th i18n:translate="">VAT (%)</th>
+                <th><br/></th>
+            </thead>
+            <tal:block tal:repeat="o python:pptool.getPrintOrderOptionsContainerFor(here).objectValues()">
+              <tal:block tal:define="classRowName python:repeat['o'].odd() and 'odd' or 'even'">
+                <tbody metal:define-macro="print_order_template_row">
+                  <tr tal:attributes="class classRowName">
+                    <td>
+                      <a tal:attributes="href string:${o/absolute_url}/delete_object" name="rm">
+                        <img tal:attributes="src string:${portal_url}/rm.png;
+                                             onmouseover string:this.src='${portal_url}/rm_over.png';
+                                             onmouseout string:this.src='${portal_url}/rm.png'"
+                                             width="11" height="11" border="0" />
+                      </a>
+                    </td>
+                    <td tal:content="o/title">title</td>
+                    <td tal:content="o/productReference">reference</td>
+                    <td tal:content="o/maxCopies"></td>
+                    <td tal:content="o/price/taxed">price</td>
+                    <td tal:content="o/price/vat">vat</td>
+                    <td rowspan="2">
+                      <a tal:attributes="href string:${o/absolute_url}/formWidgetData" name="edit">
+                        <img tal:attributes="src string:${portal_url}/pencil.png"
+                                             width="16" height="16" border="0" />
+                      </a>
+                    </td>
+                  </tr>
+                  <tr tal:attributes="class classRowName">
+                    <td colspan="2"><br /></td>
+                    <td colspan="4"><em tal:content="o/description">bla</em></td>
+                  </tr>
+                </tbody>
+              </tal:block>
+            </tal:block>
+          </table>
+          <a href="." title="Add print order template" name="add" i18n:attributes="title">
+            <img tal:attributes="src string:$portal_url/add.png"
+                 alt="Add print order template" width="11" height="11" border="0"
+                 style="margin-top:0.5em"
+                 i18n:attributes="alt"/>
+          </a>
+          <br/>
+        </form>
+      </div>
+      <form tal:attributes="action string:${here/absolute_url}/photoprint_templates_edit_form"
+            tal:condition="hasPO">
+        <input type="submit" name="deleteOptionContainer" style="margin-top:3em"
+               value="Delete options defined at this level" i18n:attributes="value"/>
+      </form>
+      
+      <!-- form widgets -->
+      <div class="hidden">
+        <div id="order_template_add_widget">
+          <table class="TwoColumnForm" metal:define-macro="order_template_form_widget">
+            <tr>
+              <th i18n:translate="">Title</th>
+              <td colspan="3">
+                <input type="text" name="title" size="30" />
+              </td>
+            </tr>
+            <tr>
+              <th i18n:translate="">Description</th>
+              <td colspan="3">
+                <textarea name="description" rows="5"></textarea>
+              </td>
+            </tr>
+            <tr>
+              <th i18n:translate="">Product reference</th>
+              <td colspan="3">
+                <input type="text" name="productReference" size="30" />
+              </td>
+            </tr>
+            <tr>
+              <th i18n:translate="">Max. number of copies</th>
+              <td>
+                <input type="text" name="maxCopies" size="3"/>
+                <dl class="FieldHelp">
+                  <dd i18n:translate="max_copies_field_help">The 0 value means unlimited</dd>
+                </dl>
+              </td>
+            </tr>
+            <tr>
+              <th i18n:translate="">Price</th>
+              <td>
+                <input type="text" name="price" size="3" />
+              </td>
+              <th i18n:translate="">VAT (%)</th>
+              <td>
+                <input type="text" name="VATRate" size="3"/>
+              </td>
+            </tr>
+            <tr>
+              <td><br /></td>
+              <td colspan="3">
+                <metal:block  metal:define-slot="buttons">
+                  <input type="submit" name="addTemplate" value="Add" i18n:attributes="value" style="float:left"/>
+                </metal:block>
+                <input type="submit" name="cancel" value="Cancel" i18n:attributes="value" style="float:right"/>
+              </td>
+          </table>
+        </div>
+
+        <div id="order_template_edit_widget">
+          <metal:block metal:use-macro="template/macros/order_template_form_widget">
+            <metal:block metal:fill-slot="buttons">
+              <input type="submit" name="edit" value="Save" i18n:attributes="value" style="float:left"/>
+              <input type="hidden" name="id" value=""/>
+            </metal:block>
+          </metal:block>
+        </div>
+      </div>
+      
+      <script type="text/javascript">
+      // <!--
+  		  new WidgetBasedFormManager( {'add'  : document.getElementById('order_template_add_widget')
+  		                              ,'edit' : document.getElementById('order_template_edit_widget')
+  		                              }
+                		  						, document.getElementById('print_order_templates_editing_area')
+                		  						, document.getElementById('print_order_templates_data_area')
+                								  , 7 // number of cols
+                		  						);
+      // -->
+      </script>
+    </div>
+  </body>
+</html>

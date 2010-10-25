@@ -1,0 +1,18 @@
+<configure xmlns="http://namespaces.zope.org/zope">
+  <permission
+    id="photoprint.AddPrintOrderTemplate"
+    title="Add print order template"
+    />
+  <permission
+    id="photoprint.AddPrintOrder"
+    title="Add print order"
+    />
+  <permission
+    id="photoprint.ListPrintOrders"
+    title="List print orders"
+    />
+	<permission
+		id="photoprint.ManagePrintOrders"
+		title="Manage print orders"
+		/>
+</configure>

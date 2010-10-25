@@ -1,0 +1,6 @@
+<tal:block
+  tal:define="o options/o;
+              classRowName options/classRowName;
+              portal_url options/portal_url">
+  <metal:block metal:use-macro="here/photoprint_templates_edit_template/macros/print_order_template_row"/>
+</tal:block>

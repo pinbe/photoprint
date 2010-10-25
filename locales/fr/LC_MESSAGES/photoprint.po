@@ -1,0 +1,574 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Plinn 2.0\n"
+"POT-Creation-Date: $Date: Mon Sep  7 17:56:32 2009 $\n"
+"PO-Revision-Date: 2009-09-07 17:58+0200\n"
+"Last-Translator:  Benoît PIN\n"
+"Language-Team: CRI http://cri.ensmp.fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language-Code: fr\n"
+"Language-Name: French\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: plinn\n"
+"X-Is-Fallback-For: fr-fr, fr-be fr-ca fr-lu fr-mc fr-ch\n"
+
+#. Default: ""
+#: price.py:72
+msgid "${i}.${d}"
+msgstr "${i},${d}"
+
+#: skins/confirm_join_template.pt:12
+msgid "You have been registered as a member."
+msgstr "Vous venez d'être enregistré en tant que membre."
+
+#: skins/confirm_join_template.pt:14
+msgid ""
+"You will receive an email shortly containing your password and instructions "
+"on how to activate your membership."
+msgstr ""
+"Vous recevrez sous peu un email comportant votre mot de passe avec des "
+"instructions pour activer votre compte."
+
+#: skins/confirm_join_template.pt:19
+msgid "Click the button to log in immediately."
+msgstr "Cliquez sur le bouton pour vous connecter immédiatement."
+
+#: skins/confirm_join_template.pt:26
+msgid "Log in"
+msgstr "Connexion"
+
+#: skins/customer_add_control.py:19
+msgid "Please enter a given name."
+msgstr "Veuillez entrer un prénom."
+
+#: skins/customer_add_control.py:20
+msgid "Please enter a name."
+msgstr "Veuillez entrer un nom."
+
+#: skins/customer_add_control.py:21
+msgid "Please enter an email."
+msgstr "Veuillez entrer un email."
+
+#: skins/customer_add_control.py:22
+msgid "Please enter a member id."
+msgstr "Veuillez entrer un login."
+
+#: skins/customer_add_control.py:23
+msgid "Please enter a billing address."
+msgstr "Veuillez entrer une addresse de facturation."
+
+#: skins/customer_add_control.py:24
+msgid "Please enter a city."
+msgstr "Veuillez entrer une ville."
+
+#: skins/customer_add_control.py:25
+msgid "Please enter zip code."
+msgstr "Veuillez entrer un code postal."
+
+#: skins/customer_add_control.py:26
+msgid "Please enter a country."
+msgstr "Veuillez entrer un pays."
+
+#: skins/customer_add_control.py:27
+msgid "Please enter a phone."
+msgstr "Veuillez entrer un numéro de téléphone."
+
+#: skins/customer_add_control.py:28
+msgid "Please accept general conditions of sales."
+msgstr "Veuillez accepter les conditions générales des ventes."
+
+#: skins/my_orders.py:17 skins/order_list.py:14
+#: skins/order_view_template.pt:190
+msgid "Date"
+msgstr "Date"
+
+#: skins/my_orders.py:21 skins/order_list.py:22
+#: skins/photoprint_templates_edit_template.pt:42
+msgid "Reference"
+msgstr "Référence"
+
+#: skins/my_orders.py:25 skins/order_list.py:26
+msgid "Prints"
+msgstr "Tirages"
+
+#: skins/my_orders.py:29 skins/order_list.py:30
+msgid "Amount"
+msgstr "Montant"
+
+#: skins/my_orders.py:33 skins/order_list.py:34
+msgid "State"
+msgstr "État"
+
+#: skins/my_orders.py:69
+msgid "My orders"
+msgstr "Mes commandes"
+
+#: skins/my_orders_template.pt:34 skins/order_cancel_form.pt:19
+#: skins/order_list_template.pt:33 skins/order_list_template.pt:35
+#: skins/order_list_template.pt:37 skins/order_list_template.pt:50
+#: skins/order_manual_payment_form.pt:19 skins/order_notify_done_form.pt:19
+#: skins/order_notify_sent_form.pt:19 skins/order_view_template.pt:87
+#: skins/order_view_template.pt:201
+msgid "${DYNAMIC_CONTENT}"
+msgstr ""
+
+#: skins/order_cancel_form.pt:11
+msgid "Cancel order \"${order_reference}\""
+msgstr "Annuler la commande « ${order_reference} »"
+
+#: skins/order_cancel_form.pt:12
+msgid "Cancel the order and relist reserved copies."
+msgstr "Annuler la commande et remettre en vente les exemplaires réservées."
+
+#: skins/order_cancel_form.pt:18 skins/order_manual_payment_form.pt:18
+#: skins/order_notify_done_form.pt:18 skins/order_notify_sent_form.pt:18
+msgid "Current state:"
+msgstr "État actuel :"
+
+#. Default: "Subject"
+#: skins/order_cancel_form.pt:23 skins/order_notify_sent_form.pt:24
+msgid "mail_subject"
+msgstr "Objet"
+
+#: skins/order_cancel_form.pt:31 skins/order_notify_done_form.pt:21
+#: skins/order_notify_sent_form.pt:32
+msgid "Comments"
+msgstr "Commentaires"
+
+#: skins/order_cancel_form.pt:39
+msgid ""
+"Due to a lack of payment since ${creation_date}, your order has been "
+"canceled. The ${store_name} team."
+msgstr ""
+"Suite à une absence de paiement depuis le ${creation_date}, votre commande a "
+"été annulée.\n"
+"\n"
+"L'équipe ${store_name}."
+
+#: skins/order_cancel_form.pt:46 skins/order_notify_sent_form.pt:59
+msgid "Send email"
+msgstr "Envoyer un email"
+
+#: skins/order_cancel_form.pt:60
+msgid "Cancel the order"
+msgstr "Annuler la commande"
+
+#: skins/order_list.py:18
+msgid "Customer"
+msgstr "Client"
+
+#: skins/order_list.py:46
+msgid "descending sort"
+msgstr "tri décroissant"
+
+#: skins/order_list.py:49
+msgid "ascending sort"
+msgstr "tri croissant"
+
+#: skins/order_list_template.pt:17 skins/order_view_template.pt:31
+#: skins/order_view_template.pt:56 skins/personalize_form.pt:33
+msgid "Name"
+msgstr "Nom"
+
+#: skins/order_manual_payment_form.pt:11
+msgid "Pay order \"${order_reference}\" manually."
+msgstr "Payer la commande « ${order_reference} » manuellement."
+
+#: skins/order_manual_payment_form.pt:12
+msgid "Pay manually"
+msgstr "Payer manuellement"
+
+#: skins/order_manual_payment_form.pt:21
+msgid "Payment description"
+msgstr "Description du paiement"
+
+#: skins/order_manual_payment_form.pt:24
+msgid "Please indicate payment mean and references"
+msgstr "Veuillez indiquer le moyen de paiement et les références."
+
+#: skins/order_manual_payment_form.pt:29
+msgid "Pay"
+msgstr "Payer"
+
+#: skins/order_notify_done_form.pt:11
+msgid "Notify order \"${order_reference}\" done."
+msgstr "Notifier la commande « ${order_reference} » effectuée."
+
+#: skins/order_notify_done_form.pt:12
+msgid "Notify that order has been made."
+msgstr "Notifier que cette commande vient d'être effectuée."
+
+#: skins/order_notify_done_form.pt:26 skins/order_notify_sent_form.pt:73
+msgid "Notify"
+msgstr "Notifier"
+
+#: skins/order_notify_sent_form.pt:11
+msgid "Notify order \"${order_reference}\" sent."
+msgstr "Notifier l'expédition de la commande « ${order_reference} »"
+
+#: skins/order_notify_sent_form.pt:12
+msgid "Notify that order has been sent."
+msgstr "Notifier que cette commande vient d'être expédiée."
+
+#: skins/order_notify_sent_form.pt:21
+msgid "Tracking info"
+msgstr "Informations de suivi"
+
+#: skins/order_notify_sent_form.pt:39
+msgid ""
+"Your order has been sent. You will receive your prints soon. You will be "
+"able to track your parcel with the informations below. The ${store_name} "
+"team thanks you for your confidence and wish you receipt you order."
+msgstr ""
+"Votre commande vient d'être expédiée, vous la recevrez prochainement. Vous "
+"pourrez suivre son acheminement à l'aide des informations ci-dessous.\n"
+"\n"
+"L'équipe ${store_name} vous remercie de votre confiance et vous souhaite "
+"bonne réception de votre commande."
+
+#: skins/order_notify_sent_form.pt:47
+msgid "Tracking number"
+msgstr "Numéro de suivi"
+
+#: skins/order_notify_sent_form.pt:53
+msgid "Tracking url"
+msgstr "url de suivi"
+
+#: skins/order_printing_list_template.pt:22 skins/order_view_template.pt:97
+msgid "Image"
+msgstr "Image"
+
+#: skins/order_printing_list_template.pt:23
+msgid "File"
+msgstr "Fichier"
+
+#: skins/order_printing_list_template.pt:24
+msgid "Format / type"
+msgstr "Format / type"
+
+#: skins/order_printing_list_template.pt:25 skins/order_view_template.pt:99
+msgid "Quantity"
+msgstr "Quantité"
+
+#: skins/order_view_template.pt:100
+msgid "Unit price"
+msgstr "Prix unitaire"
+
+#: skins/order_view_template.pt:101
+#: skins/photoprint_templates_edit_template.pt:45
+#: skins/photoprint_templates_edit_template.pt:131
+msgid "VAT (%)"
+msgstr "TVA (%)"
+
+#: skins/order_view_template.pt:102
+msgid "Amount<br />(tax incl.)"
+msgstr "Montant (TTC)"
+
+#: skins/order_view_template.pt:111
+msgid "image removed"
+msgstr "image supprimée"
+
+#: skins/order_view_template.pt:138
+msgid "VAT"
+msgstr "TVA"
+
+#: skins/order_view_template.pt:142
+msgid "Total amount to pay"
+msgstr "Montant total à payer"
+
+#: skins/order_view_template.pt:154
+msgid "Use one of these button to pay:"
+msgstr "Utilisez un de ces bouton pour payer :"
+
+#: skins/order_view_template.pt:167
+msgid ""
+"Please click over the button representing your credit card. You will leave "
+"temporarily this web site to pay your order on our bank partner payment "
+"site. After your payment, you will be able to come back to the store and get "
+"an invoice of your transaction."
+msgstr ""
+"Veuillez cliquer sur le bouton correspondant à votre carte banquaire. Vous "
+"allez quitter monmentanément ce site pour payer sur le site de notre banque "
+"partenaire. Après votre paiement, vous pourrez revenir à la boutique et "
+"obtenir une facture de votre transaction."
+
+#: skins/order_view_template.pt:174
+msgid ""
+"This secured payment is provided by the Cyberplus™ payment service of "
+"\"Banque Populaire\"."
+msgstr ""
+"Le paiement sécurisé est assuré par le service Cyberplus™ de la « Banque "
+"Populaire »."
+
+#: skins/order_view_template.pt:185
+msgid "Order processing history"
+msgstr "Historique du traitement de la commande"
+
+#: skins/order_view_template.pt:191
+msgid "Actor"
+msgstr "Acteur"
+
+#: skins/order_view_template.pt:192
+msgid "Action"
+msgstr "Action"
+
+#: skins/order_view_template.pt:23
+msgid "Order Nb. ${order_number}"
+msgstr "Commande N° ${order_number}"
+
+#: skins/order_view_template.pt:28
+msgid "Billing"
+msgstr "Facturation"
+
+#: skins/order_view_template.pt:35 skins/order_view_template.pt:60
+#: skins/personalize_form.pt:50
+msgid "Address"
+msgstr "Adresse"
+
+#: skins/order_view_template.pt:39 skins/order_view_template.pt:64
+#: skins/personalize_form.pt:57
+msgid "City"
+msgstr "Ville"
+
+#: skins/order_view_template.pt:43 skins/order_view_template.pt:68
+#: skins/personalize_form.pt:63
+msgid "Zip code"
+msgstr "Code postal"
+
+#: skins/order_view_template.pt:47 skins/order_view_template.pt:72
+#: skins/personalize_form.pt:69
+msgid "Country"
+msgstr "Pays"
+
+#: skins/order_view_template.pt:53 skins/order_view_template.pt:134
+msgid "Shipping"
+msgstr "Livraison"
+
+#: skins/order_view_template.pt:84
+msgid "Processing"
+msgstr "Traitement"
+
+#: skins/order_view_template.pt:98
+msgid "Printing format and type"
+msgstr "Format d'impression et type de support"
+
+#: skins/personalize_form.pt:21
+msgid "Member Preferences"
+msgstr "Préférences utilisateur"
+
+#: skins/personalize_form.pt:23
+msgid "${link} to change your password."
+msgstr "${link} pour changer votre mot de passe."
+
+#: skins/personalize_form.pt:23
+msgid "Click here"
+msgstr "Cliquer ici"
+
+#: skins/personalize_form.pt:27
+msgid "Given Name"
+msgstr "Prénom"
+
+#: skins/personalize_form.pt:39
+msgid "Email address"
+msgstr "Adresse e-mail"
+
+#: skins/personalize_form.pt:46
+msgid "Billing informations"
+msgstr "Informations de facturation"
+
+#: skins/personalize_form.pt:79
+msgid "Phone"
+msgstr "Téléphone"
+
+#: skins/personalize_form.pt:88
+msgid "Change"
+msgstr "Modifier"
+
+#: skins/photoprint_templates_edit_form.py:56
+msgid "Printing options added."
+msgstr "Options d'impression ajoutées."
+
+#: skins/photoprint_templates_edit_form.py:60
+msgid "Printing options deleted."
+msgstr "Options d'impression supprimées."
+
+#: skins/photoprint_templates_edit_template.pt:106
+msgid "Description"
+msgstr "Description"
+
+#: skins/photoprint_templates_edit_template.pt:112
+msgid "Product reference"
+msgstr "Référence produit"
+
+#. Default: "The 0 value means unlimited"
+#: skins/photoprint_templates_edit_template.pt:122
+msgid "max_copies_field_help"
+msgstr "La valeur 0 signifie illimité"
+
+#: skins/photoprint_templates_edit_template.pt:140
+msgid "Add"
+msgstr "Ajouter"
+
+#: skins/photoprint_templates_edit_template.pt:142
+msgid "Cancel"
+msgstr "Annuler"
+
+#: skins/photoprint_templates_edit_template.pt:150
+msgid "Save"
+msgstr "Enregistrer"
+
+#: skins/photoprint_templates_edit_template.pt:19
+msgid "No printing options are defined at this level."
+msgstr "Aucune option d'impression définie à ce niveau."
+
+#: skins/photoprint_templates_edit_template.pt:23
+msgid "The printing options that apply here are defined above:"
+msgstr ""
+"Les options d'impressions qui s'appliquent ici sont définies plus haut :"
+
+#: skins/photoprint_templates_edit_template.pt:28
+msgid "Define printing options"
+msgstr "Définir des options d'impression"
+
+#: skins/photoprint_templates_edit_template.pt:41
+#: skins/photoprint_templates_edit_template.pt:100
+msgid "Title"
+msgstr "Titre"
+
+#: skins/photoprint_templates_edit_template.pt:43
+#: skins/photoprint_templates_edit_template.pt:118
+msgid "Max. number of copies"
+msgstr "Nombre maxi d'exemplaires"
+
+#: skins/photoprint_templates_edit_template.pt:44
+#: skins/photoprint_templates_edit_template.pt:127
+msgid "Price"
+msgstr "Prix"
+
+#: skins/photoprint_templates_edit_template.pt:80
+#: skins/photoprint_templates_edit_template.pt:81
+msgid "Add print order template"
+msgstr "Ajouter un modèle d'ordre d'impression"
+
+#: skins/photoprint_templates_edit_template.pt:91
+msgid "Delete options defined at this level"
+msgstr "Supprimer les options définies à ce niveau"
+
+#: tool.py:109
+msgid "No printing options found at %r"
+msgstr "Aucune option d'impression trouvée sur %r"
+
+#: tool.py:193
+msgid "You must enter a title."
+msgstr "Vous devez saisir un titre."
+
+#: tool.py:197
+msgid ""
+"You must enter an integer number\n"
+"for the maximum number of copies."
+msgstr ""
+"Vous devez saisir un nombre entier\n"
+"pour le nombre maxi de copies."
+
+#: tool.py:199
+msgid ""
+"You must enter a positive value\n"
+"for the maximum number of copies."
+msgstr ""
+"Vous devez saisir une valeur positive\n"
+"pour le nombre maxi de copies."
+
+#: tool.py:203
+msgid "You must enter a numeric value for the price."
+msgstr "Vous devez saisir une valeur numérique pour le prix."
+
+#: tool.py:208
+msgid "You must enter a numeric value for the VAT rate."
+msgstr "Vous devez saisir une valeur numérique pour la TVA (pourcentage)."
+
+msgid "Your payment is complete."
+msgstr "Votre paiement a été accepté."
+
+msgid "Your payment has been canceled. You will be able to pay later."
+msgstr "Votre paiement a été annulé. Vous pourrez payer plus tard."
+
+msgid "Your payment has been refused."
+msgstr "Votre paiement a été refusé."
+
+msgid "recorded-en.gif"
+msgstr "recorded-fr.gif"
+
+msgid "done-en.gif"
+msgstr "done-fr.gif"
+
+msgid "paid-en.gif"
+msgstr "paid-fr.gif"
+
+msgid "refused-en.gif"
+msgstr "refused-fr.gif"
+
+msgid "sent-en.gif"
+msgstr "sent-fr.gif"
+
+msgid "canceled-en.gif"
+msgstr "canceled-fr.gif"
+
+msgid "auto_accept_payment"
+msgstr "Paiement accepté"
+
+msgid "auto_cancel_order"
+msgstr "Paiement annulé"
+
+msgid "auto_refuse_payment"
+msgstr "Paiement refusé"
+
+msgid "auto_transaction_failed"
+msgstr "Transaction échouée"
+
+msgid "manual_payment"
+msgstr "Paiement manuel"
+
+msgid "notify_done"
+msgstr "Commande effectuée"
+
+msgid "notify_sent"
+msgstr "Commande expédiée"
+
+msgid "canceled"
+msgstr "annulée"
+
+msgid "done"
+msgstr "effectuée"
+
+msgid "paid"
+msgstr "payée"
+
+msgid "recorded"
+msgstr "enregistrée"
+
+msgid "refused"
+msgstr "refusée"
+
+msgid "sent"
+msgstr "expédiée"
+
+msgid "Manual payment"
+msgstr "Paiement manuel"
+
+msgid "Notify done"
+msgstr "Notifier comme fait"
+
+msgid "Notify sent"
+msgstr "Notifier l'expédition"
+
+msgid "Printing list"
+msgstr "Liste d'impression"
+
+msgid "[%s] order %s canceling notification"
+msgstr "[%s] annulation de la commande %s"
+
+msgid "[%s] order %s sending notification"
+msgstr "[%s] expédition de la commande %s"

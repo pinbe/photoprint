@@ -1,0 +1,56 @@
+<html metal:use-macro="here/main_template/macros/master"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+  <head>
+    <title>Order listing</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    
+  </head>
+  <body i18n:domain="photoprint">
+    <div metal:fill-slot="main" tal:omit-tag=""
+         tal:define="folders options/folders;
+                     orders options/orders;
+                     columns options/columns">
+      <table class="listing" cellspacing="0" tal:condition="folders">
+        <tr>
+          <th i18n:translate="">Name</th>
+        </tr>
+        <tr tal:repeat="folder folders" tal:attributes="class python:repeat['folder'].odd() and 'odd' or 'even'">
+          <td>
+            <a tal:content="folder/title_or_id" tal:attributes="href folder/absolute_url"></a>
+          </td>
+        </tr>
+      </table>
+      <div tal:condition="orders" tal:omit-tag="">
+        <div tal:define="batch orders" tal:omit-tag="">
+          <span metal:use-macro="here/batch_macros/macros/navigation">batch navigation</span>
+        </div>
+        <table class="listing" cellspacing="0">
+          <thead id="FolderListingHeader">
+    				<tr>
+    					<th tal:attributes="width column_info/width; colspan column_info/colspan" tal:repeat="column_info columns" nowrap="nowrap" >
+    						<a href="." tal:attributes="href column_info/url" tal:content="column_info/title" i18n:translate="">Type</a>
+    						<span  tal:repeat="img column_info/images" tal:omit-tag="">
+    							<a tal:omit-tag="python:not img.has_key('href')"
+    								 tal:attributes="href img/href|nothing ; title img/alt" i18n:attributes="title"
+    								 ><img tal:attributes="src img/src ; alt img/alt ; id img/id|nothing" border="0" i18n:attributes="alt" /></a>
+    						</span>
+    					</th>
+    				</tr>
+    			</thead>
+          <tr tal:repeat="order orders" tal:attributes="class python:repeat['order'].odd() and 'odd' or 'even'">
+            <td tal:content="python:order['created'].strftime(locale_date_fmt)">date</td>
+            <td tal:content="order/customer">customer</td>
+            <td>
+              <a tal:content="order/reference" tal:attributes="href order/url">reference</a>
+            </td>
+            <td tal:content="order/quantity">quantity</td>
+            <td tal:content="order/price/taxed">price</td>
+            <td tal:content="order/state" i18n:translate="">state</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

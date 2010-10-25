@@ -1,0 +1,131 @@
+<html metal:use-macro="context/main_template/macros/master">
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+  </head>
+  <body metal:fill-slot="main_no_tabs" i18n:domain="realis"
+        tal:omit-tag="">
+    <div tal:condition="python:options.get('came_from', '').endswith('/my_cart')"
+         tal:define="step_authentication python:True" tal:omit-tag="">
+      <div metal:use-macro="here/sell_macros/macros/sell_steps"></div>
+    </div>
+    <h1 i18n:translate="">New customer account</h1>
+    
+    <form tal:attributes="action string:portal_url/customer_join_form" method="post">
+      <table class="TwoColumnForm">
+        <tr>
+          <td colspan="2" style="text-align:center">
+            <h3 i18n:translate="">Customer informations</h3>
+          </td>
+        </tr>
+        <tr>
+          <th i18n:translate="">First name</th>
+          <td>
+            <input type="text" name="given_name" size="30" value="" tal:attributes="value options/given_name" />
+          </td>
+        </tr>
+        <tr>
+          <th i18n:translate="">Last name</th>
+          <td>
+            <input type="text" name="name" size="30" value="" tal:attributes="value options/name" />
+          </td>
+        </tr>
+        <tr>
+          <th i18n:translate="">Email Address</th>
+          <td>
+            <input type="text" name="member_email" size="30"
+                   tal:attributes="value options/member_email" />
+          </td>
+        </tr>
+        <tr>
+         <th i18n:translate="">Member ID</th>
+         <td>
+          <input type="text" name="member_id" size="30" value=""
+                 tal:attributes="value options/member_id" />
+         </td>
+        </tr>
+        <tal:case tal:condition="not: options/validate_email">
+          <tr>
+            <th i18n:translate="">Password</th>
+            <td>
+              <input type="password" name="password" size="30" tal:attributes="value options/password" />
+            </td>
+          </tr>
+          <tr>
+            <th i18n:translate="">Password (confirm)</th>
+            <td>
+              <input type="password" name="confirm" size="30" tal:attributes="value options/confirm" />
+            </td>
+          </tr>
+          <tr>
+            <th i18n:translate="">Mail Password?</th>
+            <td>
+              <input type="checkbox" name="send_password" id="cb_send_password"
+                     tal:attributes="checked options/send_password" />
+              <em><label for="cb_send_password" i18n:translate="">Check this box to
+                have the password mailed.</label></em>
+            </td>
+          </tr>
+        </tal:case>
+        <tr>
+          <td colspan="2"><hr/></td>
+        </tr>
+        <tr>
+          <td colspan="2" style="text-align:center">
+            <h3 i18n:translate="">Billing informations</h3>
+          </td>
+        </tr>
+        <tr>
+          <th i18n:translate="">Address</th>
+          <td>
+            <textarea name="billing_address" tal:content="options/billing_address"
+                      cols="30" rows="1" style="width:auto"></textarea>
+          </td>
+        </tr>
+        <tr>
+          <th i18n:translate="">City</th>
+          <td>
+            <input type="text" name="billing_city" size="35" tal:attributes="value options/billing_city"/>
+          </td>
+        </tr>
+        <tr>
+          <th i18n:translate="">Zip code</th>
+          <td>
+            <input type="text" name="billing_zipcode" size="5" tal:attributes="value options/billing_zipcode"/>
+          </td>
+        </tr>
+        <tr>
+          <th i18n:translate="">Country</th>
+          <td>
+            <select name="country"
+                    tal:define="countries python:modules['Products.iso_3166_1'].fr.countries"
+                    i18n:domain="iso_3166_1">
+              <option tal:repeat="c countries" tal:attributes="value python:c[0]; selected python:c[0]==options['country']" tal:content="python:c[0]" i18n:translate=""></option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th i18n:translate="">Phone</th>
+          <td>
+            <input type="text" name="phone" tal:attributes="value options/phone"/>
+          </td>
+        </tr>
+        <tr>
+          <th><br/></th>
+          <td>
+            <input type="checkbox" name="accept_gcs" tal:attributes="checked python:options['accept_gcs']" />
+            <a tal:attributes="href string:$portal_url/cgv" target="_blank" i18n:translate="">I accept general conditions of sales</a>
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td>
+            <input type="hidden" name="noAjax" value="1"/>
+            <input type="hidden" name="came_from" tal:condition="options/came_from" tal:attributes="value options/came_from" />
+            <input type="submit" name="add" value="Register" i18n:attributes="value"/>
+            <input type="submit" name="cancle" value="Cancel" i18n:attributes="value" style="margin-left:15em"/>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </body>
+</html>

@@ -1,0 +1,40 @@
+<html metal:use-macro="here/main_template/macros/master"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+  <head>
+    <title>Order listing</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    
+  </head>
+  <body i18n:domain="photoprint">
+    <div metal:fill-slot="main_no_tabs" tal:omit-tag=""
+         tal:define="orders options/orders;
+                     columns options/columns">
+      <div tal:condition="orders" tal:omit-tag="">
+        <div tal:define="batch orders" tal:omit-tag="">
+          <span metal:use-macro="here/batch_macros/macros/navigation">batch navigation</span>
+        </div>
+        <table class="listing" cellspacing="0">
+          <thead id="FolderListingHeader">
+    				<tr>
+    					<th tal:attributes="width column_info/width; colspan column_info/colspan"
+    					    tal:repeat="column_info columns" nowrap="nowrap">
+    					  <span tal:replace="column_info/title">title</span>
+    					</th>
+    				</tr>
+    			</thead>
+          <tr tal:repeat="order orders" tal:attributes="class python:repeat['order'].odd() and 'odd' or 'even'">
+            <td tal:content="python:order['created'].strftime(locale_date_fmt)"></td>
+            <td>
+              <a tal:content="order/reference" tal:attributes="href order/url"></a>
+            </td>
+            <td tal:content="order/quantity"></td>
+            <td tal:content="order/price/taxed"></td>
+            <td tal:content="order/state" i18n:translate=""></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

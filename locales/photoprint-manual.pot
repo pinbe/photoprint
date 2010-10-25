@@ -1,0 +1,85 @@
+# from photoprint-manual.pot
+
+msgid "Your payment is complete."
+msgstr ""
+
+msgid "Your payment has been canceled. You will be able to pay later."
+msgstr ""
+
+msgid "Your payment has been refused."
+msgstr ""
+
+msgid "recorded-en.gif"
+msgstr ""
+
+msgid "done-en.gif"
+msgstr ""
+
+msgid "paid-en.gif"
+msgstr ""
+
+msgid "refused-en.gif"
+msgstr ""
+
+msgid "sent-en.gif"
+msgstr ""
+
+msgid "canceled-en.gif"
+msgstr ""
+
+msgid "auto_accept_payment"
+msgstr ""
+
+msgid "auto_cancel_order"
+msgstr ""
+
+msgid "auto_refuse_payment"
+msgstr ""
+
+msgid "auto_transaction_failed"
+msgstr ""
+
+msgid "manual_payment"
+msgstr ""
+
+msgid "notify_done"
+msgstr ""
+
+msgid "notify_sent"
+msgstr ""
+
+msgid "canceled"
+msgstr ""
+
+msgid "done"
+msgstr ""
+
+msgid "paid"
+msgstr ""
+
+msgid "recorded"
+msgstr ""
+
+msgid "refused"
+msgstr ""
+
+msgid "sent"
+msgstr ""
+
+msgid "Manual payment"
+msgstr ""
+
+msgid "Notify done"
+msgstr ""
+
+msgid "Notify sent"
+msgstr ""
+
+msgid "Printing list"
+msgstr ""
+
+msgid "[%s] order %s canceling notification"
+msgstr ""
+
+msgid "[%s] order %s sending notification"
+msgstr ""

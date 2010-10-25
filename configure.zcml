@@ -1,0 +1,37 @@
+<!--
+$Id: configure.zcml 650 2009-02-04 14:28:17Z pin $
+$URL: http://svn.luxia.fr/svn/labo/projects/zope/photoprint/trunk/configure.zcml $
+-->
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:meta="http://namespaces.zope.org/meta"
+    xmlns:cmf="http://namespaces.zope.org/cmf"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:i18n="http://namespaces.zope.org/i18n">
+
+  <include file="permissions.zcml"/>
+  <cmf:registerDirectory directory="skins" name="photoprint" recursive="True"/>
+  <i18n:registerTranslations directory="locales"/>
+
+  <five:registerClass
+      class=".order.PrintOrderTemplate"
+      meta_type="Print order template"
+      permission="photoprint.AddPrintOrderTemplate"
+      />
+  <utility
+      component=".order.PrintOrderTemplateFactory"
+      name="photoprint.order_template"
+      />
+  
+  <meta:redefinePermission from="zope2.Public" to="zope.Public" />
+  <five:registerClass
+      class=".order.PrintOrder"
+      meta_type="Print order"
+      permission="photoprint.AddPrintOrder"
+      />
+
+  <utility
+      component=".order.PrintOrderFactory"
+      name="photoprint.order"
+      />
+</configure>

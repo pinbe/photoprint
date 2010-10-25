@@ -1,0 +1,31 @@
+<html metal:use-macro="here/main_template/macros/master"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+  <head>
+    <title>titre</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    
+  </head>
+  <body i18n:domain="photoprint">
+    <div metal:fill-slot="main_no_tabs" tal:omit-tag="">
+    	<p i18n:translate="">You have been registered as a member.</p>
+
+    	<p tal:condition="options/validate_email" i18n:translate="">You will receive
+    	  an email shortly containing your password and instructions on how to
+    	  activate your membership.</p>
+
+    	<tal:case tal:condition="not: options/validate_email">
+    		<p i18n:translate="">Click the button to log in immediately.</p>
+    		<form tal:attributes="action options/form_action">
+    			<input type="hidden" name="__ac_name"  value=""
+    			       tal:attributes="value options/member_id" />
+    			<input type="hidden" name="__ac_password" value=""
+    			       tal:attributes="value options/password" />
+    			<input type="hidden" name="noAjax" value="1" />
+    			<input type="submit" name="login" value="Log in" i18n:attributes="value"/>
+    		</form>
+    	</tal:case>
+    </div>
+  </body>
+</html>
