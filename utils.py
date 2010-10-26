@@ -17,7 +17,7 @@ $URL: http://svn.luxia.fr/svn/labo/projects/zope/photoprint/trunk/utils.py $
 
 from AccessControl import ModuleSecurityInfo
 # TODO: trouver une solution…
-#from Products.PageTemplates.GlobalTranslationService import getGlobalTranslationService
+from zope.i18n import translate as i18ntranslate
 from zope.i18nmessageid import MessageFactory
 
 security = ModuleSecurityInfo('Products.photoprint.utils')
@@ -32,8 +32,7 @@ def translate(message, context):
 			message = message[0]
 		except (TypeError, IndexError):
 			pass
-	return message
-	return GTS.translate('photoprint', message, context=context)
+	return i18ntranslate(message, domain='photoprint', context=context.REQUEST)
 
 security.declarePublic('Message')
 Message = _ = MessageFactory('photoprint')
