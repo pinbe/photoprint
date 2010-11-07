@@ -1,6 +1,6 @@
 <!--
-$Id: configure.zcml 650 2009-02-04 14:28:17Z pin $
-$URL: http://svn.luxia.fr/svn/labo/projects/zope/photoprint/trunk/configure.zcml $
+
+
 -->
 <configure
     xmlns="http://namespaces.zope.org/zope"

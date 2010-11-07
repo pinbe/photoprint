@@ -11,8 +11,8 @@
 """
 Print order classes
 
-$Id: order.py 1357 2009-09-07 16:06:05Z pin $
-$URL: http://svn.luxia.fr/svn/labo/projects/zope/photoprint/trunk/order.py $
+
+
 """
 
 from Globals import InitializeClass, PersistentMapping, Persistent

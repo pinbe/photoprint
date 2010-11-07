@@ -1,7 +1,7 @@
 """ photoprint exceptions
 
-$Id: exceptions.py 805 2009-03-19 23:59:45Z pin $
-$URL: http://svn.luxia.fr/svn/labo/projects/zope/photoprint/trunk/exceptions.py $
+
+
 """
 from AccessControl import ModuleSecurityInfo
 

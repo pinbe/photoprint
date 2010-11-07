@@ -11,8 +11,8 @@
 """
 Photo print tool. Used to link photo to print orders.
 
-$Id: tool.py 1157 2009-06-13 07:14:39Z pin $
-$URL: http://svn.luxia.fr/svn/labo/projects/zope/photoprint/trunk/tool.py $
+
+
 """
 
 from AccessControl import ClassSecurityInfo

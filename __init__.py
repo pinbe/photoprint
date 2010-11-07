@@ -11,8 +11,8 @@
 """
 Photo print product. Used to order photo prints.
 
-$Id: __init__.py 1100 2009-06-01 21:48:59Z pin $
-$URL: http://svn.luxia.fr/svn/labo/projects/zope/photoprint/trunk/__init__.py $
+
+
 """
 from Products.CMFCore import utils as cmfutils
 import tool

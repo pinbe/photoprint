@@ -11,8 +11,8 @@
 """
 Global utilities
 
-$Id: utils.py 651 2009-02-04 15:38:20Z pin $
-$URL: http://svn.luxia.fr/svn/labo/projects/zope/photoprint/trunk/utils.py $
+
+
 """
 
 from AccessControl import ModuleSecurityInfo

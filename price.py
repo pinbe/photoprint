@@ -11,8 +11,8 @@
 """
 Pricing types
 
-$Id: price.py 834 2009-03-28 15:11:54Z pin $
-$URL: http://svn.luxia.fr/svn/labo/projects/zope/photoprint/trunk/price.py $
+
+
 """
 
 from Globals import Persistent

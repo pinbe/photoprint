@@ -11,8 +11,8 @@
 """
 Printable objects interfaces
 
-$Id: interfaces.py 707 2009-02-26 15:25:49Z pin $
-$URL: http://svn.luxia.fr/svn/labo/projects/zope/photoprint/trunk/interfaces.py $
+
+
 """
 
 from zope.interface import Interface, Attribute

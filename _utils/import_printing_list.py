@@ -10,8 +10,8 @@
 Downloads RSS based order description and make a local human readable file tree
 to facilitate printing tasks.
 
-$Id: import_printing_list.py 1153 2009-06-12 14:07:29Z pin $
-$URL: http://svn.luxia.fr/svn/labo/projects/zope/photoprint/trunk/_utils/import_printing_list.py $
+
+
 """
 
 

@@ -11,8 +11,8 @@
 """
 photoprint specific permissions
 
-$Id: permissions.py 1121 2009-06-08 15:41:55Z pin $
-$URL: http://svn.luxia.fr/svn/labo/projects/zope/photoprint/trunk/permissions.py $
+
+
 """
 
 from AccessControl import ModuleSecurityInfo
