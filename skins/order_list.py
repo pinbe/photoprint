@@ -89,7 +89,7 @@ def beforeGetItem(item) :
 		info['customer'] = item.Creator()
 	return info
 	
-orders = Batch(orders, 40, b_start, orphan=0, quantumleap=1, before_getitem=beforeGetItem)
+orders = Batch(orders, context.default_batch_size, b_start, orphan=0, quantumleap=1, before_getitem=beforeGetItem)
 options['orders'] = orders
 
 return context.order_list_template(**options)

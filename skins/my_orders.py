@@ -57,7 +57,7 @@ def beforeGetItem(item) :
 	info['state'] = wtool.getInfoFor(item, 'review_state', wf_id='order_workflow')
 	return info
 	
-orders = Batch(orders, 20, b_start, orphan=0, quantumleap=1, before_getitem=beforeGetItem)
+orders = Batch(orders, context.default_batch_size, b_start, orphan=0, quantumleap=1, before_getitem=beforeGetItem)
 options['orders'] = orders
 
 breadcrumbs = [
