@@ -19,7 +19,7 @@ from Globals import Persistent
 from AccessControl import ModuleSecurityInfo
 from utils import Message as _
 from utils import translate
-from Products.globalrequest import getRequest
+from zope.globalrequest import getRequest
 
 msecurity = ModuleSecurityInfo('Products.photoprint.price')
 msecurity.declarePublic('Price')
