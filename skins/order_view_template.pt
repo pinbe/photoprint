@@ -145,10 +145,10 @@
           </tr>
         </tbody>
         <tfoot>
-          <tr tal:define="paymentRequest options/paymentRequest|nothing" tal:condition="paymentRequest">
+          <tr tal:define="checkout options/checkout|nothing" tal:condition="checkout">
             <td><br/></td>
             <td colspan="5">
-              <div style="text-align:right">
+              <!-- <div style="text-align:right">
                 <form tal:attributes="action paymentRequest/URL" method="post" style="text-align:top">
                   <input type="hidden" name="DATA" tal:attributes="value paymentRequest/DATA"/>
                   <span i18n:translate="" style="font-size:110%;font-weight:bold;vertical-align:middle">Use one of these button to pay:</span>
@@ -159,7 +159,7 @@
                   </span>
                   <input type="hidden" name="noAjax" value="1"/>
                 </form>
-              </div>
+              </div> -->
               <div>
                 <img tal:attributes="src string:$portal_url/cyberplus_logo/banque_populaire_logo.png"
                      style="float:left;margin-right:1em"/>

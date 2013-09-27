@@ -20,8 +20,7 @@ options['wfhistory'] = wtool.getInfoFor(context, 'review_history', 'order_workfl
 toBePaid = wfstate == 'recorded'
 
 if toBePaid :
-	paymentRequest = context.getPaymentRequest()
-	options['paymentRequest'] = paymentRequest
+    options['checkout'] = context.ppSetExpressCheckout()
 
 if cart.locked and \
 	cart.pendingOrderPath == context.getPhysicalPath() :
