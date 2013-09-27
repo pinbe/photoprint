@@ -148,35 +148,27 @@
           <tr tal:define="checkout options/checkout|nothing" tal:condition="checkout">
             <td><br/></td>
             <td colspan="5">
-              <!-- <div style="text-align:right">
-                <form tal:attributes="action paymentRequest/URL" method="post" style="text-align:top">
-                  <input type="hidden" name="DATA" tal:attributes="value paymentRequest/DATA"/>
-                  <span i18n:translate="" style="font-size:110%;font-weight:bold;vertical-align:middle">Use one of these button to pay:</span>
-                  <span tal:repeat="mean paymentRequest/PAYMENT_MEANS">
-                    <input type="image" style="vertical-align:middle"
-                      tal:attributes="src python:'%s/cyberplus_logo/%s.gif' % (portal_url, mean);
-                                      name mean"/>    
-                  </span>
-                  <input type="hidden" name="noAjax" value="1"/>
-                </form>
-              </div> -->
-              <div>
-                <img tal:attributes="src string:$portal_url/cyberplus_logo/banque_populaire_logo.png"
-                     style="float:left;margin-right:1em"/>
-                <dl class="FieldHelp">
-                  <dd i18n:translate="">
-                    Please click over the button representing your credit card.
-                    You will leave temporarily this web site to pay your order
-                    on our bank partner payment site. After your payment, you
-                    will be able to come back to the store and get an invoice of
-                    your transaction.
-                  </dd>
-                  <dd i18n:translate="">
-                    This secured payment is provided by the Cyberplus™ payment
-                    service of "Banque Populaire".
-                  </dd>
-                </dl>
+              <div style="text-align:right">
+                <span i18n:translate="" tal:omit-tag="">Pay with PayPal:</span>
+                <a href="#" tal:attributes="href checkout/url"
+                   title="Pay with PayPal" i18n:attributes="title">
+                  <img tal:attributes="src string:$portal_url/paypal-button.png"
+                       width="72" height="45" style="vertical-align:middle"
+                       alt="Pay with PayPal" i18n:attributes="alt"/>
+                </a>
               </div>
+              <p i18n:translate="">
+                Please check the preceding table and proceed to payment. By
+                clicking on the PayPal button, you will temporarily leave the
+                site: you will be redirected to the payment provider PayPal.
+                Please follow given instructions. The transaction will be final
+                as soon as you are back on the <em i18n:name="site_name"
+                tal:content="portal_object/Title">portal title</em> site. For
+                your information, there is no need to create a PayPal account,
+                even if you will be prompted: you can simply use your credit
+                card. If you already have a PayPal account, you can, at your
+                convenience, pay by PayPal transfer or by credit card.
+              </p>
             </td>
           </tr>
         </tfoot>
