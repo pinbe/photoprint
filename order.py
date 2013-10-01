@@ -340,13 +340,15 @@ class PrintOrder(PortalContent, DefaultDublinCoreImpl) :
         quantitySum = reduce(lambda a, b : a['quantity'] + b['quantity'], self.items)
         priceSum = reduce(lambda a, b : a['unit_price'] * a['quantity'] + b['unit_price'] * b['quantity'], self.items)
         priceValues = priceSum.getValues()
-        total = round(priceValues['taxed'], 2)
-        basePrice = round(priceValues['value'], 2)
-        tax = round(total - basePrice, 2)
+        total = round(self.amountWithFees.getValues()['taxed'], 2)
         
         options['L_PAYMENTREQUEST_0_NAME0'] = 'Commande realis photo ref. %s' % self.getId()
-        options['L_PAYMENTREQUEST_0_DESC0'] = 'Commande de %d tirages photo' % quantitySum 
+        if quantitySum == 1 :
+            options['L_PAYMENTREQUEST_0_DESC0'] = "Commande d'un tirage photographique"
+        else :
+            options['L_PAYMENTREQUEST_0_DESC0'] = 'Commande de %d tirages photographiques' % quantitySum
         options['L_PAYMENTREQUEST_0_AMT0'] =  total
+        options['PAYMENTINFO_0_SHIPPINGAMT'] = round(self.shippingFees.getValues()['taxed'], 2)
         # options['L_PAYMENTREQUEST_0_TAXAMT0'] =  tax
         # options['L_PAYMENTREQUEST_0_QTY%d' % n] = 1
         options['PAYMENTREQUEST_0_AMT'] = total
@@ -364,8 +366,8 @@ class PrintOrder(PortalContent, DefaultDublinCoreImpl) :
     def ppGetExpressCheckoutDetails(self, token) :
         ppi = self._initPayPalInterface()
         response = ppi.get_express_checkout_details(TOKEN=token)
-        response = Registration.recordifyPPResp(response)
-        self._paypalLog.append(response)
+        response = PrintOrder.recordifyPPResp(response)
+        # self._paypalLog.append(response)
         return response
     
     security.declarePrivate('ppDoExpressCheckoutPayment')
@@ -376,15 +378,20 @@ class PrintOrder(PortalContent, DefaultDublinCoreImpl) :
                                                    PAYMENTREQUEST_0_CURRENCYCODE='EUR',
                                                    TOKEN=token,
                                                    PAYERID=payerid)
-        response = Registration.recordifyPPResp(response)
-        self._paypalLog.append(response)
+        response = PrintOrder.recordifyPPResp(response)
+        # self._paypalLog.append(response)
         return response
     
     security.declareProtected(ModifyPortalContent, 'ppPay')
     def ppPay(self, token, payerid):
         # assure le paiement paypal en une passe :
         # récupération des détails et validation de la transaction.
-        if not self.paid :
+        
+        wtool = getUtilityByInterfaceName('Products.CMFCore.interfaces.IWorkflowTool')
+        wfstate = wtool.getInfoFor(self, 'review_state', 'order_workflow')
+        paid = wfstate == 'paid'
+        
+        if not paid :
             details = self.ppGetExpressCheckoutDetails(token)
 
             if payerid != details['PAYERID'] :
@@ -401,7 +408,7 @@ class PrintOrder(PortalContent, DefaultDublinCoreImpl) :
                     wtool = getUtilityByInterfaceName('Products.CMFCore.interfaces.IWorkflowTool')
                     wtool.doActionFor( self
                                      , 'paypal_pay'
-                                     , wf_id='jma_registration_workflow'
+                                     , wf_id='order_workflow'
                                      , comments='Paiement par PayPal')
                     return True
             return False
