@@ -70,7 +70,7 @@ class Price(object, Persistent) :
 			n = str(round(n, 2))
 			i, d = n.split('.')
 			ds = _(u'${i}.${d}', mapping={'i':i, 'd':d}, default=n)
-			return  translate(ds, getRequest()).encode('utf-8')
+			return  translate(ds).encode('utf-8')
 	
 	def getValues(self) :
 		values = {'value':self._price,
