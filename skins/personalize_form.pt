@@ -26,19 +26,19 @@
               <tr>
                 <th i18n:translate="">Given Name</th>
                 <td>
-                  <input type="text" name="given_name" tal:attributes="value member/given_name|nothing" />
+                  <input type="text" name="given_name" tal:attributes="value python:member.getProperty('given_name', '')" />
                 </td>
               </tr>
               <tr>
                 <th i18n:translate="">Name</th>
                 <td>
-                  <input type="text" name="name" value="" tal:attributes="value member/name|nothing" />
+                  <input type="text" name="name" value="" tal:attributes="value python:member.getProperty('name', '')" />
                 </td>
               </tr>
               <tr>
                 <th i18n:translate="">Email address</th>
                 <td>
-                  <input type="text" name="email" value="" tal:attributes="value member/email|nothing" />
+                  <input type="text" name="email" value="" tal:attributes="value python:member.getProperty('email', '')" />
                 </td>
               </tr>
               <tr>
@@ -49,20 +49,20 @@
               <tr>
                 <th i18n:translate="">Address</th>
                 <td>
-                  <textarea name="billing_address" tal:content="member/billing_address"
+                  <textarea name="billing_address" tal:content="python:member.getProperty('billing_address', '')"
                             cols="30" rows="1" style="width:auto"></textarea>
                 </td>
               </tr>
               <tr>
                 <th i18n:translate="">City</th>
                 <td>
-                  <input type="text" name="billing_city" size="35" tal:attributes="value member/billing_city"/>
+                  <input type="text" name="billing_city" size="35" tal:attributes="value python:member.getProperty('billing_city', '')"/>
                 </td>
               </tr>
               <tr>
                 <th i18n:translate="">Zip code</th>
                 <td>
-                  <input type="text" name="billing_zipcode" size="5" tal:attributes="value member/billing_zipcode"/>
+                  <input type="text" name="billing_zipcode" size="5" tal:attributes="value python:member.getProperty('billing_zipcode', '')"/>
                 </td>
               </tr>
               <tr>
@@ -71,14 +71,14 @@
                   <select name="country"
                           tal:define="countries python:modules['Products.iso_3166_1'].fr.countries"
                           i18n:domain="iso_3166_1">
-                    <option tal:repeat="c countries" tal:attributes="value python:c[0]; selected python:c[0]==member.country" tal:content="python:c[0]" i18n:translate=""></option>
+                    <option tal:repeat="c countries" tal:attributes="value python:c[0]; selected python:c[0]==member.getProperty('country', '')" tal:content="python:c[0]" i18n:translate=""></option>
                   </select>
                 </td>
               </tr>
               <tr>
                 <th i18n:translate="">Phone</th>
                 <td>
-                  <input type="text" name="phone" tal:attributes="value member/phone"/>
+                  <input type="text" name="phone" tal:attributes="value python:member.getProperty('phone', '')"/>
                 </td>
               </tr>
               <tr>
