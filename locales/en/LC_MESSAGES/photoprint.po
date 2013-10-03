@@ -1,28 +1,3 @@
-##############################################################################
-#
-# Copyright (c) 2003-2004 Zope Foundation and Contributors.
-# All Rights Reserved.
-#
-# This software is subject to the provisions of the Zope Public License,
-# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
-# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
-# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
-# FOR A PARTICULAR PURPOSE.
-#
-##############################################################################
-msgid ""
-msgstr ""
-"Project-Id-Version: Meaningless\n"
-"POT-Creation-Date: Thu Oct  3 17:53:20 2013\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Generated-By: zope/app/locales/extract.py\n"
-
 #: t/price.py:72
 msgid "${i}.${d}"
 msgstr ""
@@ -32,7 +7,9 @@ msgid "You have been registered as a member."
 msgstr ""
 
 #: t/skins/confirm_join_template.pt:14
-msgid "You will receive an email shortly containing your password and instructions on how to activate your membership."
+msgid ""
+"You will receive an email shortly containing your password and instructions "
+"on how to activate your membership."
 msgstr ""
 
 #: t/skins/confirm_join_template.pt:19
@@ -83,30 +60,25 @@ msgstr ""
 msgid "Please accept general conditions of sales."
 msgstr ""
 
-#: t/skins/my_orders.py:17
-#: t/skins/order_list.py:14
+#: t/skins/my_orders.py:17 t/skins/order_list.py:14
 #: t/skins/order_view_template.pt:182
 msgid "Date"
 msgstr ""
 
-#: t/skins/my_orders.py:21
-#: t/skins/order_list.py:22
+#: t/skins/my_orders.py:21 t/skins/order_list.py:22
 #: t/skins/photoprint_templates_edit_template.pt:42
 msgid "Reference"
 msgstr ""
 
-#: t/skins/my_orders.py:25
-#: t/skins/order_list.py:26
+#: t/skins/my_orders.py:25 t/skins/order_list.py:26
 msgid "Prints"
 msgstr ""
 
-#: t/skins/my_orders.py:29
-#: t/skins/order_list.py:30
+#: t/skins/my_orders.py:29 t/skins/order_list.py:30
 msgid "Amount"
 msgstr ""
 
-#: t/skins/my_orders.py:33
-#: t/skins/order_list.py:34
+#: t/skins/my_orders.py:33 t/skins/order_list.py:34
 msgid "State"
 msgstr ""
 
@@ -114,17 +86,12 @@ msgstr ""
 msgid "My orders"
 msgstr ""
 
-#: t/skins/my_orders_template.pt:34
-#: t/skins/order_cancel_form.pt:19
-#: t/skins/order_list_template.pt:33
-#: t/skins/order_list_template.pt:35
-#: t/skins/order_list_template.pt:37
-#: t/skins/order_list_template.pt:50
+#: t/skins/my_orders_template.pt:34 t/skins/order_cancel_form.pt:19
+#: t/skins/order_list_template.pt:33 t/skins/order_list_template.pt:35
+#: t/skins/order_list_template.pt:37 t/skins/order_list_template.pt:50
 #: t/skins/order_manual_payment_form.pt:19
-#: t/skins/order_notify_done_form.pt:19
-#: t/skins/order_notify_sent_form.pt:19
-#: t/skins/order_view_template.pt:87
-#: t/skins/order_view_template.pt:193
+#: t/skins/order_notify_done_form.pt:19 t/skins/order_notify_sent_form.pt:19
+#: t/skins/order_view_template.pt:87 t/skins/order_view_template.pt:193
 msgid "${DYNAMIC_CONTENT}"
 msgstr ""
 
@@ -136,31 +103,28 @@ msgstr ""
 msgid "Cancel the order and relist reserved copies."
 msgstr ""
 
-#: t/skins/order_cancel_form.pt:18
-#: t/skins/order_manual_payment_form.pt:18
-#: t/skins/order_notify_done_form.pt:18
-#: t/skins/order_notify_sent_form.pt:18
+#: t/skins/order_cancel_form.pt:18 t/skins/order_manual_payment_form.pt:18
+#: t/skins/order_notify_done_form.pt:18 t/skins/order_notify_sent_form.pt:18
 msgid "Current state:"
 msgstr ""
 
-#: t/skins/order_cancel_form.pt:23
-#: t/skins/order_notify_sent_form.pt:24
 #. Default: "Subject"
+#: t/skins/order_cancel_form.pt:23 t/skins/order_notify_sent_form.pt:24
 msgid "mail_subject"
 msgstr ""
 
-#: t/skins/order_cancel_form.pt:31
-#: t/skins/order_notify_done_form.pt:21
+#: t/skins/order_cancel_form.pt:31 t/skins/order_notify_done_form.pt:21
 #: t/skins/order_notify_sent_form.pt:32
 msgid "Comments"
 msgstr ""
 
 #: t/skins/order_cancel_form.pt:39
-msgid "Due to a lack of payment since ${creation_date}, your order has been canceled. The ${store_name} team."
+msgid ""
+"Due to a lack of payment since ${creation_date}, your order has been "
+"canceled. The ${store_name} team."
 msgstr ""
 
-#: t/skins/order_cancel_form.pt:46
-#: t/skins/order_notify_sent_form.pt:59
+#: t/skins/order_cancel_form.pt:46 t/skins/order_notify_sent_form.pt:59
 msgid "Send email"
 msgstr ""
 
@@ -180,10 +144,8 @@ msgstr ""
 msgid "ascending sort"
 msgstr ""
 
-#: t/skins/order_list_template.pt:17
-#: t/skins/order_view_template.pt:31
-#: t/skins/order_view_template.pt:56
-#: t/skins/personalize_form.pt:33
+#: t/skins/order_list_template.pt:17 t/skins/order_view_template.pt:31
+#: t/skins/order_view_template.pt:56 t/skins/personalize_form.pt:33
 msgid "Name"
 msgstr ""
 
@@ -215,8 +177,7 @@ msgstr ""
 msgid "Notify that order has been made."
 msgstr ""
 
-#: t/skins/order_notify_done_form.pt:26
-#: t/skins/order_notify_sent_form.pt:73
+#: t/skins/order_notify_done_form.pt:26 t/skins/order_notify_sent_form.pt:73
 msgid "Notify"
 msgstr ""
 
@@ -233,7 +194,10 @@ msgid "Tracking info"
 msgstr ""
 
 #: t/skins/order_notify_sent_form.pt:39
-msgid "Your order has been sent. You will receive your prints soon. You will be able to track your parcel with the informations below. The ${store_name} team thanks you for your confidence and wish you receipt you order."
+msgid ""
+"Your order has been sent. You will receive your prints soon. You will be "
+"able to track your parcel with the informations below. The ${store_name} "
+"team thanks you for your confidence and wish you receipt you order."
 msgstr ""
 
 #: t/skins/order_notify_sent_form.pt:47
@@ -270,32 +234,27 @@ msgstr ""
 msgid "Billing"
 msgstr ""
 
-#: t/skins/order_view_template.pt:35
-#: t/skins/order_view_template.pt:60
+#: t/skins/order_view_template.pt:35 t/skins/order_view_template.pt:60
 #: t/skins/personalize_form.pt:50
 msgid "Address"
 msgstr ""
 
-#: t/skins/order_view_template.pt:39
-#: t/skins/order_view_template.pt:64
+#: t/skins/order_view_template.pt:39 t/skins/order_view_template.pt:64
 #: t/skins/personalize_form.pt:57
 msgid "City"
 msgstr ""
 
-#: t/skins/order_view_template.pt:43
-#: t/skins/order_view_template.pt:68
+#: t/skins/order_view_template.pt:43 t/skins/order_view_template.pt:68
 #: t/skins/personalize_form.pt:63
 msgid "Zip code"
 msgstr ""
 
-#: t/skins/order_view_template.pt:47
-#: t/skins/order_view_template.pt:72
+#: t/skins/order_view_template.pt:47 t/skins/order_view_template.pt:72
 #: t/skins/personalize_form.pt:69
 msgid "Country"
 msgstr ""
 
-#: t/skins/order_view_template.pt:53
-#: t/skins/order_view_template.pt:134
+#: t/skins/order_view_template.pt:53 t/skins/order_view_template.pt:134
 msgid "Shipping"
 msgstr ""
 
@@ -337,13 +296,20 @@ msgstr ""
 msgid "Pay with PayPal:"
 msgstr ""
 
-#: t/skins/order_view_template.pt:153
-#: t/skins/order_view_template.pt:155
+#: t/skins/order_view_template.pt:153 t/skins/order_view_template.pt:155
 msgid "Pay with PayPal"
 msgstr ""
 
 #: t/skins/order_view_template.pt:165
-msgid "Please check the preceding table and proceed to payment. By clicking on the PayPal button, you will temporarily leave the site: you will be redirected to the payment provider PayPal. Please follow given instructions. The transaction will be final as soon as you are back on the ${site_name} site. For your information, there is no need to create a PayPal account, even if you will be prompted: you can simply use your credit card. If you already have a PayPal account, you can, at your convenience, pay by PayPal transfer or by credit card."
+msgid ""
+"Please check the preceding table and proceed to payment. By clicking on the "
+"PayPal button, you will temporarily leave the site: you will be redirected "
+"to the payment provider PayPal. Please follow given instructions. The "
+"transaction will be final as soon as you are back on the ${site_name} site. "
+"For your information, there is no need to create a PayPal account, even if "
+"you will be prompted: you can simply use your credit card. If you already "
+"have a PayPal account, you can, at your convenience, pay by PayPal transfer "
+"or by credit card."
 msgstr ""
 
 #: t/skins/order_view_template.pt:177
@@ -395,7 +361,9 @@ msgid "Your payment has been accepted by PayPal."
 msgstr ""
 
 #: t/skins/photoprint_order_confirm.py:11
-msgid "Your payment has been canceled.<br/>You can retry with an other account / credit card by cliking on the PayPal button.<br/>"
+msgid ""
+"Your payment has been canceled.<br/>You can retry with an other account / "
+"credit card by cliking on the PayPal button.<br/>"
 msgstr ""
 
 #: t/skins/photoprint_templates_edit_form.py:56
@@ -450,8 +418,8 @@ msgstr ""
 msgid "Product reference"
 msgstr ""
 
-#: t/skins/photoprint_templates_edit_template.pt:122
 #. Default: "The 0 value means unlimited"
+#: t/skins/photoprint_templates_edit_template.pt:122
 msgid "max_copies_field_help"
 msgstr ""
 
@@ -496,7 +464,6 @@ msgid "You must enter a numeric value for the VAT rate."
 msgstr ""
 
 # from photoprint-manual.pot
-
 msgid "Your payment is complete."
 msgstr ""
 
