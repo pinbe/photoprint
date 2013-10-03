@@ -25,7 +25,7 @@
             <td tal:define="_ python:modules['Products.photoprint.utils'].translate">
               <input type="text" size="58"
                 name="subject"
-                tal:attributes="value python:_('[%s] order %s sending notification', here) % (here.portal_photo_print.store_name, here.getId())"/>
+                tal:attributes="value python:_('[%s] order %s sending notification') % (here.portal_photo_print.store_name, here.getId())"/>
             </td>
           </tr>
           <tr>
@@ -61,7 +61,7 @@
               <label tal:repeat="member python:mtool.getMembers(here.listCreators())">
                 <input type="checkbox" name="recipients:list" tal:attributes="value member/id" checked="checked" />
                 <span tal:replace="member/getMemberFullName">Membre full name</span>
-                &lt;<span tal:replace="member/email">member email</span>&gt;
+                &lt;<span tal:replace="python:member.getProperty('email')">member email</span>&gt;
               </label>
             </td>
           </tr>
