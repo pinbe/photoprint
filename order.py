@@ -41,8 +41,6 @@ from Products.Plinn.utils import getPreferredLanguages
 from interfaces import IPrintOrderTemplate, IPrintOrder
 from permissions import ManagePrintOrderTemplate, ManagePrintOrders
 from price import Price
-from utils import Message as _
-from utils import translate
 from xml.dom.minidom import Document
 from tool import COPIES_COUNTERS
 from App.config import getConfiguration
