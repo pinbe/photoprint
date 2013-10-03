@@ -9,8 +9,6 @@ if token and PayerID and context.ppPay(token, PayerID) :
     return context.order_view()
 else :
     context.setStatus(False, _('Your payment has been canceled.<br/>'
-                               'You can retry with an other account / credit card by cliking on the PayPal button.<br/>'
-                               'You can also choose an other payment option, like bank transfert or cheque.<br/>'
-                               'If so, click on the "Modify" button.'))
+                               'You can retry with an other account / credit card by cliking on the PayPal button.<br/>'))
 
     return context.order_view()
