@@ -337,9 +337,10 @@ class PrintOrder(PortalContent, DefaultDublinCoreImpl) :
                    'PAYMENTREQUEST_0_SHIPTOPHONENUM' : self.billing['phone'],
                    }
         
-        quantitySum = reduce(lambda a, b : a['quantity'] + b['quantity'], self.items)
-        priceSum = reduce(lambda a, b : a['unit_price'] * a['quantity'] + b['unit_price'] * b['quantity'], self.items)
-        priceValues = priceSum.getValues()
+        if len(self.items) > 1 :
+            quantitySum = reduce(lambda a, b : a['quantity'] + b['quantity'], self.items)
+        else :
+            quantitySum = self.items[0]['quantity']
         total = round(self.amountWithFees.getValues()['taxed'], 2)
         
         options['L_PAYMENTREQUEST_0_NAME0'] = 'Commande realis photo ref. %s' % self.getId()
