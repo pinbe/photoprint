@@ -1,7 +1,6 @@
 ##parameters=addTemplate='', edit='', deleteOptionContainer='', createOptionsContainer=''
 from Products.CMFCore.utils import getToolByName
-from Products.photoprint.utils import translate
-_ = lambda msg : translate(msg, context)
+from Products.photoprint.utils import translate as _
 
 utool = getToolByName(context, 'portal_url')
 pptool = getToolByName(context, 'portal_photo_print')

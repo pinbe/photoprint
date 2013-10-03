@@ -75,8 +75,7 @@
             </table>
           </td>
           <td>
-            <img tal:define="translate nocall:modules/Products/photoprint/utils/translate;
-                             tr python:lambda msg: translate(msg, here)"
+            <img tal:define="tr nocall:modules/Products/photoprint/utils/translate"
                  tal:attributes="src python:'%s/order_states/%s' % (portal_url, tr('%s-en.gif' % options['wfstate']))"
                  style="float:right"/>
           </td>
