@@ -16,23 +16,16 @@ Global utilities
 """
 
 from AccessControl import ModuleSecurityInfo
-# TODO: trouver une solution…
 from zope.i18n import translate as i18ntranslate
 from zope.i18nmessageid import MessageFactory
+from zope.globalrequest import getRequest
 
 security = ModuleSecurityInfo('Products.photoprint.utils')
 
 security.declarePublic('translate')
-def translate(message, context):
-	""" Translate i18n message.
-	"""
-	# GTS = getGlobalTranslationService()
-	if isinstance(message, Exception):
-		try:
-			message = message[0]
-		except (TypeError, IndexError):
-			pass
-	return i18ntranslate(message, domain='photoprint', context=context.REQUEST)
+def translate(msgid, mapping=None, default=None) :
+    """ traduction dans le domaine photoprint """
+    return i18ntranslate(msgid, domain='photoprint', mapping=mapping, context=getRequest(), default=default)
 
 security.declarePublic('Message')
 Message = _ = MessageFactory('photoprint')
