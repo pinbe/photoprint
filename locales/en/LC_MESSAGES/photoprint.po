@@ -61,7 +61,7 @@ msgid "Please accept general conditions of sales."
 msgstr ""
 
 #: t/skins/my_orders.py:17 t/skins/order_list.py:14
-#: t/skins/order_view_template.pt:182
+#: t/skins/order_view_template.pt:181
 msgid "Date"
 msgstr ""
 
@@ -91,7 +91,7 @@ msgstr ""
 #: t/skins/order_list_template.pt:37 t/skins/order_list_template.pt:50
 #: t/skins/order_manual_payment_form.pt:19
 #: t/skins/order_notify_done_form.pt:19 t/skins/order_notify_sent_form.pt:19
-#: t/skins/order_view_template.pt:87 t/skins/order_view_template.pt:193
+#: t/skins/order_view_template.pt:86 t/skins/order_view_template.pt:191
 msgid "${DYNAMIC_CONTENT}"
 msgstr ""
 
@@ -209,7 +209,7 @@ msgid "Tracking url"
 msgstr ""
 
 #: t/skins/order_printing_list_template.pt:22
-#: t/skins/order_view_template.pt:97
+#: t/skins/order_view_template.pt:96
 msgid "Image"
 msgstr ""
 
@@ -222,7 +222,7 @@ msgid "Format / type"
 msgstr ""
 
 #: t/skins/order_printing_list_template.pt:25
-#: t/skins/order_view_template.pt:99
+#: t/skins/order_view_template.pt:98
 msgid "Quantity"
 msgstr ""
 
@@ -254,53 +254,53 @@ msgstr ""
 msgid "Country"
 msgstr ""
 
-#: t/skins/order_view_template.pt:53 t/skins/order_view_template.pt:134
+#: t/skins/order_view_template.pt:53 t/skins/order_view_template.pt:133
 msgid "Shipping"
 msgstr ""
 
-#: t/skins/order_view_template.pt:84
+#: t/skins/order_view_template.pt:83
 msgid "Processing"
 msgstr ""
 
-#: t/skins/order_view_template.pt:98
+#: t/skins/order_view_template.pt:97
 msgid "Printing format and type"
 msgstr ""
 
-#: t/skins/order_view_template.pt:100
+#: t/skins/order_view_template.pt:99
 msgid "Unit price"
 msgstr ""
 
-#: t/skins/order_view_template.pt:101
+#: t/skins/order_view_template.pt:100
 #: t/skins/photoprint_templates_edit_template.pt:45
 #: t/skins/photoprint_templates_edit_template.pt:131
 msgid "VAT (%)"
 msgstr ""
 
-#: t/skins/order_view_template.pt:102
+#: t/skins/order_view_template.pt:101
 msgid "Amount<br />(tax incl.)"
 msgstr ""
 
-#: t/skins/order_view_template.pt:111
+#: t/skins/order_view_template.pt:110
 msgid "image removed"
 msgstr ""
 
-#: t/skins/order_view_template.pt:138
+#: t/skins/order_view_template.pt:137
 msgid "VAT"
 msgstr ""
 
-#: t/skins/order_view_template.pt:142
+#: t/skins/order_view_template.pt:141
 msgid "Total amount to pay"
 msgstr ""
 
-#: t/skins/order_view_template.pt:152
+#: t/skins/order_view_template.pt:151
 msgid "Pay with PayPal:"
 msgstr ""
 
-#: t/skins/order_view_template.pt:153 t/skins/order_view_template.pt:155
+#: t/skins/order_view_template.pt:152 t/skins/order_view_template.pt:154
 msgid "Pay with PayPal"
 msgstr ""
 
-#: t/skins/order_view_template.pt:165
+#: t/skins/order_view_template.pt:164
 msgid ""
 "Please check the preceding table and proceed to payment. By clicking on the "
 "PayPal button, you will temporarily leave the site: you will be redirected "
@@ -312,15 +312,15 @@ msgid ""
 "or by credit card."
 msgstr ""
 
-#: t/skins/order_view_template.pt:177
+#: t/skins/order_view_template.pt:176
 msgid "Order processing history"
 msgstr ""
 
-#: t/skins/order_view_template.pt:183
+#: t/skins/order_view_template.pt:182
 msgid "Actor"
 msgstr ""
 
-#: t/skins/order_view_template.pt:184
+#: t/skins/order_view_template.pt:183
 msgid "Action"
 msgstr ""
 
@@ -366,11 +366,11 @@ msgid ""
 "credit card by cliking on the PayPal button.<br/>"
 msgstr ""
 
-#: t/skins/photoprint_templates_edit_form.py:56
+#: t/skins/photoprint_templates_edit_form.py:55
 msgid "Printing options added."
 msgstr ""
 
-#: t/skins/photoprint_templates_edit_form.py:60
+#: t/skins/photoprint_templates_edit_form.py:59
 msgid "Printing options deleted."
 msgstr ""
 
@@ -546,4 +546,7 @@ msgid "[%s] order %s canceling notification"
 msgstr ""
 
 msgid "[%s] order %s sending notification"
+msgstr ""
+
+msgid "paypal_pay"
 msgstr ""

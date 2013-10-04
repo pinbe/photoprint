@@ -83,3 +83,7 @@ msgstr ""
 
 msgid "[%s] order %s sending notification"
 msgstr ""
+
+msgid "paypal_pay"
+msgstr ""
+
