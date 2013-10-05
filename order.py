@@ -30,6 +30,7 @@ from AccessControl import ClassSecurityInfo
 from AccessControl.requestmethod import postonly
 from zope.interface import implements
 from zope.component.factory import Factory
+from persistent.list import PersistentList
 from OFS.SimpleItem import SimpleItem
 from ZTUtils import make_query
 from DateTime import DateTime
@@ -183,7 +184,7 @@ class PrintOrder(PortalContent, DefaultDublinCoreImpl) :
         self.billing = PersistentMapping()
         self.shipping = PersistentMapping()
         self.shippingFees = Price(0,0)
-        self._paymentResponse = PersistentMapping()
+        self._paypalLog = PersistentList()
     
     @property
     def amountWithFees(self) :
@@ -355,7 +356,7 @@ class PrintOrder(PortalContent, DefaultDublinCoreImpl) :
         ppi = self._initPayPalInterface()
         response = ppi.set_express_checkout(**options)
         response = PrintOrder.recordifyPPResp(response)
-        # self._paypalLog.append(response)
+        self._paypalLog.append(response)
         response['url'] = ppi.generate_express_checkout_redirect_url(response['TOKEN'])
         console.info(options)
         console.info(response)
@@ -366,7 +367,7 @@ class PrintOrder(PortalContent, DefaultDublinCoreImpl) :
         ppi = self._initPayPalInterface()
         response = ppi.get_express_checkout_details(TOKEN=token)
         response = PrintOrder.recordifyPPResp(response)
-        # self._paypalLog.append(response)
+        self._paypalLog.append(response)
         return response
     
     security.declarePrivate('ppDoExpressCheckoutPayment')
@@ -378,7 +379,7 @@ class PrintOrder(PortalContent, DefaultDublinCoreImpl) :
                                                    TOKEN=token,
                                                    PAYERID=payerid)
         response = PrintOrder.recordifyPPResp(response)
-        # self._paypalLog.append(response)
+        self._paypalLog.append(response)
         return response
     
     security.declareProtected(ModifyPortalContent, 'ppPay')
