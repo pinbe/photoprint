@@ -311,12 +311,10 @@ class PrintOrder(PortalContent, DefaultDublinCoreImpl) :
         portal = utool.getPortalObject()
         member = mtool.getAuthenticatedMember()
         
-        options = {#'PAYMENTREQUEST_0_AMT' : '99.55', # todo
-                   'PAYMENTREQUEST_0_CURRENCYCODE' : 'EUR',
+        options = {'PAYMENTREQUEST_0_CURRENCYCODE' : 'EUR',
                    'PAYMENTREQUEST_0_PAYMENTACTION' : 'Sale',
                    'RETURNURL' : '%s/photoprint_order_confirm' % self.absolute_url(),
                    'CANCELURL' : '%s/photoprint_order_cancel' % self.absolute_url(),
-                   # 'CALLBACK' : TODO
                    'ALLOWNOTE' : 0, # The buyer is unable to enter a note to the merchant.
                    'HDRIMG' : '%s/logo.gif' % portal_url,
                    'EMAIL' : member.getProperty('email'),
@@ -327,8 +325,6 @@ class PrintOrder(PortalContent, DefaultDublinCoreImpl) :
                    'GIFTRECEIPTENABLE' : 0,
                    'BUYEREMAILOPTINENABLE' : 0, # Do not enable buyer to provide email address.
                    'NOSHIPPING' : 1, # PayPal does not display shipping address fields whatsoever.
-                   # 'PAYMENTREQUEST_0_NOTIFYURL' : TODO
-                   
                    'PAYMENTREQUEST_0_SHIPTONAME' : self.billing['name'],
                    'PAYMENTREQUEST_0_SHIPTOSTREET' : self.billing['address'],
                    'PAYMENTREQUEST_0_SHIPTOCITY' : self.billing['city'],
@@ -349,8 +345,6 @@ class PrintOrder(PortalContent, DefaultDublinCoreImpl) :
             options['L_PAYMENTREQUEST_0_DESC0'] = 'Commande de %d tirages photographiques' % quantitySum
         options['L_PAYMENTREQUEST_0_AMT0'] =  total
         options['PAYMENTINFO_0_SHIPPINGAMT'] = round(self.shippingFees.getValues()['taxed'], 2)
-        # options['L_PAYMENTREQUEST_0_TAXAMT0'] =  tax
-        # options['L_PAYMENTREQUEST_0_QTY%d' % n] = 1
         options['PAYMENTREQUEST_0_AMT'] = total
 
         ppi = self._initPayPalInterface()
