@@ -79,7 +79,7 @@
     </table>
           
     <p><a href=""
-        tal:attributes="href string:${here/portal_url}/mail_password_form"
+        tal:attributes="href string:${here/portal_url}/request_password_reset_form"
         i18n:translate=""
        >Forgot your password?</a>
     </p>
