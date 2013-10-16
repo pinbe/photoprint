@@ -45,7 +45,11 @@ from price import Price
 from xml.dom.minidom import Document
 from tool import COPIES_COUNTERS
 from App.config import getConfiguration
-from paypal.interface import PayPalInterface
+try :
+    from paypal.interface import PayPalInterface
+    paypalAvailable = True
+except ImportError :
+    paypalAvailable = False
 from logging import getLogger
 console = getLogger('Products.photoprint.order')
 
