@@ -3,7 +3,7 @@
 # Copyright © 2009 Luxia SAS. All rights reserved. #
 #                                                  #
 # Contributors:                                    #
-#  - Benoît Pin <pinbe@luxia.fr>                   #
+#  - Benoît Pin <pin@cri.ensmp.fr>                   #
 ####################################################
 """ Cart definition used to store buyable prints
 
