@@ -21,8 +21,6 @@
 """
 Photo print product. Used to order photo prints.
 
-
-
 """
 from Products.CMFCore import utils as cmfutils
 import tool
