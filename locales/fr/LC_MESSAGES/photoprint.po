@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Plinn 2.0\n"
-"POT-Creation-Date: Mon Sep  1 20:58:12 2014\n"
-"PO-Revision-Date: 2014-09-01 21:22+0200\n"
+"POT-Creation-Date: Mon Sep  1 23:37:28 2014\n"
+"PO-Revision-Date: 2014-09-01 23:39+0200\n"
 "Last-Translator:  Benoît PIN\n"
 "Language-Team: CRI http://cri.ensmp.fr\n"
 "Language: \n"
@@ -76,10 +76,6 @@ msgstr "Veuillez entrer un pays."
 msgid "Please enter a phone."
 msgstr "Veuillez entrer un numéro de téléphone."
 
-#: t/skins/customer_add_control.py:28
-msgid "Please accept general conditions of sales."
-msgstr "Veuillez accepter les conditions générales des ventes."
-
 #: t/skins/customer_join_template.pt:11
 msgid "New customer account"
 msgstr "Nouveau compte client"
@@ -112,51 +108,39 @@ msgstr "Mot de passe"
 msgid "Password (confirm)"
 msgstr "Mot de passe (confirmation)"
 
-#: t/skins/customer_join_template.pt:60
-msgid "Mail Password?"
-msgstr "Envoyer le mot de passe ?"
-
-#: t/skins/customer_join_template.pt:64
-msgid "Check this box to have the password mailed."
-msgstr "Cochez cette case afin que votre mot de passe vous soit envoyé par mail."
-
-#: t/skins/customer_join_template.pt:102 t/skins/personalize_form.pt:46
+#: t/skins/customer_join_template.pt:93 t/skins/personalize_form.pt:46
 msgid "Billing informations"
 msgstr "Informations de facturation"
 
-#: t/skins/customer_join_template.pt:106 t/skins/order_view_template.pt:35
+#: t/skins/customer_join_template.pt:97 t/skins/order_view_template.pt:35
 #: t/skins/order_view_template.pt:60 t/skins/personalize_form.pt:50
 msgid "Address"
 msgstr "Adresse"
 
-#: t/skins/customer_join_template.pt:113 t/skins/order_view_template.pt:39
+#: t/skins/customer_join_template.pt:104 t/skins/order_view_template.pt:39
 #: t/skins/order_view_template.pt:64 t/skins/personalize_form.pt:57
 msgid "City"
 msgstr "Ville"
 
-#: t/skins/customer_join_template.pt:119 t/skins/order_view_template.pt:43
+#: t/skins/customer_join_template.pt:110 t/skins/order_view_template.pt:43
 #: t/skins/order_view_template.pt:68 t/skins/personalize_form.pt:63
 msgid "Zip code"
 msgstr "Code postal"
 
-#: t/skins/customer_join_template.pt:125 t/skins/order_view_template.pt:47
+#: t/skins/customer_join_template.pt:116 t/skins/order_view_template.pt:47
 #: t/skins/order_view_template.pt:72 t/skins/personalize_form.pt:69
 msgid "Country"
 msgstr "Pays"
 
-#: t/skins/customer_join_template.pt:135 t/skins/personalize_form.pt:79
+#: t/skins/customer_join_template.pt:126 t/skins/personalize_form.pt:79
 msgid "Phone"
 msgstr "Téléphone"
 
-#: t/skins/customer_join_template.pt:144
-msgid "I accept general conditions of sales"
-msgstr "J'accepte les conditions générales des ventes"
-
-#: t/skins/customer_join_template.pt:152
+#: t/skins/customer_join_template.pt:136
 msgid "Register"
 msgstr "S'enregistrer"
 
-#: t/skins/customer_join_template.pt:153
+#: t/skins/customer_join_template.pt:137
 #: t/skins/photoprint_templates_edit_template.pt:142
 msgid "Cancel"
 msgstr "Annuler"
@@ -508,6 +492,10 @@ msgstr "Adresse e-mail"
 msgid "Change"
 msgstr "Modifier"
 
+#: t/skins/photoprint_order_cancel.py:5
+msgid "Your payment has been canceled. You can retry later."
+msgstr "Votre paiement a été annulé. Vous pouvez réessayer plus tard."
+
 #: t/skins/photoprint_order_confirm.py:7
 msgid "Your payment has been accepted by PayPal."
 msgstr "Votre paiement a été accepté par PayPal."
@@ -618,6 +606,18 @@ msgstr "Vous devez saisir une valeur numérique pour le prix."
 msgid "You must enter a numeric value for the VAT rate."
 msgstr "Vous devez saisir une valeur numérique pour la TVA (pourcentage)."
 
+#: t/utils.py:53
+msgid "Wrong private collection identifier."
+msgstr "Identifiant de collection privée incorrect."
+
+#: t/utils.py:56
+msgid "Collection's password does not match confirmation."
+msgstr "Le mot de passe de collection et sa confirmation sont différents."
+
+#: t/utils.py:60
+msgid "Wrong collection's password."
+msgstr "Mot de passe de collection incorrect."
+
 msgid "Your payment is complete."
 msgstr "Votre paiement a été accepté."
 
@@ -704,6 +704,19 @@ msgstr "[%s] expédition de la commande %s"
 
 msgid "paypal_pay"
 msgstr "Paiement PayPal"
+
+#~ msgid "Please accept general conditions of sales."
+#~ msgstr "Veuillez accepter les conditions générales des ventes."
+
+#~ msgid "Mail Password?"
+#~ msgstr "Envoyer le mot de passe ?"
+
+#~ msgid "Check this box to have the password mailed."
+#~ msgstr ""
+#~ "Cochez cette case afin que votre mot de passe vous soit envoyé par mail."
+
+#~ msgid "I accept general conditions of sales"
+#~ msgstr "J'accepte les conditions générales des ventes"
 
 #~ msgid "Use one of these button to pay:"
 #~ msgstr "Utilisez un de ces bouton pour payer :"

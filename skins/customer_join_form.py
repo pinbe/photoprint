@@ -39,7 +39,6 @@ continuationFields = [
 	, 'member_id'
 	, 'password'
 	, 'confirm'
-	, 'send_password'
 	, 'collection_id'
 	, 'collection_password'
 	, 'collection_password_confirm'
@@ -47,8 +46,7 @@ continuationFields = [
 	, 'billing_city'
 	, 'billing_zipcode'
 	, 'country'
-	, 'phone'
-	, 'accept_gcs']
+	, 'phone']
 
 
 for name in continuationFields :

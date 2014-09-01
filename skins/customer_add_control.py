@@ -25,7 +25,6 @@ mandatoryFields = [
 	, ('billing_zipcode', _('Please enter zip code.'))
 	, ('country', _('Please enter a country.'))
 	, ('phone', _('Please enter a phone.'))
-	, ('accept_gcs', _('Please accept general conditions of sales.'))
 	]
 
 for name, failMessage in mandatoryFields :
@@ -45,8 +44,7 @@ try:
 								,'billing_city'     : kg('billing_city')
 								,'billing_zipcode'	: kg('billing_zipcode')
 								,'country'			: kg('country')
-								,'phone'			: kg('phone')
-								,'accept_gcs'		: kg('accep_gcs')} )
+								,'phone'			: kg('phone')} )
 except ValueError, errmsg:
 	return context.setStatus(False, _(errmsg))
 

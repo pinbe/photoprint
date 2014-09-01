@@ -56,15 +56,6 @@
               <input type="password" name="confirm" size="30" tal:attributes="value options/confirm" />
             </td>
           </tr>
-          <tr>
-            <th i18n:translate="">Mail Password?</th>
-            <td>
-              <input type="checkbox" name="send_password" id="cb_send_password"
-                     tal:attributes="checked options/send_password" />
-              <em><label for="cb_send_password" i18n:translate="">Check this box to
-                have the password mailed.</label></em>
-            </td>
-          </tr>
         </tal:case>
         <tr>
           <td colspan="2"><hr/></td>
@@ -135,13 +126,6 @@
           <th i18n:translate="">Phone</th>
           <td>
             <input type="text" name="phone" tal:attributes="value options/phone"/>
-          </td>
-        </tr>
-        <tr>
-          <th><br/></th>
-          <td>
-            <input type="checkbox" name="accept_gcs" tal:attributes="checked python:options['accept_gcs']" />
-            <a tal:attributes="href string:$portal_url/cgv" target="_blank" i18n:translate="">I accept general conditions of sales</a>
           </td>
         </tr>
         <tr>
