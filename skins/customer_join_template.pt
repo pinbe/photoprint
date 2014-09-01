@@ -79,19 +79,19 @@
         <tr>
           <th>Identifiant collection privée</th>
           <td>
-            <input type="text" name="wedding_id" tal:attributes="value options/wedding_id"/>
+            <input type="text" name="collection_id" tal:attributes="value options/collection_id"/>
           </td>
         </tr>
         <tr>
           <th>Mot de passe associé</th>
           <td>
-            <input type="password" name="wedding_password" tal:attributes="value options/wedding_password" />
+            <input type="password" name="collection_password" tal:attributes="value options/collection_password" />
           </td>
         </tr>
         <tr>
           <th>Confirmation du mot de passe</th>
           <td>
-            <input type="password" name="wedding_password_confirm" tal:attributes="value options/wedding_password_confirm" />
+            <input type="password" name="collection_password_confirm" tal:attributes="value options/collection_password_confirm" />
           </td>
         </tr>
         <tr>

@@ -19,6 +19,10 @@ from AccessControl import ModuleSecurityInfo
 from zope.i18n import translate as i18ntranslate
 from zope.i18nmessageid import MessageFactory
 from zope.globalrequest import getRequest
+from Products.CMFCore.utils import getUtilityByInterfaceName
+from Products.Plinn.utils import _sudo
+import transaction
+
 
 security = ModuleSecurityInfo('Products.photoprint.utils')
 
@@ -29,3 +33,34 @@ def translate(msgid, mapping=None, default=None) :
 
 security.declarePublic('Message')
 Message = _ = MessageFactory('photoprint')
+
+security.declarePublic('grantAccess')
+def grantAccess(collectionId, password, confirm, memberId) :
+    utool = getUtilityByInterfaceName('Products.CMFCore.interfaces.IURLTool')
+    mtool = getUtilityByInterfaceName('Products.CMFCore.interfaces.IMembershipTool')
+    portal = utool.getPortalObject()
+    
+    data = portal.private_collections.data
+    lines = filter(None, [l.strip() for l in data.split('\n')])
+    assert len(lines) % 3 == 0
+    collecInfos = {}
+    for i in xrange(0, len(lines), 3) :
+        collecInfos[lines[i]] = {'pw' : lines[i+1],
+                                 'path' : lines[i+2]}
+
+    if not collecInfos.has_key(collectionId) :
+        transaction.abort()
+        return _('Wrong private collection identifier.')
+    elif password != confirm :
+        transaction.abort()
+        return _("Collection's password does not match confirmation.")
+    else :
+        if collecInfos[collectionId]['pw'] != password :
+            transaction.abort()
+            return _("Wrong collection's password.")
+        else :
+            collec = portal.unrestrictedTraverse(collecInfos[collectionId]['path'])
+            def do() :
+                mtool.setLocalRoles(collec, [memberId], 'Reader')
+            
+            _sudo(do)
