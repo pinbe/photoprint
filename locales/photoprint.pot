@@ -14,7 +14,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Meaningless\n"
-"POT-Creation-Date: Fri Oct  4 21:36:58 2013\n"
+"POT-Creation-Date: Mon Sep  1 20:58:12 2014\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: zope/app/locales/extract.py\n"
 
-#: t/price.py:72
+#: t/price.py:82
 msgid "${i}.${d}"
 msgstr ""
 
@@ -81,6 +81,148 @@ msgstr ""
 
 #: t/skins/customer_add_control.py:28
 msgid "Please accept general conditions of sales."
+msgstr ""
+
+#: t/skins/customer_join_template.pt:11
+msgid "New customer account"
+msgstr ""
+
+#: t/skins/customer_join_template.pt:17
+msgid "Customer informations"
+msgstr ""
+
+#: t/skins/customer_join_template.pt:21
+msgid "First name"
+msgstr ""
+
+#: t/skins/customer_join_template.pt:27
+msgid "Last name"
+msgstr ""
+
+#: t/skins/customer_join_template.pt:33
+msgid "Email Address"
+msgstr ""
+
+#: t/skins/customer_join_template.pt:40
+msgid "Member ID"
+msgstr ""
+
+#: t/skins/customer_join_template.pt:48
+#: t/skins/customer_login_form.pt:45
+msgid "Password"
+msgstr ""
+
+#: t/skins/customer_join_template.pt:54
+msgid "Password (confirm)"
+msgstr ""
+
+#: t/skins/customer_join_template.pt:60
+msgid "Mail Password?"
+msgstr ""
+
+#: t/skins/customer_join_template.pt:64
+msgid "Check this box to have the password mailed."
+msgstr ""
+
+#: t/skins/customer_join_template.pt:102
+#: t/skins/personalize_form.pt:46
+msgid "Billing informations"
+msgstr ""
+
+#: t/skins/customer_join_template.pt:106
+#: t/skins/order_view_template.pt:35
+#: t/skins/order_view_template.pt:60
+#: t/skins/personalize_form.pt:50
+msgid "Address"
+msgstr ""
+
+#: t/skins/customer_join_template.pt:113
+#: t/skins/order_view_template.pt:39
+#: t/skins/order_view_template.pt:64
+#: t/skins/personalize_form.pt:57
+msgid "City"
+msgstr ""
+
+#: t/skins/customer_join_template.pt:119
+#: t/skins/order_view_template.pt:43
+#: t/skins/order_view_template.pt:68
+#: t/skins/personalize_form.pt:63
+msgid "Zip code"
+msgstr ""
+
+#: t/skins/customer_join_template.pt:125
+#: t/skins/order_view_template.pt:47
+#: t/skins/order_view_template.pt:72
+#: t/skins/personalize_form.pt:69
+msgid "Country"
+msgstr ""
+
+#: t/skins/customer_join_template.pt:135
+#: t/skins/personalize_form.pt:79
+msgid "Phone"
+msgstr ""
+
+#: t/skins/customer_join_template.pt:144
+msgid "I accept general conditions of sales"
+msgstr ""
+
+#: t/skins/customer_join_template.pt:152
+msgid "Register"
+msgstr ""
+
+#: t/skins/customer_join_template.pt:153
+#: t/skins/photoprint_templates_edit_template.pt:142
+msgid "Cancel"
+msgstr ""
+
+#: t/skins/customer_login_form.pt:16
+msgid "You already have an account?"
+msgstr ""
+
+#: t/skins/customer_login_form.pt:17
+msgid "Please login to continue"
+msgstr ""
+
+#: t/skins/customer_login_form.pt:20
+msgid "New customer?"
+msgstr ""
+
+#: t/skins/customer_login_form.pt:21
+msgid "Welcome!<br /> Please create an account to order."
+msgstr ""
+
+#: t/skins/customer_login_form.pt:38
+#. Default: "Login"
+msgid "user_name"
+msgstr ""
+
+#: t/skins/customer_login_form.pt:55
+msgid "Remember my name."
+msgstr ""
+
+#: t/skins/customer_login_form.pt:63
+#. Default: "Login"
+msgid " Login "
+msgstr ""
+
+#: t/skins/customer_login_form.pt:73
+msgid "Open new account >>"
+msgstr ""
+
+#: t/skins/customer_login_form.pt:81
+msgid "Forgot your password?"
+msgstr ""
+
+#: t/skins/customer_login_form.pt:87
+msgid "Having trouble logging in? Make sure to enable cookies in your web browser."
+msgstr ""
+
+#: t/skins/customer_login_form.pt:90
+msgid "Don't forget to logout or exit your browser when you're done."
+msgstr ""
+
+#: t/skins/customer_login_form.pt:94
+msgid "Setting the 'Remember my name' option will set a cookie with your username, so that when you next log in, your user name will already be filled in for you."
 msgstr ""
 
 #: t/skins/my_orders.py:17
@@ -270,30 +412,6 @@ msgstr ""
 msgid "Billing"
 msgstr ""
 
-#: t/skins/order_view_template.pt:35
-#: t/skins/order_view_template.pt:60
-#: t/skins/personalize_form.pt:50
-msgid "Address"
-msgstr ""
-
-#: t/skins/order_view_template.pt:39
-#: t/skins/order_view_template.pt:64
-#: t/skins/personalize_form.pt:57
-msgid "City"
-msgstr ""
-
-#: t/skins/order_view_template.pt:43
-#: t/skins/order_view_template.pt:68
-#: t/skins/personalize_form.pt:63
-msgid "Zip code"
-msgstr ""
-
-#: t/skins/order_view_template.pt:47
-#: t/skins/order_view_template.pt:72
-#: t/skins/personalize_form.pt:69
-msgid "Country"
-msgstr ""
-
 #: t/skins/order_view_template.pt:53
 #: t/skins/order_view_template.pt:133
 msgid "Shipping"
@@ -378,14 +496,6 @@ msgstr ""
 msgid "Email address"
 msgstr ""
 
-#: t/skins/personalize_form.pt:46
-msgid "Billing informations"
-msgstr ""
-
-#: t/skins/personalize_form.pt:79
-msgid "Phone"
-msgstr ""
-
 #: t/skins/personalize_form.pt:88
 msgid "Change"
 msgstr ""
@@ -459,39 +569,35 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: t/skins/photoprint_templates_edit_template.pt:142
-msgid "Cancel"
-msgstr ""
-
 #: t/skins/photoprint_templates_edit_template.pt:150
 msgid "Save"
 msgstr ""
 
-#: t/tool.py:109
+#: t/tool.py:119
 msgid "No printing options found at %r"
 msgstr ""
 
-#: t/tool.py:193
+#: t/tool.py:203
 msgid "You must enter a title."
 msgstr ""
 
-#: t/tool.py:197
+#: t/tool.py:207
 msgid ""
 "You must enter an integer number\n"
 "for the maximum number of copies."
 msgstr ""
 
-#: t/tool.py:199
+#: t/tool.py:209
 msgid ""
 "You must enter a positive value\n"
 "for the maximum number of copies."
 msgstr ""
 
-#: t/tool.py:203
+#: t/tool.py:213
 msgid "You must enter a numeric value for the price."
 msgstr ""
 
-#: t/tool.py:208
+#: t/tool.py:218
 msgid "You must enter a numeric value for the VAT rate."
 msgstr ""
 
