@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
   </head>
-  <body metal:fill-slot="main_no_tabs" i18n:domain="realis" tal:omit-tag="">
+  <body metal:fill-slot="main_no_tabs" i18n:domain="photoprint" tal:omit-tag="">
     <div tal:condition="python:request.get('came_from', '').endswith('/my_cart')"
          tal:define="step_authentication python:True"
          tal:omit-tag="">

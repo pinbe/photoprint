@@ -1,6 +1,6 @@
 ##parameters=**kw
 from Products.CMFCore.utils import getToolByName
-from Products.realis.utils import translate
+from Products.photoprint.utils import translate
 from Products.CMFDefault.utils import translate as cmf_translate
 rtool = getToolByName(context, 'portal_registration')
 ptool = getToolByName(context, 'portal_properties')

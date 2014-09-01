@@ -1,6 +1,6 @@
 ##parameters=add=''
 from Products.CMFCore.utils import getToolByName
-from Products.realis.utils import translate
+from Products.Plinn.utils import translate
 from ZTUtils import make_query as mq
 _ = lambda msg : translate(msg, context)
 ptool = getToolByName(script, 'portal_properties')
@@ -17,7 +17,8 @@ fg = lambda name : form.get(name,'').strip()
 
 if add and \
 	context.validatePassword(**form) and \
-	context.customer_add_control(**form) :
+	context.customer_add_control(**form) and \
+	context.validatePrivateAccess(**form) :
 	came_from = fg('came_from')
 	if came_from :
 		return context.setRedirect(	atool, 'user/logged_in'
@@ -39,6 +40,9 @@ continuationFields = [
 	, 'password'
 	, 'confirm'
 	, 'send_password'
+	, 'wedding_id'
+	, 'wedding_password'
+	, 'wedding_password_confirm'
 	, 'billing_address'
 	, 'billing_city'
 	, 'billing_zipcode'

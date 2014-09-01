@@ -2,7 +2,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
   </head>
-  <body metal:fill-slot="main_no_tabs" i18n:domain="realis"
+  <body metal:fill-slot="main_no_tabs" i18n:domain="plinn"
         tal:omit-tag="">
     <div tal:condition="python:options.get('came_from', '').endswith('/my_cart')"
          tal:define="step_authentication python:True" tal:omit-tag="">
@@ -66,6 +66,34 @@
             </td>
           </tr>
         </tal:case>
+        <tr>
+          <td colspan="2"><hr/></td>
+        </tr>
+        <tr>
+          <td colspan="2" style="text-align:center">
+            <h3>Accès à des images privées</h3>
+            veuillez entrer le code d'accès pour accéder / acheter les images<br/>
+            d'un événement privé couvert par les photographes de notre agence.
+          </td>
+        </tr>
+        <tr>
+          <th>Identifiant collection privée</th>
+          <td>
+            <input type="text" name="wedding_id" tal:attributes="value options/wedding_id"/>
+          </td>
+        </tr>
+        <tr>
+          <th>Mot de passe associé</th>
+          <td>
+            <input type="password" name="wedding_password" tal:attributes="value options/wedding_password" />
+          </td>
+        </tr>
+        <tr>
+          <th>Confirmation du mot de passe</th>
+          <td>
+            <input type="password" name="wedding_password_confirm" tal:attributes="value options/wedding_password_confirm" />
+          </td>
+        </tr>
         <tr>
           <td colspan="2"><hr/></td>
         </tr>
