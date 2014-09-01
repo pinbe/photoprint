@@ -337,12 +337,12 @@ class PrintOrder(PortalContent, DefaultDublinCoreImpl) :
                    }
         
         if len(self.items) > 1 :
-            quantitySum = reduce(lambda a, b : a['quantity'] + b['quantity'], self.items)
+            quantitySum = reduce(lambda a, b : a + b, [item['quantity'] for item in self.items])
         else :
             quantitySum = self.items[0]['quantity']
         total = round(self.amountWithFees.getValues()['taxed'], 2)
         
-        options['L_PAYMENTREQUEST_0_NAME0'] = 'Commande realis photo ref. %s' % self.getId()
+        options['L_PAYMENTREQUEST_0_NAME0'] = 'Commande photo ref. %s' % self.getId()
         if quantitySum == 1 :
             options['L_PAYMENTREQUEST_0_DESC0'] = "Commande d'un tirage photographique"
         else :
