@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Plinn 2.0\n"
 "POT-Creation-Date: Mon Sep  1 20:58:12 2014\n"
-"PO-Revision-Date: 2014-09-01 21:00+0200\n"
+"PO-Revision-Date: 2014-09-01 21:22+0200\n"
 "Last-Translator:  Benoît PIN\n"
 "Language-Team: CRI http://cri.ensmp.fr\n"
 "Language: \n"
@@ -150,11 +150,11 @@ msgstr "Téléphone"
 
 #: t/skins/customer_join_template.pt:144
 msgid "I accept general conditions of sales"
-msgstr ""
+msgstr "J'accepte les conditions générales des ventes"
 
 #: t/skins/customer_join_template.pt:152
 msgid "Register"
-msgstr ""
+msgstr "S'enregistrer"
 
 #: t/skins/customer_join_template.pt:153
 #: t/skins/photoprint_templates_edit_template.pt:142
