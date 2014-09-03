@@ -41,6 +41,14 @@
          <td>
           <input type="text" name="member_id" size="30" value=""
                  tal:attributes="value options/member_id" />
+           <dl class="FieldHelp">
+             <dd i18n:translate="">
+               Your login must starts with a letter, followed only by <br/>
+               letters, numbers or _ (underscore).<br/>
+               No accent, nopunctuation or special chars.<br/>
+               Those restrictions are only for this login field.
+             </dd>
+           </dl>
          </td>
         </tr>
         <tal:case tal:condition="not: options/validate_email">
@@ -62,9 +70,12 @@
         </tr>
         <tr>
           <td colspan="2" style="text-align:center">
-            <h3>Accès à des images privées</h3>
-            veuillez entrer le code d'accès pour accéder / acheter les images<br/>
-            d'un événement privé couvert par les photographes de notre agence.
+            <h3 i18n:translate="">Access to private Images</h3>
+            <dl class="FieldHelp">
+              <dd i18n:translate="">
+                Please enter the access code to view / purchase private images.
+              </dd>
+            </dl>
           </td>
         </tr>
         <tr>

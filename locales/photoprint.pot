@@ -14,7 +14,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Meaningless\n"
-"POT-Creation-Date: Wed Sep  3 23:10:26 2014\n"
+"POT-Creation-Date: Wed Sep  3 23:34:02 2014\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
@@ -107,58 +107,70 @@ msgstr ""
 msgid "Member ID"
 msgstr ""
 
-#: t/skins/customer_join_template.pt:48
+#: t/skins/customer_join_template.pt:45
+msgid "Your login must starts with a letter, followed only by <br /> letters, numbers or _ (underscore).<br /> No accent, nopunctuation or special chars.<br /> Those restrictions are only for this login field."
+msgstr ""
+
+#: t/skins/customer_join_template.pt:56
 #: t/skins/customer_login_form.pt:45
 msgid "Password"
 msgstr ""
 
-#: t/skins/customer_join_template.pt:54
+#: t/skins/customer_join_template.pt:62
 msgid "Password (confirm)"
 msgstr ""
 
-#: t/skins/customer_join_template.pt:93
+#: t/skins/customer_join_template.pt:73
+msgid "Access to private Images"
+msgstr ""
+
+#: t/skins/customer_join_template.pt:75
+msgid "Please enter the access code to view / purchase private images."
+msgstr ""
+
+#: t/skins/customer_join_template.pt:104
 #: t/skins/personalize_form.pt:46
 msgid "Billing informations"
 msgstr ""
 
-#: t/skins/customer_join_template.pt:97
+#: t/skins/customer_join_template.pt:108
 #: t/skins/order_view_template.pt:35
 #: t/skins/order_view_template.pt:60
 #: t/skins/personalize_form.pt:50
 msgid "Address"
 msgstr ""
 
-#: t/skins/customer_join_template.pt:104
+#: t/skins/customer_join_template.pt:115
 #: t/skins/order_view_template.pt:39
 #: t/skins/order_view_template.pt:64
 #: t/skins/personalize_form.pt:57
 msgid "City"
 msgstr ""
 
-#: t/skins/customer_join_template.pt:110
+#: t/skins/customer_join_template.pt:121
 #: t/skins/order_view_template.pt:43
 #: t/skins/order_view_template.pt:68
 #: t/skins/personalize_form.pt:63
 msgid "Zip code"
 msgstr ""
 
-#: t/skins/customer_join_template.pt:116
+#: t/skins/customer_join_template.pt:127
 #: t/skins/order_view_template.pt:47
 #: t/skins/order_view_template.pt:72
 #: t/skins/personalize_form.pt:69
 msgid "Country"
 msgstr ""
 
-#: t/skins/customer_join_template.pt:126
+#: t/skins/customer_join_template.pt:137
 #: t/skins/personalize_form.pt:79
 msgid "Phone"
 msgstr ""
 
-#: t/skins/customer_join_template.pt:136
+#: t/skins/customer_join_template.pt:147
 msgid "Register"
 msgstr ""
 
-#: t/skins/customer_join_template.pt:137
+#: t/skins/customer_join_template.pt:148
 #: t/skins/photoprint_templates_edit_template.pt:142
 msgid "Cancel"
 msgstr ""
