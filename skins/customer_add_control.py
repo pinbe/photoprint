@@ -2,6 +2,8 @@
 from Products.CMFCore.utils import getToolByName
 from Products.photoprint.utils import translate
 from Products.CMFDefault.utils import translate as cmf_translate
+from Products.CMFCore.exceptions import AccessControl_Unauthorized
+from Products.Plinn.RegistrationTool import MODE_PASS_ANONYMOUS
 rtool = getToolByName(context, 'portal_registration')
 ptool = getToolByName(context, 'portal_properties')
 _ = lambda msg : translate(msg, context)
@@ -44,9 +46,15 @@ try:
 								,'billing_city'     : kg('billing_city')
 								,'billing_zipcode'	: kg('billing_zipcode')
 								,'country'			: kg('country')
-								,'phone'			: kg('phone')} )
+								,'phone'			: kg('phone')
+                                ,'collection_id'    : kg('collection_id')
+                                ,'collection_password': kg('collection_password')} )
 except ValueError, errmsg:
 	return context.setStatus(False, _(errmsg))
+except AccessControl_Unauthorized :
+    if rtool.getMode() == MODE_PASS_ANONYMOUS :
+        return context.setStatus(False, _('Wrong private collection credentials.'))
+    raise
 
 
 if kg('send_password') or ptool.getProperty('validate_email') :

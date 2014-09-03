@@ -20,40 +20,44 @@ msgstr ""
 msgid "Log in"
 msgstr ""
 
-#: t/skins/customer_add_control.py:19
+#: t/skins/customer_add_control.py:21
 msgid "Please enter a given name."
 msgstr ""
 
-#: t/skins/customer_add_control.py:20
+#: t/skins/customer_add_control.py:22
 msgid "Please enter a name."
 msgstr ""
 
-#: t/skins/customer_add_control.py:21
+#: t/skins/customer_add_control.py:23
 msgid "Please enter an email."
 msgstr ""
 
-#: t/skins/customer_add_control.py:22
+#: t/skins/customer_add_control.py:24
 msgid "Please enter a member id."
 msgstr ""
 
-#: t/skins/customer_add_control.py:23
+#: t/skins/customer_add_control.py:25
 msgid "Please enter a billing address."
 msgstr ""
 
-#: t/skins/customer_add_control.py:24
+#: t/skins/customer_add_control.py:26
 msgid "Please enter a city."
 msgstr ""
 
-#: t/skins/customer_add_control.py:25
+#: t/skins/customer_add_control.py:27
 msgid "Please enter zip code."
 msgstr ""
 
-#: t/skins/customer_add_control.py:26
+#: t/skins/customer_add_control.py:28
 msgid "Please enter a country."
 msgstr ""
 
-#: t/skins/customer_add_control.py:27
+#: t/skins/customer_add_control.py:29
 msgid "Please enter a phone."
+msgstr ""
+
+#: t/skins/customer_add_control.py:56
+msgid "Wrong private collection credentials."
 msgstr ""
 
 #: t/skins/customer_join_template.pt:11

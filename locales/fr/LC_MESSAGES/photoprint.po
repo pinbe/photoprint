@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Plinn 2.0\n"
-"POT-Creation-Date: Mon Sep  1 23:37:28 2014\n"
+"POT-Creation-Date: Wed Sep  3 23:10:26 2014\n"
 "PO-Revision-Date: 2014-09-01 23:39+0200\n"
 "Last-Translator:  Benoît PIN\n"
 "Language-Team: CRI http://cri.ensmp.fr\n"
@@ -40,41 +40,45 @@ msgstr "Cliquez sur le bouton pour vous connecter immédiatement."
 msgid "Log in"
 msgstr "Connexion"
 
-#: t/skins/customer_add_control.py:19
+#: t/skins/customer_add_control.py:21
 msgid "Please enter a given name."
 msgstr "Veuillez entrer un prénom."
 
-#: t/skins/customer_add_control.py:20
+#: t/skins/customer_add_control.py:22
 msgid "Please enter a name."
 msgstr "Veuillez entrer un nom."
 
-#: t/skins/customer_add_control.py:21
+#: t/skins/customer_add_control.py:23
 msgid "Please enter an email."
 msgstr "Veuillez entrer un email."
 
-#: t/skins/customer_add_control.py:22
+#: t/skins/customer_add_control.py:24
 msgid "Please enter a member id."
 msgstr "Veuillez entrer un login."
 
-#: t/skins/customer_add_control.py:23
+#: t/skins/customer_add_control.py:25
 msgid "Please enter a billing address."
 msgstr "Veuillez entrer une addresse de facturation."
 
-#: t/skins/customer_add_control.py:24
+#: t/skins/customer_add_control.py:26
 msgid "Please enter a city."
 msgstr "Veuillez entrer une ville."
 
-#: t/skins/customer_add_control.py:25
+#: t/skins/customer_add_control.py:27
 msgid "Please enter zip code."
 msgstr "Veuillez entrer un code postal."
 
-#: t/skins/customer_add_control.py:26
+#: t/skins/customer_add_control.py:28
 msgid "Please enter a country."
 msgstr "Veuillez entrer un pays."
 
-#: t/skins/customer_add_control.py:27
+#: t/skins/customer_add_control.py:29
 msgid "Please enter a phone."
 msgstr "Veuillez entrer un numéro de téléphone."
+
+#: t/skins/customer_add_control.py:56
+msgid "Wrong private collection credentials."
+msgstr "Identifiant ou mot de passe de collection privée incorrect."
 
 #: t/skins/customer_join_template.pt:11
 msgid "New customer account"
