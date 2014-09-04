@@ -14,7 +14,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Meaningless\n"
-"POT-Creation-Date: Wed Sep  3 23:34:02 2014\n"
+"POT-Creation-Date: Fri Sep  5 00:21:28 2014\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
@@ -227,7 +227,7 @@ msgstr ""
 
 #: t/skins/my_orders.py:17
 #: t/skins/order_list.py:14
-#: t/skins/order_view_template.pt:181
+#: t/skins/order_view_template.pt:185
 msgid "Date"
 msgstr ""
 
@@ -266,7 +266,7 @@ msgstr ""
 #: t/skins/order_notify_done_form.pt:19
 #: t/skins/order_notify_sent_form.pt:19
 #: t/skins/order_view_template.pt:86
-#: t/skins/order_view_template.pt:191
+#: t/skins/order_view_template.pt:195
 msgid "${DYNAMIC_CONTENT}"
 msgstr ""
 
@@ -413,7 +413,7 @@ msgid "Billing"
 msgstr ""
 
 #: t/skins/order_view_template.pt:53
-#: t/skins/order_view_template.pt:133
+#: t/skins/order_view_template.pt:137
 msgid "Shipping"
 msgstr ""
 
@@ -443,36 +443,40 @@ msgstr ""
 msgid "image removed"
 msgstr ""
 
-#: t/skins/order_view_template.pt:137
-msgid "VAT"
+#: t/skins/order_view_template.pt:133
+msgid "Discount"
 msgstr ""
 
 #: t/skins/order_view_template.pt:141
+msgid "VAT"
+msgstr ""
+
+#: t/skins/order_view_template.pt:145
 msgid "Total amount to pay"
 msgstr ""
 
-#: t/skins/order_view_template.pt:151
+#: t/skins/order_view_template.pt:155
 msgid "Pay with PayPal:"
 msgstr ""
 
-#: t/skins/order_view_template.pt:152
-#: t/skins/order_view_template.pt:154
+#: t/skins/order_view_template.pt:156
+#: t/skins/order_view_template.pt:158
 msgid "Pay with PayPal"
 msgstr ""
 
-#: t/skins/order_view_template.pt:164
+#: t/skins/order_view_template.pt:168
 msgid "Please check the preceding table and proceed to payment. By clicking on the PayPal button, you will temporarily leave the site: you will be redirected to the payment provider PayPal. Please follow given instructions. The transaction will be final as soon as you are back on the ${site_name} site. For your information, there is no need to create a PayPal account, even if you will be prompted: you can simply use your credit card. If you already have a PayPal account, you can, at your convenience, pay by PayPal transfer or by credit card."
 msgstr ""
 
-#: t/skins/order_view_template.pt:176
+#: t/skins/order_view_template.pt:180
 msgid "Order processing history"
 msgstr ""
 
-#: t/skins/order_view_template.pt:182
+#: t/skins/order_view_template.pt:186
 msgid "Actor"
 msgstr ""
 
-#: t/skins/order_view_template.pt:183
+#: t/skins/order_view_template.pt:187
 msgid "Action"
 msgstr ""
 

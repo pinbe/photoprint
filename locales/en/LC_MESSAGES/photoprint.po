@@ -199,7 +199,7 @@ msgid ""
 msgstr ""
 
 #: t/skins/my_orders.py:17 t/skins/order_list.py:14
-#: t/skins/order_view_template.pt:181
+#: t/skins/order_view_template.pt:185
 msgid "Date"
 msgstr ""
 
@@ -229,7 +229,7 @@ msgstr ""
 #: t/skins/order_list_template.pt:37 t/skins/order_list_template.pt:50
 #: t/skins/order_manual_payment_form.pt:19
 #: t/skins/order_notify_done_form.pt:19 t/skins/order_notify_sent_form.pt:19
-#: t/skins/order_view_template.pt:86 t/skins/order_view_template.pt:191
+#: t/skins/order_view_template.pt:86 t/skins/order_view_template.pt:195
 msgid "${DYNAMIC_CONTENT}"
 msgstr ""
 
@@ -372,7 +372,7 @@ msgstr ""
 msgid "Billing"
 msgstr ""
 
-#: t/skins/order_view_template.pt:53 t/skins/order_view_template.pt:133
+#: t/skins/order_view_template.pt:53 t/skins/order_view_template.pt:137
 msgid "Shipping"
 msgstr ""
 
@@ -402,23 +402,27 @@ msgstr ""
 msgid "image removed"
 msgstr ""
 
-#: t/skins/order_view_template.pt:137
-msgid "VAT"
+#: t/skins/order_view_template.pt:133
+msgid "Discount"
 msgstr ""
 
 #: t/skins/order_view_template.pt:141
+msgid "VAT"
+msgstr ""
+
+#: t/skins/order_view_template.pt:145
 msgid "Total amount to pay"
 msgstr ""
 
-#: t/skins/order_view_template.pt:151
+#: t/skins/order_view_template.pt:155
 msgid "Pay with PayPal:"
 msgstr ""
 
-#: t/skins/order_view_template.pt:152 t/skins/order_view_template.pt:154
+#: t/skins/order_view_template.pt:156 t/skins/order_view_template.pt:158
 msgid "Pay with PayPal"
 msgstr ""
 
-#: t/skins/order_view_template.pt:164
+#: t/skins/order_view_template.pt:168
 msgid ""
 "Please check the preceding table and proceed to payment. By clicking on the "
 "PayPal button, you will temporarily leave the site: you will be redirected "
@@ -430,15 +434,15 @@ msgid ""
 "or by credit card."
 msgstr ""
 
-#: t/skins/order_view_template.pt:176
+#: t/skins/order_view_template.pt:180
 msgid "Order processing history"
 msgstr ""
 
-#: t/skins/order_view_template.pt:182
+#: t/skins/order_view_template.pt:186
 msgid "Actor"
 msgstr ""
 
-#: t/skins/order_view_template.pt:183
+#: t/skins/order_view_template.pt:187
 msgid "Action"
 msgstr ""
 

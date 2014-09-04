@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Plinn 2.0\n"
-"POT-Creation-Date: Wed Sep  3 23:34:02 2014\n"
-"PO-Revision-Date: 2014-09-01 23:39+0200\n"
+"POT-Creation-Date: Fri Sep  5 00:21:28 2014\n"
+"PO-Revision-Date: 2014-09-05 00:22+0200\n"
 "Last-Translator:  Benoît PIN\n"
 "Language-Team: CRI http://cri.ensmp.fr\n"
 "Language: \n"
@@ -111,7 +111,8 @@ msgid ""
 "<br /> Those restrictions are only for this login field."
 msgstr ""
 "Votre login doit commencer par une lettre, suivi par des lettres,<br/>\n"
-"des chiffres ou _ (underscore). Pas d'accent, pas de ponctuation, pas de<br/>\n"
+"des chiffres ou _ (underscore). Pas d'accent, pas de ponctuation, pas de<br/"
+">\n"
 "caractères spéciaux. Ces restrictions ne s'appliquent qu'à ce champ."
 
 #: t/skins/customer_join_template.pt:56 t/skins/customer_login_form.pt:45
@@ -128,7 +129,8 @@ msgstr "Accès à des images privées"
 
 #: t/skins/customer_join_template.pt:75
 msgid "Please enter the access code to view / purchase private images."
-msgstr "Veuillez entrer le code d'accès pour voir / acheter des images privées."
+msgstr ""
+"Veuillez entrer le code d'accès pour voir / acheter des images privées."
 
 #: t/skins/customer_join_template.pt:104 t/skins/personalize_form.pt:46
 msgid "Billing informations"
@@ -229,7 +231,7 @@ msgstr ""
 "visite."
 
 #: t/skins/my_orders.py:17 t/skins/order_list.py:14
-#: t/skins/order_view_template.pt:181
+#: t/skins/order_view_template.pt:185
 msgid "Date"
 msgstr "Date"
 
@@ -259,7 +261,7 @@ msgstr "Mes commandes"
 #: t/skins/order_list_template.pt:37 t/skins/order_list_template.pt:50
 #: t/skins/order_manual_payment_form.pt:19
 #: t/skins/order_notify_done_form.pt:19 t/skins/order_notify_sent_form.pt:19
-#: t/skins/order_view_template.pt:86 t/skins/order_view_template.pt:191
+#: t/skins/order_view_template.pt:86 t/skins/order_view_template.pt:195
 msgid "${DYNAMIC_CONTENT}"
 msgstr ""
 
@@ -411,7 +413,7 @@ msgstr "Commande N° ${order_number}"
 msgid "Billing"
 msgstr "Facturation"
 
-#: t/skins/order_view_template.pt:53 t/skins/order_view_template.pt:133
+#: t/skins/order_view_template.pt:53 t/skins/order_view_template.pt:137
 msgid "Shipping"
 msgstr "Livraison"
 
@@ -441,23 +443,27 @@ msgstr "Montant (TTC)"
 msgid "image removed"
 msgstr "image supprimée"
 
-#: t/skins/order_view_template.pt:137
+#: t/skins/order_view_template.pt:133
+msgid "Discount"
+msgstr "Remise"
+
+#: t/skins/order_view_template.pt:141
 msgid "VAT"
 msgstr "TVA"
 
-#: t/skins/order_view_template.pt:141
+#: t/skins/order_view_template.pt:145
 msgid "Total amount to pay"
 msgstr "Montant total à payer"
 
-#: t/skins/order_view_template.pt:151
+#: t/skins/order_view_template.pt:155
 msgid "Pay with PayPal:"
 msgstr "Payer avec PayPal :"
 
-#: t/skins/order_view_template.pt:152 t/skins/order_view_template.pt:154
+#: t/skins/order_view_template.pt:156 t/skins/order_view_template.pt:158
 msgid "Pay with PayPal"
 msgstr "Payer avec PayPal"
 
-#: t/skins/order_view_template.pt:164
+#: t/skins/order_view_template.pt:168
 msgid ""
 "Please check the preceding table and proceed to payment. By clicking on the "
 "PayPal button, you will temporarily leave the site: you will be redirected "
@@ -478,15 +484,15 @@ msgstr ""
 "vous pourrez, à votre convenance, payer par virement PayPal ou par carte "
 "bancaire."
 
-#: t/skins/order_view_template.pt:176
+#: t/skins/order_view_template.pt:180
 msgid "Order processing history"
 msgstr "Historique du traitement de la commande"
 
-#: t/skins/order_view_template.pt:182
+#: t/skins/order_view_template.pt:186
 msgid "Actor"
 msgstr "Acteur"
 
-#: t/skins/order_view_template.pt:183
+#: t/skins/order_view_template.pt:187
 msgid "Action"
 msgstr "Action"
 
