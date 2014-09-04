@@ -131,7 +131,7 @@
           </tr>
           <tr tal:condition="options/discount">
             <td class="num" colspan="5" i18n:translate="">Discount</td>
-            <td class="num"><span tal:replace="options/discount"/> %</td>
+            <td class="num"><span tal:replace="options/discount"/> %</td>
           </tr>
           <tr>
             <td class="num" colspan="5" i18n:translate="">Shipping</td>
