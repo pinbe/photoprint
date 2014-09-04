@@ -129,6 +129,10 @@
             <th class="num" tal:content="python:'%s €' % options['pricesSum'].taxed"
                 style="border-right:1px solid black"></th>
           </tr>
+          <tr tal:condition="options/discount">
+            <td class="num" colspan="5" i18n:translate="">Discount</td>
+            <td class="num"><span tal:replace="options/discount"/> %</td>
+          </tr>
           <tr>
             <td class="num" colspan="5" i18n:translate="">Shipping</td>
             <td class="num" tal:content="python:'%s €' % options['shippingFees'].taxed"></td>

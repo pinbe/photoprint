@@ -55,6 +55,7 @@ for item in context.items :
 options['infos'] = infos
 options['quantity'] = quantity
 options['pricesSum'] = context.price
+options['discount'] = getattr(context, 'discount', 0)
 options['shippingFees'] = shippingFees = context.shippingFees
 options['total'] = context.amountWithFees
 

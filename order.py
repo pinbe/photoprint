@@ -183,6 +183,7 @@ class PrintOrder(PortalContent, DefaultDublinCoreImpl) :
         self.id = id
         self.items = []
         self.quantity = 0
+        self.discount = 0 # discount ratio in percent
         self.price = Price(0, 0)
         # billing and shipping addresses
         self.billing = PersistentMapping()
@@ -192,7 +193,8 @@ class PrintOrder(PortalContent, DefaultDublinCoreImpl) :
     
     @property
     def amountWithFees(self) :
-        return self.price + self.shippingFees
+        coeff = (100 - self.discount) / 100.
+        return self.price * coeff + self.shippingFees
     
     
     security.declareProtected(ModifyPortalContent, 'editBilling')
@@ -223,6 +225,7 @@ class PrintOrder(PortalContent, DefaultDublinCoreImpl) :
         pptool = getToolByName(self, 'portal_photo_print')
         uidh = getToolByName(self, 'portal_uidhandler')
         mtool = getToolByName(self, 'portal_membership')
+        utool = getToolByName(self, 'portal_url')
         
         items = []
         for item in cart :
@@ -251,6 +254,9 @@ class PrintOrder(PortalContent, DefaultDublinCoreImpl) :
                 counters.confirm(reference, quantity)
                 
         self.items = tuple(items)
+        discount_script = getattr(utool.getPortalObject(), 'photoprint_discount', None)
+        if discount_script :
+            self.discount = discount_script(self.price, self.quantity)
 
         member = mtool.getAuthenticatedMember()
         mg = lambda name : member.getProperty(name, '')
