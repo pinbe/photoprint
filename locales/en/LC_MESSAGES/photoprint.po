@@ -1,88 +1,115 @@
+# #############################################################################
+#
+# Copyright (c) 2003-2004 Zope Foundation and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+# #############################################################################
+msgid ""
+msgstr ""
+"Project-Id-Version: Meaningless\n"
+"POT-Creation-Date: Fri Sep  5 00:21:28 2014\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: zope/app/locales/extract.py\n"
+
 #: t/price.py:82
 msgid "${i}.${d}"
-msgstr ""
+msgstr "${i}.${d}"
 
 #: t/skins/confirm_join_template.pt:12
 msgid "You have been registered as a member."
-msgstr ""
+msgstr "You have been registered as a member."
 
 #: t/skins/confirm_join_template.pt:14
 msgid ""
 "You will receive an email shortly containing your password and instructions "
 "on how to activate your membership."
 msgstr ""
+"You will receive an email shortly containing your password and instructions "
+"on how to activate your membership."
 
 #: t/skins/confirm_join_template.pt:19
 msgid "Click the button to log in immediately."
-msgstr ""
+msgstr "Click the button to log in immediately."
 
 #: t/skins/confirm_join_template.pt:26
 msgid "Log in"
-msgstr ""
+msgstr "Log in"
 
 #: t/skins/customer_add_control.py:21
 msgid "Please enter a given name."
-msgstr ""
+msgstr "Please enter a given name."
 
 #: t/skins/customer_add_control.py:22
 msgid "Please enter a name."
-msgstr ""
+msgstr "Please enter a name."
 
 #: t/skins/customer_add_control.py:23
 msgid "Please enter an email."
-msgstr ""
+msgstr "Please enter an email."
 
 #: t/skins/customer_add_control.py:24
 msgid "Please enter a member id."
-msgstr ""
+msgstr "Please enter a member id."
 
 #: t/skins/customer_add_control.py:25
 msgid "Please enter a billing address."
-msgstr ""
+msgstr "Please enter a billing address."
 
 #: t/skins/customer_add_control.py:26
 msgid "Please enter a city."
-msgstr ""
+msgstr "Please enter a city."
 
 #: t/skins/customer_add_control.py:27
 msgid "Please enter zip code."
-msgstr ""
+msgstr "Please enter zip code."
 
 #: t/skins/customer_add_control.py:28
 msgid "Please enter a country."
-msgstr ""
+msgstr "Please enter a country."
 
 #: t/skins/customer_add_control.py:29
 msgid "Please enter a phone."
-msgstr ""
+msgstr "Please enter a phone."
 
 #: t/skins/customer_add_control.py:56
 msgid "Wrong private collection credentials."
-msgstr ""
+msgstr "Wrong private collection credentials."
 
 #: t/skins/customer_join_template.pt:11
 msgid "New customer account"
-msgstr ""
+msgstr "New customer account"
 
 #: t/skins/customer_join_template.pt:17
 msgid "Customer informations"
-msgstr ""
+msgstr "Customer informations"
 
 #: t/skins/customer_join_template.pt:21
 msgid "First name"
-msgstr ""
+msgstr "First name"
 
 #: t/skins/customer_join_template.pt:27
 msgid "Last name"
-msgstr ""
+msgstr "Last name"
 
 #: t/skins/customer_join_template.pt:33
 msgid "Email Address"
-msgstr ""
+msgstr "Email Address"
 
 #: t/skins/customer_join_template.pt:40
 msgid "Member ID"
-msgstr ""
+msgstr "Member ID"
 
 #: t/skins/customer_join_template.pt:45
 msgid ""
@@ -90,106 +117,110 @@ msgid ""
 "numbers or _ (underscore).<br /> No accent, nopunctuation or special chars."
 "<br /> Those restrictions are only for this login field."
 msgstr ""
+"Your login must starts with a letter, followed only by <br /> letters, "
+"numbers or _ (underscore).<br /> No accent, nopunctuation or special chars."
+"<br /> Those restrictions are only for this login field."
 
 #: t/skins/customer_join_template.pt:56 t/skins/customer_login_form.pt:45
 msgid "Password"
-msgstr ""
+msgstr "Password"
 
 #: t/skins/customer_join_template.pt:62
 msgid "Password (confirm)"
-msgstr ""
+msgstr "Password (confirm)"
 
 #: t/skins/customer_join_template.pt:73
 msgid "Access to private Images"
-msgstr ""
+msgstr "Access to private Images"
 
 #: t/skins/customer_join_template.pt:75
 msgid "Please enter the access code to view / purchase private images."
-msgstr ""
+msgstr "Please enter the access code to view / purchase private images."
 
 #: t/skins/customer_join_template.pt:104 t/skins/personalize_form.pt:46
 msgid "Billing informations"
-msgstr ""
+msgstr "Billing informations"
 
 #: t/skins/customer_join_template.pt:108 t/skins/order_view_template.pt:35
 #: t/skins/order_view_template.pt:60 t/skins/personalize_form.pt:50
 msgid "Address"
-msgstr ""
+msgstr "Address"
 
 #: t/skins/customer_join_template.pt:115 t/skins/order_view_template.pt:39
 #: t/skins/order_view_template.pt:64 t/skins/personalize_form.pt:57
 msgid "City"
-msgstr ""
+msgstr "City"
 
 #: t/skins/customer_join_template.pt:121 t/skins/order_view_template.pt:43
 #: t/skins/order_view_template.pt:68 t/skins/personalize_form.pt:63
 msgid "Zip code"
-msgstr ""
+msgstr "Zip code"
 
 #: t/skins/customer_join_template.pt:127 t/skins/order_view_template.pt:47
 #: t/skins/order_view_template.pt:72 t/skins/personalize_form.pt:69
 msgid "Country"
-msgstr ""
+msgstr "Country"
 
 #: t/skins/customer_join_template.pt:137 t/skins/personalize_form.pt:79
 msgid "Phone"
-msgstr ""
+msgstr "Phone"
 
 #: t/skins/customer_join_template.pt:147
 msgid "Register"
-msgstr ""
+msgstr "Register"
 
 #: t/skins/customer_join_template.pt:148
 #: t/skins/photoprint_templates_edit_template.pt:142
 msgid "Cancel"
-msgstr ""
+msgstr "Cancel"
 
 #: t/skins/customer_login_form.pt:16
 msgid "You already have an account?"
-msgstr ""
+msgstr "You already have an account?"
 
 #: t/skins/customer_login_form.pt:17
 msgid "Please login to continue"
-msgstr ""
+msgstr "Please login to continue"
 
 #: t/skins/customer_login_form.pt:20
 msgid "New customer?"
-msgstr ""
+msgstr "New customer?"
 
 #: t/skins/customer_login_form.pt:21
 msgid "Welcome!<br /> Please create an account to order."
-msgstr ""
+msgstr "Welcome!<br /> Please create an account to order."
 
 #. Default: "Login"
 #: t/skins/customer_login_form.pt:38
 msgid "user_name"
-msgstr ""
+msgstr "Login"
 
 #: t/skins/customer_login_form.pt:55
 msgid "Remember my name."
-msgstr ""
+msgstr "Remember my name."
 
 #. Default: "Login"
 #: t/skins/customer_login_form.pt:63
 msgid " Login "
-msgstr ""
+msgstr " Login "
 
 #: t/skins/customer_login_form.pt:73
 msgid "Open new account >>"
-msgstr ""
+msgstr "Open new account >>"
 
 #: t/skins/customer_login_form.pt:81
 msgid "Forgot your password?"
-msgstr ""
+msgstr "Forgot your password?"
 
 #: t/skins/customer_login_form.pt:87
 msgid ""
 "Having trouble logging in? Make sure to enable cookies in your web browser."
 msgstr ""
+"Having trouble logging in? Make sure to enable cookies in your web browser."
 
 #: t/skins/customer_login_form.pt:90
 msgid "Don't forget to logout or exit your browser when you're done."
-msgstr ""
+msgstr "Don't forget to logout or exit your browser when you're done."
 
 #: t/skins/customer_login_form.pt:94
 msgid ""
@@ -197,32 +228,35 @@ msgid ""
 "so that when you next log in, your user name will already be filled in for "
 "you."
 msgstr ""
+"Setting the 'Remember my name' option will set a cookie with your username, "
+"so that when you next log in, your user name will already be filled in for "
+"you."
 
 #: t/skins/my_orders.py:17 t/skins/order_list.py:14
 #: t/skins/order_view_template.pt:185
 msgid "Date"
-msgstr ""
+msgstr "Date"
 
 #: t/skins/my_orders.py:21 t/skins/order_list.py:22
 #: t/skins/photoprint_templates_edit_template.pt:42
 msgid "Reference"
-msgstr ""
+msgstr "Reference"
 
 #: t/skins/my_orders.py:25 t/skins/order_list.py:26
 msgid "Prints"
-msgstr ""
+msgstr "Prints"
 
 #: t/skins/my_orders.py:29 t/skins/order_list.py:30
 msgid "Amount"
-msgstr ""
+msgstr "Amount"
 
 #: t/skins/my_orders.py:33 t/skins/order_list.py:34
 msgid "State"
-msgstr ""
+msgstr "State"
 
 #: t/skins/my_orders.py:69
 msgid "My orders"
-msgstr ""
+msgstr "My orders"
 
 #: t/skins/my_orders_template.pt:34 t/skins/order_cancel_form.pt:19
 #: t/skins/order_list_template.pt:33 t/skins/order_list_template.pt:35
@@ -231,105 +265,107 @@ msgstr ""
 #: t/skins/order_notify_done_form.pt:19 t/skins/order_notify_sent_form.pt:19
 #: t/skins/order_view_template.pt:86 t/skins/order_view_template.pt:195
 msgid "${DYNAMIC_CONTENT}"
-msgstr ""
+msgstr "${DYNAMIC_CONTENT}"
 
 #: t/skins/order_cancel_form.pt:11
 msgid "Cancel order \"${order_reference}\""
-msgstr ""
+msgstr "Cancel order \"${order_reference}\""
 
 #: t/skins/order_cancel_form.pt:12
 msgid "Cancel the order and relist reserved copies."
-msgstr ""
+msgstr "Cancel the order and relist reserved copies."
 
 #: t/skins/order_cancel_form.pt:18 t/skins/order_manual_payment_form.pt:18
 #: t/skins/order_notify_done_form.pt:18 t/skins/order_notify_sent_form.pt:18
 msgid "Current state:"
-msgstr ""
+msgstr "Current state:"
 
 #. Default: "Subject"
 #: t/skins/order_cancel_form.pt:23 t/skins/order_notify_sent_form.pt:24
 msgid "mail_subject"
-msgstr ""
+msgstr "Subject"
 
 #: t/skins/order_cancel_form.pt:31 t/skins/order_notify_done_form.pt:21
 #: t/skins/order_notify_sent_form.pt:32
 msgid "Comments"
-msgstr ""
+msgstr "Comments"
 
 #: t/skins/order_cancel_form.pt:39
 msgid ""
 "Due to a lack of payment since ${creation_date}, your order has been "
 "canceled. The ${store_name} team."
 msgstr ""
+"Due to a lack of payment since ${creation_date}, your order has been "
+"canceled. The ${store_name} team."
 
 #: t/skins/order_cancel_form.pt:46 t/skins/order_notify_sent_form.pt:59
 msgid "Send email"
-msgstr ""
+msgstr "Send email"
 
 #: t/skins/order_cancel_form.pt:60
 msgid "Cancel the order"
-msgstr ""
+msgstr "Cancel the order"
 
 #: t/skins/order_list.py:18
 msgid "Customer"
-msgstr ""
+msgstr "Customer"
 
 #: t/skins/order_list.py:46
 msgid "descending sort"
-msgstr ""
+msgstr "descending sort"
 
 #: t/skins/order_list.py:49
 msgid "ascending sort"
-msgstr ""
+msgstr "ascending sort"
 
 #: t/skins/order_list_template.pt:17 t/skins/order_view_template.pt:31
 #: t/skins/order_view_template.pt:56 t/skins/personalize_form.pt:33
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 #: t/skins/order_manual_payment_form.pt:11
 msgid "Pay order \"${order_reference}\" manually."
-msgstr ""
+msgstr "Pay order \"${order_reference}\" manually."
 
 #: t/skins/order_manual_payment_form.pt:12
 msgid "Pay manually"
-msgstr ""
+msgstr "Pay manually"
 
 #: t/skins/order_manual_payment_form.pt:21
 msgid "Payment description"
-msgstr ""
+msgstr "Payment description"
 
 #: t/skins/order_manual_payment_form.pt:24
 msgid "Please indicate payment mean and references"
-msgstr ""
+msgstr "Please indicate payment mean and references"
 
 #: t/skins/order_manual_payment_form.pt:29
 msgid "Pay"
-msgstr ""
+msgstr "Pay"
 
 #: t/skins/order_notify_done_form.pt:11
 msgid "Notify order \"${order_reference}\" done."
-msgstr ""
+msgstr "Notify order \"${order_reference}\" done."
 
 #: t/skins/order_notify_done_form.pt:12
 msgid "Notify that order has been made."
-msgstr ""
+msgstr "Notify that order has been made."
 
 #: t/skins/order_notify_done_form.pt:26 t/skins/order_notify_sent_form.pt:73
 msgid "Notify"
-msgstr ""
+msgstr "Notify"
 
 #: t/skins/order_notify_sent_form.pt:11
 msgid "Notify order \"${order_reference}\" sent."
-msgstr ""
+msgstr "Notify order \"${order_reference}\" sent."
 
 #: t/skins/order_notify_sent_form.pt:12
 msgid "Notify that order has been sent."
-msgstr ""
+msgstr "Notify that order has been sent."
 
 #: t/skins/order_notify_sent_form.pt:21
 msgid "Tracking info"
-msgstr ""
+msgstr "Tracking info"
 
 #: t/skins/order_notify_sent_form.pt:39
 msgid ""
@@ -337,90 +373,93 @@ msgid ""
 "able to track your parcel with the informations below. The ${store_name} "
 "team thanks you for your confidence and wish you receipt you order."
 msgstr ""
+"Your order has been sent. You will receive your prints soon. You will be "
+"able to track your parcel with the informations below. The ${store_name} "
+"team thanks you for your confidence and wish you receipt you order."
 
 #: t/skins/order_notify_sent_form.pt:47
 msgid "Tracking number"
-msgstr ""
+msgstr "Tracking number"
 
 #: t/skins/order_notify_sent_form.pt:53
 msgid "Tracking url"
-msgstr ""
+msgstr "Tracking url"
 
 #: t/skins/order_printing_list_template.pt:22
 #: t/skins/order_view_template.pt:96
 msgid "Image"
-msgstr ""
+msgstr "Image"
 
 #: t/skins/order_printing_list_template.pt:23
 msgid "File"
-msgstr ""
+msgstr "File"
 
 #: t/skins/order_printing_list_template.pt:24
 msgid "Format / type"
-msgstr ""
+msgstr "Format / type"
 
 #: t/skins/order_printing_list_template.pt:25
 #: t/skins/order_view_template.pt:98
 msgid "Quantity"
-msgstr ""
+msgstr "Quantity"
 
 #: t/skins/order_view_template.pt:23
 msgid "Order Nb. ${order_number}"
-msgstr ""
+msgstr "Order Nb. ${order_number}"
 
 #: t/skins/order_view_template.pt:28
 msgid "Billing"
-msgstr ""
+msgstr "Billing"
 
 #: t/skins/order_view_template.pt:53 t/skins/order_view_template.pt:137
 msgid "Shipping"
-msgstr ""
+msgstr "Shipping"
 
 #: t/skins/order_view_template.pt:83
 msgid "Processing"
-msgstr ""
+msgstr "Processing"
 
 #: t/skins/order_view_template.pt:97
 msgid "Printing format and type"
-msgstr ""
+msgstr "Printing format and type"
 
 #: t/skins/order_view_template.pt:99
 msgid "Unit price"
-msgstr ""
+msgstr "Unit price"
 
 #: t/skins/order_view_template.pt:100
 #: t/skins/photoprint_templates_edit_template.pt:45
 #: t/skins/photoprint_templates_edit_template.pt:131
 msgid "VAT (%)"
-msgstr ""
+msgstr "VAT (%)"
 
 #: t/skins/order_view_template.pt:101
 msgid "Amount<br />(tax incl.)"
-msgstr ""
+msgstr "Amount<br />(tax incl.)"
 
 #: t/skins/order_view_template.pt:110
 msgid "image removed"
-msgstr ""
+msgstr "image removed"
 
 #: t/skins/order_view_template.pt:133
 msgid "Discount"
-msgstr ""
+msgstr "Discount"
 
 #: t/skins/order_view_template.pt:141
 msgid "VAT"
-msgstr ""
+msgstr "VAT"
 
 #: t/skins/order_view_template.pt:145
 msgid "Total amount to pay"
-msgstr ""
+msgstr "Total amount to pay"
 
 #: t/skins/order_view_template.pt:155
 msgid "Pay with PayPal:"
-msgstr ""
+msgstr "Pay with PayPal:"
 
 #: t/skins/order_view_template.pt:156 t/skins/order_view_template.pt:158
 msgid "Pay with PayPal"
-msgstr ""
+msgstr "Pay with PayPal"
 
 #: t/skins/order_view_template.pt:168
 msgid ""
@@ -433,246 +472,260 @@ msgid ""
 "have a PayPal account, you can, at your convenience, pay by PayPal transfer "
 "or by credit card."
 msgstr ""
+"Please check the preceding table and proceed to payment. By clicking on the "
+"PayPal button, you will temporarily leave the site: you will be redirected "
+"to the payment provider PayPal. Please follow given instructions. The "
+"transaction will be final as soon as you are back on the ${site_name} site. "
+"For your information, there is no need to create a PayPal account, even if "
+"you will be prompted: you can simply use your credit card. If you already "
+"have a PayPal account, you can, at your convenience, pay by PayPal transfer "
+"or by credit card."
 
 #: t/skins/order_view_template.pt:180
 msgid "Order processing history"
-msgstr ""
+msgstr "Order processing history"
 
 #: t/skins/order_view_template.pt:186
 msgid "Actor"
-msgstr ""
+msgstr "Actor"
 
 #: t/skins/order_view_template.pt:187
 msgid "Action"
-msgstr ""
+msgstr "Action"
 
 #: t/skins/personalize_form.pt:21
 msgid "Member Preferences"
-msgstr ""
+msgstr "Member Preferences"
 
 #: t/skins/personalize_form.pt:23
 msgid "${link} to change your password."
-msgstr ""
+msgstr "${link} to change your password."
 
 #: t/skins/personalize_form.pt:23
 msgid "Click here"
-msgstr ""
+msgstr "Click here"
 
 #: t/skins/personalize_form.pt:27
 msgid "Given Name"
-msgstr ""
+msgstr "Given Name"
 
 #: t/skins/personalize_form.pt:39
 msgid "Email address"
-msgstr ""
+msgstr "Email address"
 
 #: t/skins/personalize_form.pt:88
 msgid "Change"
-msgstr ""
+msgstr "Change"
 
 #: t/skins/photoprint_order_cancel.py:5
 msgid "Your payment has been canceled. You can retry later."
-msgstr ""
+msgstr "Your payment has been canceled. You can retry later."
 
 #: t/skins/photoprint_order_confirm.py:7
 msgid "Your payment has been accepted by PayPal."
-msgstr ""
+msgstr "Your payment has been accepted by PayPal."
 
 #: t/skins/photoprint_order_confirm.py:11
 msgid ""
 "Your payment has been canceled.<br/>You can retry with an other account / "
 "credit card by cliking on the PayPal button.<br/>"
 msgstr ""
+"Your payment has been canceled.<br/>You can retry with an other account / "
+"credit card by cliking on the PayPal button.<br/>"
 
 #: t/skins/photoprint_templates_edit_form.py:55
 msgid "Printing options added."
-msgstr ""
+msgstr "Printing options added."
 
 #: t/skins/photoprint_templates_edit_form.py:59
 msgid "Printing options deleted."
-msgstr ""
+msgstr "Printing options deleted."
 
 #: t/skins/photoprint_templates_edit_template.pt:19
 msgid "No printing options are defined at this level."
-msgstr ""
+msgstr "No printing options are defined at this level."
 
 #: t/skins/photoprint_templates_edit_template.pt:23
 msgid "The printing options that apply here are defined above:"
-msgstr ""
+msgstr "The printing options that apply here are defined above:"
 
 #: t/skins/photoprint_templates_edit_template.pt:28
 msgid "Define printing options"
-msgstr ""
+msgstr "Define printing options"
 
 #: t/skins/photoprint_templates_edit_template.pt:41
 #: t/skins/photoprint_templates_edit_template.pt:100
 msgid "Title"
-msgstr ""
+msgstr "Title"
 
 #: t/skins/photoprint_templates_edit_template.pt:43
 #: t/skins/photoprint_templates_edit_template.pt:118
 msgid "Max. number of copies"
-msgstr ""
+msgstr "Max. number of copies"
 
 #: t/skins/photoprint_templates_edit_template.pt:44
 #: t/skins/photoprint_templates_edit_template.pt:127
 msgid "Price"
-msgstr ""
+msgstr "Price"
 
 #: t/skins/photoprint_templates_edit_template.pt:80
 #: t/skins/photoprint_templates_edit_template.pt:81
 msgid "Add print order template"
-msgstr ""
+msgstr "Add print order template"
 
 #: t/skins/photoprint_templates_edit_template.pt:91
 msgid "Delete options defined at this level"
-msgstr ""
+msgstr "Delete options defined at this level"
 
 #: t/skins/photoprint_templates_edit_template.pt:106
 msgid "Description"
-msgstr ""
+msgstr "Description"
 
 #: t/skins/photoprint_templates_edit_template.pt:112
 msgid "Product reference"
-msgstr ""
+msgstr "Product reference"
 
 #. Default: "The 0 value means unlimited"
 #: t/skins/photoprint_templates_edit_template.pt:122
 msgid "max_copies_field_help"
-msgstr ""
+msgstr "The 0 value means unlimited"
 
 #: t/skins/photoprint_templates_edit_template.pt:140
 msgid "Add"
-msgstr ""
+msgstr "Add"
 
 #: t/skins/photoprint_templates_edit_template.pt:150
 msgid "Save"
-msgstr ""
+msgstr "Save"
 
 #: t/tool.py:119
 msgid "No printing options found at %r"
-msgstr ""
+msgstr "No printing options found at %r"
 
 #: t/tool.py:203
 msgid "You must enter a title."
-msgstr ""
+msgstr "You must enter a title."
 
 #: t/tool.py:207
 msgid ""
 "You must enter an integer number\n"
 "for the maximum number of copies."
 msgstr ""
+"You must enter an integer number\n"
+"for the maximum number of copies."
 
 #: t/tool.py:209
 msgid ""
 "You must enter a positive value\n"
 "for the maximum number of copies."
 msgstr ""
+"You must enter a positive value\n"
+"for the maximum number of copies."
 
 #: t/tool.py:213
 msgid "You must enter a numeric value for the price."
-msgstr ""
+msgstr "You must enter a numeric value for the price."
 
 #: t/tool.py:218
 msgid "You must enter a numeric value for the VAT rate."
-msgstr ""
+msgstr "You must enter a numeric value for the VAT rate."
 
 #: t/utils.py:53
 msgid "Wrong private collection identifier."
-msgstr ""
+msgstr "Wrong private collection identifier."
 
 #: t/utils.py:56
 msgid "Collection's password does not match confirmation."
-msgstr ""
+msgstr "Collection's password does not match confirmation."
 
 #: t/utils.py:60
 msgid "Wrong collection's password."
-msgstr ""
+msgstr "Wrong collection's password."
 
 # from photoprint-manual.pot
 msgid "Your payment is complete."
-msgstr ""
+msgstr "Your payment is complete."
 
 msgid "Your payment has been canceled. You will be able to pay later."
-msgstr ""
+msgstr "Your payment has been canceled. You will be able to pay later."
 
 msgid "Your payment has been refused."
-msgstr ""
+msgstr "Your payment has been refused."
 
 msgid "recorded-en.gif"
-msgstr ""
+msgstr "recorded-en.gif"
 
 msgid "done-en.gif"
-msgstr ""
+msgstr "done-en.gif"
 
 msgid "paid-en.gif"
-msgstr ""
+msgstr "paid-en.gif"
 
 msgid "refused-en.gif"
-msgstr ""
+msgstr "refused-en.gif"
 
 msgid "sent-en.gif"
-msgstr ""
+msgstr "sent-en.gif"
 
 msgid "canceled-en.gif"
-msgstr ""
+msgstr "canceled-en.gif"
 
 msgid "auto_accept_payment"
-msgstr ""
+msgstr "auto_accept_payment"
 
 msgid "auto_cancel_order"
-msgstr ""
+msgstr "auto_cancel_order"
 
 msgid "auto_refuse_payment"
-msgstr ""
+msgstr "auto_refuse_payment"
 
 msgid "auto_transaction_failed"
-msgstr ""
+msgstr "auto_transaction_failed"
 
 msgid "manual_payment"
-msgstr ""
+msgstr "manual_payment"
 
 msgid "notify_done"
-msgstr ""
+msgstr "notify_done"
 
 msgid "notify_sent"
-msgstr ""
+msgstr "notify_sent"
 
 msgid "canceled"
-msgstr ""
+msgstr "canceled"
 
 msgid "done"
-msgstr ""
+msgstr "done"
 
 msgid "paid"
-msgstr ""
+msgstr "paid"
 
 msgid "recorded"
-msgstr ""
+msgstr "recorded"
 
 msgid "refused"
-msgstr ""
+msgstr "refused"
 
 msgid "sent"
-msgstr ""
+msgstr "sent"
 
 msgid "Manual payment"
-msgstr ""
+msgstr "Manual payment"
 
 msgid "Notify done"
-msgstr ""
+msgstr "Notify done"
 
 msgid "Notify sent"
-msgstr ""
+msgstr "Notify sent"
 
 msgid "Printing list"
-msgstr ""
+msgstr "Printing list"
 
 msgid "[%s] order %s canceling notification"
-msgstr ""
+msgstr "[%s] order %s canceling notification"
 
 msgid "[%s] order %s sending notification"
-msgstr ""
+msgstr "[%s] order %s sending notification"
 
 msgid "paypal_pay"
-msgstr ""
+msgstr "paypal_pay"
