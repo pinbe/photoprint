@@ -7,7 +7,7 @@ pptool = getToolByName(context, 'portal_photo_print')
 form = context.REQUEST.form.copy()
 
 if addTemplate:
-	context.REQUEST.RESPONSE.setHeader('Content-Type', 'text/xml;;charset=utf-8');
+	context.REQUEST.RESPONSE.setHeader('Content-Type', 'text/xml;;charset=utf-8')
 	fg = form.get
 
 	try :
