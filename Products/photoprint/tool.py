@@ -31,6 +31,8 @@ from Acquisition import aq_base, aq_inner
 from Globals import InitializeClass
 from OFS.OrderedFolder import OrderedFolder
 from Products.CMFCore.utils import UniqueObject, getToolByName
+
+from Products.photoprint.printoffer import PrintOffer
 from permissions import ManagePrintOrderTemplate
 from price import Price
 from utils import Message as _
@@ -77,6 +79,8 @@ class PhotoPrintTool(UniqueObject, OrderedFolder) :
 	security.declarePublic('getPrintingOptionsFor')
 	def getPrintingOptionsFor(self, ob) :
 		"returns printing options for the given ob."
+		return None
+		#TODO: implement
 		optionsContainer = getattr(aq_inner(ob), PRINTING_OPTIONS_ID, None)
 		if optionsContainer is None :
 			return None
@@ -289,6 +293,9 @@ class PrintingOptionsContainer(OrderedFolder) :
 	
 	def __init__(self) :
 		self.id = PRINTING_OPTIONS_ID
+		offer = PrintOffer()
+		self._setObject(offer.id, offer)
+
 	
 	def __getitem__(self, k) :
 		sd = context.session_data_manager.getSessionData(create = 1)

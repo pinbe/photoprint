@@ -34,6 +34,10 @@ ManagePrintOrderTemplate = "Manage print order template"
 security.declarePublic('ManagePrintOrderTemplate')
 setDefaultRoles(ManagePrintOrderTemplate, ('Manager',))
 
+ManagePrintOffer = "Manage print offer"
+security.declarePublic('ManagePrintOffer')
+setDefaultRoles(ManagePrintOffer, ('Manager',))
+
 AddPrintOrder =  "Add print order"
 security.declarePublic('AddPrintOrder')
 setDefaultRoles(AddPrintOrder, ('Authenticated', 'Manager',))

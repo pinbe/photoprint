@@ -1,0 +1,18 @@
+<tal:header tal:replace="structure here/manage_page_header">header</tal:header>
+<tal:tabs   tal:replace="structure here/manage_tabs">tabs</tal:tabs>
+<div tal:omit-tag="" i18n:domain="photoprint">
+  <h2 i18n:translate="">Print offer</h2>
+  <form method="post" action=".">
+    <div>
+      <textarea name="jsoncode"
+                rows="30"
+                style="width: 100%"
+                tal:content="python:here.json(indent=2)"></textarea>
+    </div>
+    <input type="submit"
+           name="manage_editJSON:method"
+           value="Save"
+           i18n:attributes="value"/>
+  </form>
+</div>
+<tal:footer tal:replace="structure here/manage_page_footer">footer</tal:footer>
