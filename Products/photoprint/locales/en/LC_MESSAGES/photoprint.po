@@ -14,10 +14,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Meaningless\n"
-"POT-Creation-Date: Fri Sep  5 00:21:28 2014\n"
+"POT-Creation-Date: Tue Jun 16 17:23:36 2020\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -170,7 +171,6 @@ msgid "Register"
 msgstr "Register"
 
 #: t/skins/customer_join_template.pt:148
-#: t/skins/photoprint_templates_edit_template.pt:142
 msgid "Cancel"
 msgstr "Cancel"
 
@@ -238,7 +238,6 @@ msgid "Date"
 msgstr "Date"
 
 #: t/skins/my_orders.py:21 t/skins/order_list.py:22
-#: t/skins/photoprint_templates_edit_template.pt:42
 msgid "Reference"
 msgstr "Reference"
 
@@ -261,9 +260,9 @@ msgstr "My orders"
 #: t/skins/my_orders_template.pt:34 t/skins/order_cancel_form.pt:19
 #: t/skins/order_list_template.pt:33 t/skins/order_list_template.pt:35
 #: t/skins/order_list_template.pt:37 t/skins/order_list_template.pt:50
-#: t/skins/order_manual_payment_form.pt:19
-#: t/skins/order_notify_done_form.pt:19 t/skins/order_notify_sent_form.pt:19
-#: t/skins/order_view_template.pt:86 t/skins/order_view_template.pt:195
+#: t/skins/order_manual_payment_form.pt:19 t/skins/order_notify_done_form.pt:19
+#: t/skins/order_notify_sent_form.pt:19 t/skins/order_view_template.pt:86
+#: t/skins/order_view_template.pt:195
 msgid "${DYNAMIC_CONTENT}"
 msgstr "${DYNAMIC_CONTENT}"
 
@@ -385,8 +384,7 @@ msgstr "Tracking number"
 msgid "Tracking url"
 msgstr "Tracking url"
 
-#: t/skins/order_printing_list_template.pt:22
-#: t/skins/order_view_template.pt:96
+#: t/skins/order_printing_list_template.pt:22 t/skins/order_view_template.pt:96
 msgid "Image"
 msgstr "Image"
 
@@ -398,8 +396,7 @@ msgstr "File"
 msgid "Format / type"
 msgstr "Format / type"
 
-#: t/skins/order_printing_list_template.pt:25
-#: t/skins/order_view_template.pt:98
+#: t/skins/order_printing_list_template.pt:25 t/skins/order_view_template.pt:98
 msgid "Quantity"
 msgstr "Quantity"
 
@@ -428,8 +425,6 @@ msgid "Unit price"
 msgstr "Unit price"
 
 #: t/skins/order_view_template.pt:100
-#: t/skins/photoprint_templates_edit_template.pt:45
-#: t/skins/photoprint_templates_edit_template.pt:131
 msgid "VAT (%)"
 msgstr "VAT (%)"
 
@@ -553,50 +548,13 @@ msgstr "The printing options that apply here are defined above:"
 msgid "Define printing options"
 msgstr "Define printing options"
 
-#: t/skins/photoprint_templates_edit_template.pt:41
-#: t/skins/photoprint_templates_edit_template.pt:100
-msgid "Title"
-msgstr "Title"
-
-#: t/skins/photoprint_templates_edit_template.pt:43
-#: t/skins/photoprint_templates_edit_template.pt:118
-msgid "Max. number of copies"
-msgstr "Max. number of copies"
-
-#: t/skins/photoprint_templates_edit_template.pt:44
-#: t/skins/photoprint_templates_edit_template.pt:127
-msgid "Price"
-msgstr "Price"
-
-#: t/skins/photoprint_templates_edit_template.pt:80
-#: t/skins/photoprint_templates_edit_template.pt:81
-msgid "Add print order template"
-msgstr "Add print order template"
-
-#: t/skins/photoprint_templates_edit_template.pt:91
+#: t/skins/photoprint_templates_edit_template.pt:34
 msgid "Delete options defined at this level"
 msgstr "Delete options defined at this level"
 
-#: t/skins/photoprint_templates_edit_template.pt:106
-msgid "Description"
-msgstr "Description"
-
-#: t/skins/photoprint_templates_edit_template.pt:112
-msgid "Product reference"
-msgstr "Product reference"
-
-#. Default: "The 0 value means unlimited"
-#: t/skins/photoprint_templates_edit_template.pt:122
-msgid "max_copies_field_help"
-msgstr "The 0 value means unlimited"
-
-#: t/skins/photoprint_templates_edit_template.pt:140
-msgid "Add"
-msgstr "Add"
-
-#: t/skins/photoprint_templates_edit_template.pt:150
-msgid "Save"
-msgstr "Save"
+#: t/skins/photoprint_templates_edit_template.pt:40
+msgid "Proposed formats"
+msgstr ""
 
 #: t/tool.py:119
 msgid "No printing options found at %r"
@@ -630,15 +588,15 @@ msgstr "You must enter a numeric value for the price."
 msgid "You must enter a numeric value for the VAT rate."
 msgstr "You must enter a numeric value for the VAT rate."
 
-#: t/utils.py:53
+#: t/utils.py:54
 msgid "Wrong private collection identifier."
 msgstr "Wrong private collection identifier."
 
-#: t/utils.py:56
+#: t/utils.py:57
 msgid "Collection's password does not match confirmation."
 msgstr "Collection's password does not match confirmation."
 
-#: t/utils.py:60
+#: t/utils.py:61
 msgid "Wrong collection's password."
 msgstr "Wrong collection's password."
 
@@ -729,3 +687,30 @@ msgstr "[%s] order %s sending notification"
 
 msgid "paypal_pay"
 msgstr "paypal_pay"
+
+#~ msgid "Title"
+#~ msgstr "Title"
+
+#~ msgid "Max. number of copies"
+#~ msgstr "Max. number of copies"
+
+#~ msgid "Price"
+#~ msgstr "Price"
+
+#~ msgid "Add print order template"
+#~ msgstr "Add print order template"
+
+#~ msgid "Description"
+#~ msgstr "Description"
+
+#~ msgid "Product reference"
+#~ msgstr "Product reference"
+
+#~ msgid "max_copies_field_help"
+#~ msgstr "The 0 value means unlimited"
+
+#~ msgid "Add"
+#~ msgstr "Add"
+
+#~ msgid "Save"
+#~ msgstr "Save"

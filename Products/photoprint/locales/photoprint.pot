@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2003-2004 Zope Foundation and Contributors.
+# Copyright (c) 2003-2019 Zope Foundation and Contributors.
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -13,8 +13,8 @@
 ##############################################################################
 msgid ""
 msgstr ""
-"Project-Id-Version: Meaningless\n"
-"POT-Creation-Date: Fri Sep  5 00:21:28 2014\n"
+"Project-Id-Version: Unknown\n"
+"POT-Creation-Date: Tue Jun 16 22:14:26 2020\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
@@ -171,7 +171,6 @@ msgid "Register"
 msgstr ""
 
 #: t/skins/customer_join_template.pt:148
-#: t/skins/photoprint_templates_edit_template.pt:142
 msgid "Cancel"
 msgstr ""
 
@@ -233,7 +232,6 @@ msgstr ""
 
 #: t/skins/my_orders.py:21
 #: t/skins/order_list.py:22
-#: t/skins/photoprint_templates_edit_template.pt:42
 msgid "Reference"
 msgstr ""
 
@@ -430,8 +428,6 @@ msgid "Unit price"
 msgstr ""
 
 #: t/skins/order_view_template.pt:100
-#: t/skins/photoprint_templates_edit_template.pt:45
-#: t/skins/photoprint_templates_edit_template.pt:131
 msgid "VAT (%)"
 msgstr ""
 
@@ -536,49 +532,12 @@ msgstr ""
 msgid "Define printing options"
 msgstr ""
 
-#: t/skins/photoprint_templates_edit_template.pt:41
-#: t/skins/photoprint_templates_edit_template.pt:100
-msgid "Title"
-msgstr ""
-
-#: t/skins/photoprint_templates_edit_template.pt:43
-#: t/skins/photoprint_templates_edit_template.pt:118
-msgid "Max. number of copies"
-msgstr ""
-
-#: t/skins/photoprint_templates_edit_template.pt:44
-#: t/skins/photoprint_templates_edit_template.pt:127
-msgid "Price"
-msgstr ""
-
-#: t/skins/photoprint_templates_edit_template.pt:80
-#: t/skins/photoprint_templates_edit_template.pt:81
-msgid "Add print order template"
-msgstr ""
-
-#: t/skins/photoprint_templates_edit_template.pt:91
+#: t/skins/photoprint_templates_edit_template.pt:34
 msgid "Delete options defined at this level"
 msgstr ""
 
-#: t/skins/photoprint_templates_edit_template.pt:106
-msgid "Description"
-msgstr ""
-
-#: t/skins/photoprint_templates_edit_template.pt:112
-msgid "Product reference"
-msgstr ""
-
-#: t/skins/photoprint_templates_edit_template.pt:122
-#. Default: "The 0 value means unlimited"
-msgid "max_copies_field_help"
-msgstr ""
-
-#: t/skins/photoprint_templates_edit_template.pt:140
-msgid "Add"
-msgstr ""
-
-#: t/skins/photoprint_templates_edit_template.pt:150
-msgid "Save"
+#: t/skins/photoprint_templates_edit_template.pt:40
+msgid "Proposed formats"
 msgstr ""
 
 #: t/tool.py:119
@@ -609,15 +568,15 @@ msgstr ""
 msgid "You must enter a numeric value for the VAT rate."
 msgstr ""
 
-#: t/utils.py:53
+#: t/utils.py:54
 msgid "Wrong private collection identifier."
 msgstr ""
 
-#: t/utils.py:56
+#: t/utils.py:57
 msgid "Collection's password does not match confirmation."
 msgstr ""
 
-#: t/utils.py:60
+#: t/utils.py:61
 msgid "Wrong collection's password."
 msgstr ""
 

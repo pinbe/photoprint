@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Plinn 2.0\n"
-"POT-Creation-Date: Fri Sep  5 00:21:28 2014\n"
-"PO-Revision-Date: 2014-09-05 00:22+0200\n"
+"POT-Creation-Date: Tue Jun 16 17:23:36 2020\n"
+"PO-Revision-Date: 2020-06-16 22:13+0200\n"
 "Last-Translator:  Benoît PIN\n"
 "Language-Team: CRI http://cri.ensmp.fr\n"
 "Language: \n"
@@ -165,7 +165,6 @@ msgid "Register"
 msgstr "S'enregistrer"
 
 #: t/skins/customer_join_template.pt:148
-#: t/skins/photoprint_templates_edit_template.pt:142
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -236,7 +235,6 @@ msgid "Date"
 msgstr "Date"
 
 #: t/skins/my_orders.py:21 t/skins/order_list.py:22
-#: t/skins/photoprint_templates_edit_template.pt:42
 msgid "Reference"
 msgstr "Référence"
 
@@ -259,9 +257,9 @@ msgstr "Mes commandes"
 #: t/skins/my_orders_template.pt:34 t/skins/order_cancel_form.pt:19
 #: t/skins/order_list_template.pt:33 t/skins/order_list_template.pt:35
 #: t/skins/order_list_template.pt:37 t/skins/order_list_template.pt:50
-#: t/skins/order_manual_payment_form.pt:19
-#: t/skins/order_notify_done_form.pt:19 t/skins/order_notify_sent_form.pt:19
-#: t/skins/order_view_template.pt:86 t/skins/order_view_template.pt:195
+#: t/skins/order_manual_payment_form.pt:19 t/skins/order_notify_done_form.pt:19
+#: t/skins/order_notify_sent_form.pt:19 t/skins/order_view_template.pt:86
+#: t/skins/order_view_template.pt:195
 msgid "${DYNAMIC_CONTENT}"
 msgstr ""
 
@@ -387,8 +385,7 @@ msgstr "Numéro de suivi"
 msgid "Tracking url"
 msgstr "url de suivi"
 
-#: t/skins/order_printing_list_template.pt:22
-#: t/skins/order_view_template.pt:96
+#: t/skins/order_printing_list_template.pt:22 t/skins/order_view_template.pt:96
 msgid "Image"
 msgstr "Image"
 
@@ -400,8 +397,7 @@ msgstr "Fichier"
 msgid "Format / type"
 msgstr "Format / type"
 
-#: t/skins/order_printing_list_template.pt:25
-#: t/skins/order_view_template.pt:98
+#: t/skins/order_printing_list_template.pt:25 t/skins/order_view_template.pt:98
 msgid "Quantity"
 msgstr "Quantité"
 
@@ -430,8 +426,6 @@ msgid "Unit price"
 msgstr "Prix unitaire"
 
 #: t/skins/order_view_template.pt:100
-#: t/skins/photoprint_templates_edit_template.pt:45
-#: t/skins/photoprint_templates_edit_template.pt:131
 msgid "VAT (%)"
 msgstr "TVA (%)"
 
@@ -557,50 +551,13 @@ msgstr ""
 msgid "Define printing options"
 msgstr "Définir des options d'impression"
 
-#: t/skins/photoprint_templates_edit_template.pt:41
-#: t/skins/photoprint_templates_edit_template.pt:100
-msgid "Title"
-msgstr "Titre"
-
-#: t/skins/photoprint_templates_edit_template.pt:43
-#: t/skins/photoprint_templates_edit_template.pt:118
-msgid "Max. number of copies"
-msgstr "Nombre maxi d'exemplaires"
-
-#: t/skins/photoprint_templates_edit_template.pt:44
-#: t/skins/photoprint_templates_edit_template.pt:127
-msgid "Price"
-msgstr "Prix"
-
-#: t/skins/photoprint_templates_edit_template.pt:80
-#: t/skins/photoprint_templates_edit_template.pt:81
-msgid "Add print order template"
-msgstr "Ajouter un modèle d'ordre d'impression"
-
-#: t/skins/photoprint_templates_edit_template.pt:91
+#: t/skins/photoprint_templates_edit_template.pt:34
 msgid "Delete options defined at this level"
 msgstr "Supprimer les options définies à ce niveau"
 
-#: t/skins/photoprint_templates_edit_template.pt:106
-msgid "Description"
-msgstr "Description"
-
-#: t/skins/photoprint_templates_edit_template.pt:112
-msgid "Product reference"
-msgstr "Référence produit"
-
-#. Default: "The 0 value means unlimited"
-#: t/skins/photoprint_templates_edit_template.pt:122
-msgid "max_copies_field_help"
-msgstr "La valeur 0 signifie illimité"
-
-#: t/skins/photoprint_templates_edit_template.pt:140
-msgid "Add"
-msgstr "Ajouter"
-
-#: t/skins/photoprint_templates_edit_template.pt:150
-msgid "Save"
-msgstr "Enregistrer"
+#: t/skins/photoprint_templates_edit_template.pt:40
+msgid "Proposed formats"
+msgstr "Formats proposés"
 
 #: t/tool.py:119
 msgid "No printing options found at %r"
@@ -634,15 +591,15 @@ msgstr "Vous devez saisir une valeur numérique pour le prix."
 msgid "You must enter a numeric value for the VAT rate."
 msgstr "Vous devez saisir une valeur numérique pour la TVA (pourcentage)."
 
-#: t/utils.py:53
+#: t/utils.py:54
 msgid "Wrong private collection identifier."
 msgstr "Identifiant de collection privée incorrect."
 
-#: t/utils.py:56
+#: t/utils.py:57
 msgid "Collection's password does not match confirmation."
 msgstr "Le mot de passe de collection et sa confirmation sont différents."
 
-#: t/utils.py:60
+#: t/utils.py:61
 msgid "Wrong collection's password."
 msgstr "Mot de passe de collection incorrect."
 
@@ -732,6 +689,33 @@ msgstr "[%s] expédition de la commande %s"
 
 msgid "paypal_pay"
 msgstr "Paiement PayPal"
+
+#~ msgid "Title"
+#~ msgstr "Titre"
+
+#~ msgid "Max. number of copies"
+#~ msgstr "Nombre maxi d'exemplaires"
+
+#~ msgid "Price"
+#~ msgstr "Prix"
+
+#~ msgid "Add print order template"
+#~ msgstr "Ajouter un modèle d'ordre d'impression"
+
+#~ msgid "Description"
+#~ msgstr "Description"
+
+#~ msgid "Product reference"
+#~ msgstr "Référence produit"
+
+#~ msgid "max_copies_field_help"
+#~ msgstr "La valeur 0 signifie illimité"
+
+#~ msgid "Add"
+#~ msgstr "Ajouter"
+
+#~ msgid "Save"
+#~ msgstr "Enregistrer"
 
 #~ msgid "Please accept general conditions of sales."
 #~ msgstr "Veuillez accepter les conditions générales des ventes."

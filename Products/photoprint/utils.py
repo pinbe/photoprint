@@ -16,6 +16,7 @@ Global utilities
 """
 
 from AccessControl import ModuleSecurityInfo
+from App.config import getConfiguration
 from zope.i18n import translate as i18ntranslate
 from zope.i18nmessageid import MessageFactory
 from zope.globalrequest import getRequest
@@ -64,3 +65,18 @@ def grantAccess(collectionId, password, confirm, memberId) :
                 mtool.setLocalRoles(collec, [memberId], 'Reader')
             
             _sudo(do)
+
+
+def getPayPalConfig() :
+    zopeConf = getConfiguration()
+    try :
+        conf = zopeConf.product_config['photoprint']
+    except KeyError :
+        EnvironmentError("No photoprint configuration found in Zope environment.")
+
+    ppconf = {'API_ENVIRONMENT' : conf['paypal_api_environment'],
+              'API_USERNAME' : conf['paypal_username'],
+              'API_PASSWORD' : conf['paypal_password'],
+              'API_SIGNATURE' : conf['paypal_signature']}
+
+    return ppconf

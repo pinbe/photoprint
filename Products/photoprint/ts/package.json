@@ -15,6 +15,7 @@
   "devDependencies": {
     "awesome-typescript-loader": "^5.2.1",
     "d3": "^5.16.0",
+    "source-map-loader": "^1.0.0",
     "ts-loader": "^7.0.5",
     "typescript": "^3.9.5",
     "webpack": "^4.43.0",

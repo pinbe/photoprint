@@ -1,6 +1,6 @@
 #! /bin/sh
 
-i18nextract --path . --site_zcml ../../etc/site.zcml --domain photoprint -o locales
+i18nextract --path . --site_zcml ~/dev/var/zope_instances/cbb/etc/site.zcml --domain photoprint -o locales
 
 cat locales/photoprint.pot locales/photoprint-manual.pot > locales/photoprint-all.pot
 mv locales/photoprint-all.pot locales/photoprint.pot
