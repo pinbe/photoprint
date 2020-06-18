@@ -5,17 +5,40 @@ from AccessControl.requestmethod import postonly
 from App.Dialogs import MessageDialog
 from OFS.SimpleItem import SimpleItem
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from persistent.list import PersistentList
 from persistent.mapping import PersistentMapping
-
+from json.decoder import JSONArray, WHITESPACE, WHITESPACE_STR
 from Products.photoprint.permissions import ManagePrintOffer
 import json
+from json import scanner
 
-class _JSONPersistentMappingEncoder(json.JSONEncoder) :
+class _JSONPersistentEncoder(json.JSONEncoder) :
     def default(self, o) :
         if type(o) is PersistentMapping :
             return dict(o)
+        elif type(o) is PersistentList :
+            return list(o)
         else :
             return json.JSONEncoder.default(self, o)
+
+class _JsonPersistentDecoder(json.JSONDecoder) :
+
+    @staticmethod
+    def JSONArray(s_and_end, scan_once, _w=WHITESPACE.match, _ws=WHITESPACE_STR):
+        values, end = JSONArray(s_and_end, scan_once, _w, _ws)
+        return PersistentList(values), end
+
+    def __init__(self, encoding=None, object_hook=None, parse_float=None,
+                 parse_int=None, parse_constant=None, strict=True,
+                 object_pairs_hook=None):
+        json.JSONDecoder.__init__(self,
+                                  encoding='utf-8',
+                                  object_hook=lambda d: PersistentMapping(d))
+        # Unlike 'object_hook', array decoding is not hookable from json.JSONDecoder constructor…
+        self.parse_array= _JsonPersistentDecoder.JSONArray
+        # It's necessary to use pyton implementation (py_make_scanner)
+        # because c implementation will not use our custom array decoder.
+        self.scan_once = scanner.py_make_scanner(self)
 
 class PrintOffer(SimpleItem) :
     """
@@ -42,8 +65,10 @@ class PrintOffer(SimpleItem) :
     security.declareProtected(ManagePrintOffer, 'edit')
     def edit(self, jsons) :
         self.data = json.loads(jsons,
-                               encoding='utf-8',
-                               object_hook=lambda d : PersistentMapping(d))
+                               # encoding='utf-8',
+                               cls=_JsonPersistentDecoder,
+                               # object_hook=lambda d : PersistentMapping(d)
+                               )
 
     security.declareProtected(ManagePrintOffer, 'manage_editJSON')
     @postonly
@@ -59,6 +84,10 @@ class PrintOffer(SimpleItem) :
     security.declarePublic('json')
     def json(self, indent=None) :
         """ json offer data """
-        return json.dumps(self.data, cls=_JSONPersistentMappingEncoder, indent=indent)
+        return json.dumps(self.data,
+                          encoding='utf-8',
+                          ensure_ascii=False,
+                          cls=_JSONPersistentEncoder,
+                          indent=indent)
 
 InitializeClass(PrintOffer)
