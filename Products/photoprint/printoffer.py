@@ -57,6 +57,31 @@ class PrintOffer(SimpleItem) :
                                    globals(),
                                    __name__='manage_data')
 
+    TEMPLATES = {
+        'format' : {
+            'reference' : '',
+            'label' : {},
+            'short_edge' : 0,
+            'long_edge': 0,
+            'copies' : 0,
+            'prices_ranges' : [],
+            'finishes' : [],
+        },
+        'finishe' : {
+            'reference' : '',
+            'label' : {},
+            'description' : {},
+            'price' : 0,
+            'frames' : [],
+        },
+        'frame' : {
+            'reference' : '',
+            'label' : {},
+            'description' : {},
+            'price' : 0,
+        }
+    }
+
     def __init__(self) :
         self.id = 'printoffer'
         self.data = PersistentMapping()
@@ -64,11 +89,7 @@ class PrintOffer(SimpleItem) :
 
     security.declareProtected(ManagePrintOffer, 'edit')
     def edit(self, jsons) :
-        self.data = json.loads(jsons,
-                               # encoding='utf-8',
-                               cls=_JsonPersistentDecoder,
-                               # object_hook=lambda d : PersistentMapping(d)
-                               )
+        self.data = json.loads(jsons, cls=_JsonPersistentDecoder)
 
     security.declareProtected(ManagePrintOffer, 'manage_editJSON')
     @postonly
@@ -82,11 +103,21 @@ class PrintOffer(SimpleItem) :
 
 
     security.declarePublic('json')
-    def json(self, indent=None) :
+    def json(self, indent=None, REQUEST=None) :
         """ json offer data """
+        if REQUEST :
+            REQUEST.RESPONSE.setHeader('Content-Type', 'text/json; charset=utf-8')
         return json.dumps(self.data,
                           encoding='utf-8',
                           ensure_ascii=False,
+                          cls=_JSONPersistentEncoder,
+                          indent=indent)
+
+    security.declareProtected(ManagePrintOffer, 'getTemplate')
+    def getTemplate(self, name, indent=None) :
+        """ ready to edit new json item """
+        return json.dumps(self.TEMPLATES[name],
+                          encoding='utf-8',
                           cls=_JSONPersistentEncoder,
                           indent=indent)
 

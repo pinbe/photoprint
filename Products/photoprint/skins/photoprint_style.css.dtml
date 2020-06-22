@@ -1,0 +1,6 @@
+/* photoprint <dtml-with base_properties> */
+#print_options_editor .TwoColumnForm th::after {
+  content: " :";
+}
+
+/* </dtml-with> */
