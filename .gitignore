@@ -4,3 +4,4 @@ node_modules
 .idea
 jsbuild
 *.po~
+.DS_Store
