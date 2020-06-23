@@ -52,18 +52,19 @@ class PrintOptionsEditor {
 
         d3.json(`${this.absUrl}/printingOptions/printoffer/json`)
             .then((infos: PrintInfos) => {
-                this.initFormats(infos.formats);
+                this.updateFormats(infos.formats);
             })
     }
 
-    private initFormats(formats: Array<Format>, editLast=false) {
-        d3.select(this.formatsWrapper).select('div.formats')
-            .selectAll('div')
-            .data(formats)
-            .enter()
-            .append('div')
-            .html((d: Format, i: number) => PrintOptionsEditor.formatViewHtml(d, i))
-            .on('click', (d: Format, i: number, g: Array<HTMLDivElement>)=> {
+    private updateFormats(formats: Array<Format>, editLast=false) {
+        const formatUpdate = d3.select(this.formatsWrapper).select('div.formats').selectAll('div')
+            .data(formats);
+        const formatEnter = formatUpdate.enter().append('div')
+        const formatExit = formatUpdate.exit().remove();
+
+        formatEnter.merge(formatUpdate)
+            .html((d:Format, i: number) => PrintOptionsEditor.formatViewHtml(d, i))
+            .on('click', (d: Format, i: number, g: Array<HTMLDivElement>) => {
                 this.onFormatClick(d, i, g);
             })
         ;
@@ -96,7 +97,7 @@ class PrintOptionsEditor {
             let data = d3.select(this.formatsWrapper).select('div.formats')
                 .selectAll('div').data();
             data.push(format);
-            this.initFormats(<Format[]>data, true);
+            this.updateFormats(<Format[]>data, true);
         });
     }
 
@@ -217,7 +218,7 @@ class PrintOptionsEditor {
     private deleteFormat(fmt: Format, i: number, g: HTMLDivElement[]) {
         const url = `${this.absUrl}/printingOptions/printoffer/removeOfferItem`;
         const params = new FormData();
-        params.append('type', 'formats')
+        params.append('section', 'formats')
         params.append('index:int', Number(i).toString(10));
         d3.json(url, {body: params, method: 'POST'})
             .then(() => {
@@ -246,7 +247,33 @@ class PrintOptionsEditor {
                 .reduce((a, b) => a && b, true);
 
         const ok = inpustok && textareasok;
-        console.log('ok:', ok);
+        if (ok) {
+            let kv: {[name:string] : string} = {};
+            d3.select(g[i]).selectAll('input, textarea')
+                .each((d, i, g) => {
+                    const input = <HTMLInputElement|HTMLTextAreaElement>g[i];
+                    kv[input.name] = input.value;
+                });
+            console.log(kv);
+            let req = new XMLHttpRequest();
+            req.open('POST', `${this.absUrl}/printingOptions/printoffer/saveOfferItem`)
+            req.addEventListener('load', ev => {
+                const resp = <XMLHttpRequest>(ev.target);
+                if (resp.status == 200) {
+                    const updated = <Format>JSON.parse(resp.responseText);
+                    let data = <Format[]>d3.select(this.formatsWrapper).select('div.formats')
+                        .selectAll('div').data();
+                    data.splice(i,1, updated);
+                    this.updateFormats(data);
+                }
+
+            })
+            const formdata = new FormData();
+            formdata.append('section', 'formats');
+            formdata.append('index:int', Number(i).toString(10));
+            formdata.append('jsondata', JSON.stringify(kv));
+            req.send(formdata);
+        }
     }
 
     private static checkTextareaLines(ta: HTMLTextAreaElement): boolean {

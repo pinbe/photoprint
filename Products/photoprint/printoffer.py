@@ -84,7 +84,9 @@ class PrintOffer(SimpleItem) :
 
     def __init__(self) :
         self.id = 'printoffer'
-        self.data = PersistentMapping()
+        self.data = PersistentMapping({'formats':PersistentList(),
+                                       'finishes': PersistentList(),
+                                       'frames': PersistentList()})
 
 
     security.declareProtected(ManagePrintOffer, 'edit')
@@ -123,16 +125,39 @@ class PrintOffer(SimpleItem) :
 
     security.declareProtected(ManagePrintOffer, 'removeOfferItem')
     @postonly
-    def removeOfferItem(self, type, index, REQUEST=None) :
+    def removeOfferItem(self, section, index, REQUEST=None) :
         """ ready to edit new json item """
-        del self.data[type][index]
-        return json.dumps(self.data[type],
+        del self.data[section][index]
+        return json.dumps(self.data[section],
                           encoding='utf-8',
                           cls=_JSONPersistentEncoder)
 
     security.declareProtected(ManagePrintOffer, 'saveOfferItem')
     @postonly
-    def saveOfferItem(self, type, index, REQUEST=None) :
-        pass
+    def saveOfferItem(self, section, index, jsondata, REQUEST=None) :
+        try :
+            payload = json.loads(jsondata, cls=_JsonPersistentDecoder)
+        except ValueError :
+            return
+
+        if section == 'formats' :
+            payload['short_edge'] = int(payload['short_edge'])
+            payload['long_edge'] = int(payload['long_edge'])
+            payload['copies'] = int(payload['copies'])
+            label = payload['label'].strip().split('\n')
+            label = [line.rsplit('@', 1) for line in label]
+            label = PersistentMapping((lang, value) for value, lang in label)
+            payload['label'] = label
+
+        if index < len(self.data[section]) :
+            self.data[section][index] = payload
+        else :
+            assert len(self.data[section]) == index
+            self.data[section].append(payload)
+
+        return json.dumps(self.data[section][index],
+                          encoding='utf-8',
+                          cls=_JSONPersistentEncoder)
+
 
 InitializeClass(PrintOffer)
