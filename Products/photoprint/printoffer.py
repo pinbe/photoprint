@@ -64,6 +64,7 @@ class PrintOffer(SimpleItem) :
             'short_edge' : 0,
             'long_edge': 0,
             'copies' : 0,
+            'price' : 0,
             'prices_ranges' : [],
             'finishes' : [],
         },
@@ -144,6 +145,7 @@ class PrintOffer(SimpleItem) :
             payload['short_edge'] = int(payload['short_edge'])
             payload['long_edge'] = int(payload['long_edge'])
             payload['copies'] = int(payload['copies'])
+            payload['price'] = int(payload['price'])
             label = payload['label'].strip().split('\n')
             label = [line.rsplit('@', 1) for line in label]
             label = PersistentMapping((lang, value) for value, lang in label)

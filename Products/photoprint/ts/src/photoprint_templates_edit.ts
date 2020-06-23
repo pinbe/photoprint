@@ -19,6 +19,7 @@ type Format = {
     short_edge: number,
     long_edge: number,
     copies: number,
+    price: number,
     prices_ranges: Array<PriceRange>,
     finishes: Array<string>,
 };
@@ -140,6 +141,12 @@ class PrintOptionsEditor {
                     <th>${_("Long edge")}</th>
                     <td>
                       <span data-name="long_edge" data-pattern="^\\d+$">${fmt.long_edge}</span> cm
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>${_("Price")}</th>
+                    <td>
+                      <span data-name="price" data-pattern="^\\d+$">${fmt.price}</span> ${_("€ ET")}
                     </td>
                   </tr>
                   <tr>
