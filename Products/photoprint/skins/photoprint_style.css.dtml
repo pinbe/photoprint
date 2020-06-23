@@ -3,4 +3,9 @@
   content: " :";
 }
 
+#print_options_editor > tr > td > div > table {
+  border: 1px solid &dtml-highLightColor;;
+  width: 100%;
+}
+
 /* </dtml-with> */
