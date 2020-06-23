@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Plinn 2.0\n"
-"POT-Creation-Date: Tue Jun 16 17:23:36 2020\n"
-"PO-Revision-Date: 2020-06-16 22:13+0200\n"
+"POT-Creation-Date: Tue Jun 23 16:09:43 2020\n"
+"PO-Revision-Date: 2020-06-23 16:09+0200\n"
 "Last-Translator:  Benoît PIN\n"
 "Language-Team: CRI http://cri.ensmp.fr\n"
 "Language: \n"
@@ -556,18 +556,26 @@ msgid "Delete options defined at this level"
 msgstr "Supprimer les options définies à ce niveau"
 
 #: t/skins/photoprint_templates_edit_template.pt:40
-msgid "Proposed formats"
-msgstr "Formats proposés"
+msgid "Formats"
+msgstr "Formats"
 
-#: t/tool.py:119
+#: t/skins/photoprint_templates_edit_template.pt:41
+msgid "Finishes"
+msgstr "Finitions"
+
+#: t/skins/photoprint_templates_edit_template.pt:42
+msgid "Frames"
+msgstr "Cadres"
+
+#: t/tool.py:123
 msgid "No printing options found at %r"
 msgstr "Aucune option d'impression trouvée sur %r"
 
-#: t/tool.py:203
+#: t/tool.py:207
 msgid "You must enter a title."
 msgstr "Vous devez saisir un titre."
 
-#: t/tool.py:207
+#: t/tool.py:211
 msgid ""
 "You must enter an integer number\n"
 "for the maximum number of copies."
@@ -575,7 +583,7 @@ msgstr ""
 "Vous devez saisir un nombre entier\n"
 "pour le nombre maxi de copies."
 
-#: t/tool.py:209
+#: t/tool.py:213
 msgid ""
 "You must enter a positive value\n"
 "for the maximum number of copies."
@@ -583,11 +591,11 @@ msgstr ""
 "Vous devez saisir une valeur positive\n"
 "pour le nombre maxi de copies."
 
-#: t/tool.py:213
+#: t/tool.py:217
 msgid "You must enter a numeric value for the price."
 msgstr "Vous devez saisir une valeur numérique pour le prix."
 
-#: t/tool.py:218
+#: t/tool.py:222
 msgid "You must enter a numeric value for the VAT rate."
 msgstr "Vous devez saisir une valeur numérique pour la TVA (pourcentage)."
 
@@ -689,6 +697,12 @@ msgstr "[%s] expédition de la commande %s"
 
 msgid "paypal_pay"
 msgstr "Paiement PayPal"
+
+#~ msgid "Frame"
+#~ msgstr "Fram"
+
+#~ msgid "Proposed formats"
+#~ msgstr "Formats proposés"
 
 #~ msgid "Title"
 #~ msgstr "Titre"

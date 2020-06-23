@@ -3,10 +3,11 @@ import i18next, {TOptions} from "i18next";
 import HttpApi from 'i18next-http-backend';
 import LanguageDetector from 'i18next-browser-languagedetector'
 
-const _ = (s: string, options?:TOptions): string => i18next.t(s, options);
+const _ = (s: string, options?: TOptions): string => i18next.t(s, options);
+const TR_DURATION = 500; // ms
 
 type Sel = d3.Selection<HTMLElement, any, HTMLElement, any>;
-type I18NString = {[lang: string] : string};
+type I18NString = { [lang: string]: string };
 type PriceRange = {
     from: number
     to: number,
@@ -30,78 +31,17 @@ class PrintOptionsEditor {
     private absUrl: string;
     private formatsWrapper: HTMLTableDataCellElement;
 
-    constructor(absUrl:string) {
+    constructor(absUrl: string) {
         this.absUrl = absUrl;
         let cells = document.querySelectorAll<HTMLTableDataCellElement>('#print_options_editor > tr > td');
         this.formatsWrapper = cells[0];
-
-        d3.json(`${this.absUrl}/printingOptions/printoffer/json`)
-            .then((infos: PrintInfos) => {
-                this.initFormats(infos.formats);
-            })
-    }
-
-    private initFormats(formats: Array<Format>) {
         d3.select(this.formatsWrapper)
-            // .append('div')
-            .selectAll('div')
-            .data(formats)
-            .enter()
             .append('div')
-            .html((d, i, g) => {
-                console.log(d, i, g);
-                let lbl= '';
-                for (let [lang, value] of Object.entries(d.label)) {
-                    lbl += `<li><span>${value}</span>@<span>${lang}</span></li>`
-                }
-                return `
-                <table class="TwoColumnForm">
-                  <tr>
-                    <td colspan="2" style="text-align: right">
-                      <a href="#" title="${_("Edit")}">
-                        <i class="fas fa-edit"></i>
-                      </a>
-                      <a href="#" title="${_("Delete")}">
-                        <i class="fas fa-backspace"></i>
-                      </a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>${_("Reference")}</th>
-                    <td data-name="reference">${d.reference}</td>
-                  </tr>
-                  <tr>
-                    <th>${_("Label")}</th>
-                    <td>
-                      <ul style="list-style: none">${lbl}</ul>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>${_("Short edge")}</th>
-                    <td>
-                      <span data-name="short_edge">${d.short_edge}</span> cm
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>${_("Long edge")}</th>
-                    <td>
-                      <span data-name="long_edge">${d.long_edge}</span> cm
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>${_("Copies")}</th>
-                    <td>
-                      <span data-name="copies">${d.copies}</span>
-                    </td>
-                  </tr>
-                </table>
-                `
-                }
-            )
+            .attr('class', 'formats')
         ;
         d3.select(this.formatsWrapper)
             .append('div')
-            .style('text-align', 'center')
+            .attr('class', 'buttons')
             .append('a')
             .on('click', () => this.createFormat())
             .attr('href', '#')
@@ -109,12 +49,219 @@ class PrintOptionsEditor {
             .append('i')
             .attr('class', 'fas fa-plus')
         ;
+
+        d3.json(`${this.absUrl}/printingOptions/printoffer/json`)
+            .then((infos: PrintInfos) => {
+                this.initFormats(infos.formats);
+            })
+    }
+
+    private initFormats(formats: Array<Format>, editLast=false) {
+        d3.select(this.formatsWrapper).select('div.formats')
+            .selectAll('div')
+            .data(formats)
+            .enter()
+            .append('div')
+            .html((d: Format, i: number) => PrintOptionsEditor.formatViewHtml(d, i))
+            .on('click', (d: Format, i: number, g: Array<HTMLDivElement>)=> {
+                this.onFormatClick(d, i, g);
+            })
+        ;
+        if(editLast) {
+            const editbtn: HTMLElement =
+                <HTMLElement>
+                d3.select(this.formatsWrapper).select('div.formats > div:last-child i.btn.edit').node();
+            editbtn.dispatchEvent(new MouseEvent('click', {view: window, bubbles:true, cancelable: true}));
+            d3.select(this.formatsWrapper).select('div.formats > div:last-child input')
+                .call((s) => (<HTMLInputElement>s.node()).focus())
+            ;
+        }
     }
 
     private createFormat() {
         d3.event.stopPropagation();
         d3.event.preventDefault();
-        console.log('Ajouter !');
+
+        let params: FormData = new FormData();
+        params.append('name', 'format');
+        params.append('indent:int', '2');
+        let url = `${this.absUrl}/printingOptions/printoffer/getTemplate`;
+        d3.json(
+            url,
+            {
+                body: params,
+                method: 'POST'
+            }
+        ).then((format: Format) => {
+            let data = d3.select(this.formatsWrapper).select('div.formats')
+                .selectAll('div').data();
+            data.push(format);
+            this.initFormats(<Format[]>data, true);
+        });
+    }
+
+    private static formatViewHtml(fmt: Format, index: number): string {
+        let lbl = '';
+        for (let [lang, value] of Object.entries(fmt.label)) {
+            lbl += `<li><span>${value}</span>@<span>${lang}</span></li>`
+        }
+        return `
+                <table class="TwoColumnForm">
+                  <tr>
+                    <td colspan="2" style="text-align: right">
+                      <a href="#" title="${_("Edit")}">
+                        <i class="btn edit fas"></i>
+                      </a>
+                      <a href="#" title="${_("Delete")}">
+                        <i class="btn delete fas fa-backspace"></i>
+                      </a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>${_("Reference")}</th>
+                    <td>
+                      <span data-name="reference" data-pattern=".+">${fmt.reference}</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>${_("Label")}</th>
+                    <td>
+                      <ul data-name="label" data-line_pattern="(.*)@(\\w\\w)$" style="list-style: none">${lbl}</ul>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>${_("Short edge")}</th>
+                    <td>
+                      <span data-name="short_edge" data-pattern="^\\d+$">${fmt.short_edge}</span> cm
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>${_("Long edge")}</th>
+                    <td>
+                      <span data-name="long_edge" data-pattern="^\\d+$">${fmt.long_edge}</span> cm
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>${_("Copies")}</th>
+                    <td>
+                      <span data-name="copies" data-pattern="^\\d+$">${fmt.copies}</span>
+                    </td>
+                  </tr>
+                </table>
+                `;
+    }
+
+    private onFormatClick(fmt: Format, i: number, g: HTMLDivElement[]) {
+        const evt = d3.event;
+        const target = evt.target;
+        if (target.classList.contains('btn')) {
+            evt.stopPropagation();
+            evt.preventDefault();
+            if(target.classList.contains('edit')) {
+                target.classList.remove('edit');
+                target.classList.add('validate');
+                target.parentElement.setAttribute('title', _("Save"));
+                this.startEdit(fmt, i, g);
+            }
+            else if (target.classList.contains('delete'))
+                this.deleteFormat(fmt, i, g);
+            else if (target.classList.contains('validate'))
+                this.saveFormat(fmt, i, g);
+        }
+    }
+
+    private startEdit(fmt: Format, i: number, g: HTMLDivElement[]) {
+        d3.select(g[i]).selectAll('*[data-name]')
+            .each((d, i, g)=> {
+                const elt = <HTMLElement>g[i];
+                const name = (elt.getAttribute('data-name'));
+                const parent = elt.parentElement;
+                let input: HTMLElement;
+                switch (elt.tagName) {
+                    case 'SPAN' :
+                        input =
+                            <HTMLElement>
+                            d3.select(parent)
+                                .append('input')
+                                .attr('type', 'text')
+                                .attr('name', name)
+                                .attr('value', (<any>fmt)[name])
+                                .attr('pattern', elt.getAttribute('data-pattern'))
+                                .attr('required', true)
+                                .node()
+                        ;
+                        break;
+                    case 'UL' :
+                        let txt: string =
+                            (<I18NString[]><unknown>(Object.entries((<any>fmt)[name])))
+                                .map((item):string => `${item[1]}@${item[0]}`)
+                                .reduce((prev, cur) => `${prev}\n${cur}`, '');
+                        txt = txt.trim();
+                        input =
+                            <HTMLElement>
+                            d3.select(parent)
+                                .append('textarea')
+                                .attr('name', name)
+                                .attr('data-line_pattern', elt.getAttribute('data-line_pattern'))
+                                .text(txt)
+                                .on('input', (d, i, g) => PrintOptionsEditor.checkTextareaLines(<HTMLTextAreaElement>g[i]))
+                                .node()
+                        ;
+                        break;
+
+                }
+                parent.replaceChild(input, <HTMLElement>g[i]);
+            });
+    }
+
+    private deleteFormat(fmt: Format, i: number, g: HTMLDivElement[]) {
+        const url = `${this.absUrl}/printingOptions/printoffer/removeOfferItem`;
+        const params = new FormData();
+        params.append('type', 'formats')
+        params.append('index:int', Number(i).toString(10));
+        d3.json(url, {body: params, method: 'POST'})
+            .then(() => {
+                const height = g[i].getBoundingClientRect().height;
+                d3.select(g[i])
+                    .style('height', `${height}px`)
+                    .style('opacity', '1')
+                    .style('overflow', 'hidden')
+                    .transition().duration(TR_DURATION)
+                    .style('height', '0px')
+                    .style('opacity', '0')
+                    .remove()
+                ;
+            });
+    }
+
+    private saveFormat(fmt: Format, i: number, g: HTMLDivElement[]) {
+        const inpustok =
+            d3.select(g[i]).selectAll('input').nodes()
+                .map<boolean>((elt: HTMLInputElement) => elt.validity.valid)
+                .reduce((a, b) => a && b, true);
+
+        const textareasok =
+            d3.select(g[i]).selectAll('textarea').nodes()
+                .map<boolean>((elt: HTMLTextAreaElement) => PrintOptionsEditor.checkTextareaLines(elt))
+                .reduce((a, b) => a && b, true);
+
+        const ok = inpustok && textareasok;
+        console.log('ok:', ok);
+    }
+
+    private static checkTextareaLines(ta: HTMLTextAreaElement): boolean {
+        const lines: string[] = ta.value.split('\n');
+        const reline = new RegExp(ta.getAttribute('data-line_pattern'));
+        for (let line of lines) {
+            if (!reline.test(line)) {
+                ta.classList.add('invalid');
+                return false;
+            }
+            else {
+                ta.classList.remove('invalid');
+            }
+        }
+        return true;
     }
 }
 
@@ -128,10 +275,11 @@ function main() {
             ns: ['photoprint',],
             defaultNS: 'photoprint',
             backend: {
-                loadPath: portal_url+'/photoprint/jsbuild/locales/{{lng}}/{{ns}}.json',
+                loadPath: portal_url + '/photoprint/jsbuild/locales/{{lng}}/{{ns}}.json',
             },
             detection: {
-                order: ['navigator',
+                order: [
+                    'navigator',
                     'querystring',
                     'cookie',
                     'localStorage',
@@ -139,11 +287,12 @@ function main() {
                     'navigator',
                     'htmlTag',
                     'path',
-                    'subdomain'],
+                    'subdomain'
+                ],
             },
         })
         .then(
             () => new PrintOptionsEditor(document.body.getAttribute('data-absolute_url')));
 }
 
-window.addEventListener('load', ()=>main());
+window.addEventListener('load', () => main());

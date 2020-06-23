@@ -121,4 +121,18 @@ class PrintOffer(SimpleItem) :
                           cls=_JSONPersistentEncoder,
                           indent=indent)
 
+    security.declareProtected(ManagePrintOffer, 'removeOfferItem')
+    @postonly
+    def removeOfferItem(self, type, index, REQUEST=None) :
+        """ ready to edit new json item """
+        del self.data[type][index]
+        return json.dumps(self.data[type],
+                          encoding='utf-8',
+                          cls=_JSONPersistentEncoder)
+
+    security.declareProtected(ManagePrintOffer, 'saveOfferItem')
+    @postonly
+    def saveOfferItem(self, type, index, REQUEST=None) :
+        pass
+
 InitializeClass(PrintOffer)

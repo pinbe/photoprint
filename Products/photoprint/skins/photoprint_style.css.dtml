@@ -3,9 +3,30 @@
   content: " :";
 }
 
-#print_options_editor > tr > td > div > table {
+#print_options_editor div.formats table {
   border: 1px solid &dtml-highLightColor;;
   width: 100%;
+}
+
+#print_options_editor div.buttons {
+  text-align: center;
+}
+
+#print_options_editor textarea:focus {
+  outline: none;
+}
+
+#print_options_editor i.btn.edit::before {
+  content: "\f044"; /* fas fa-edit */
+}
+
+#print_options_editor i.btn.validate::before {
+  content: "\f00c"; /* fas fa-check */
+}
+
+#print_options_editor *:invalid,
+#print_options_editor *.invalid {
+  border-color: #d20000;
 }
 
 /* </dtml-with> */

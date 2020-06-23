@@ -14,7 +14,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Unknown\n"
-"POT-Creation-Date: Tue Jun 16 22:14:26 2020\n"
+"POT-Creation-Date: Tue Jun 23 16:09:43 2020\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
@@ -537,34 +537,42 @@ msgid "Delete options defined at this level"
 msgstr ""
 
 #: t/skins/photoprint_templates_edit_template.pt:40
-msgid "Proposed formats"
+msgid "Formats"
 msgstr ""
 
-#: t/tool.py:119
+#: t/skins/photoprint_templates_edit_template.pt:41
+msgid "Finishes"
+msgstr ""
+
+#: t/skins/photoprint_templates_edit_template.pt:42
+msgid "Frames"
+msgstr ""
+
+#: t/tool.py:123
 msgid "No printing options found at %r"
 msgstr ""
 
-#: t/tool.py:203
+#: t/tool.py:207
 msgid "You must enter a title."
 msgstr ""
 
-#: t/tool.py:207
+#: t/tool.py:211
 msgid ""
 "You must enter an integer number\n"
 "for the maximum number of copies."
 msgstr ""
 
-#: t/tool.py:209
+#: t/tool.py:213
 msgid ""
 "You must enter a positive value\n"
 "for the maximum number of copies."
 msgstr ""
 
-#: t/tool.py:213
+#: t/tool.py:217
 msgid "You must enter a numeric value for the price."
 msgstr ""
 
-#: t/tool.py:218
+#: t/tool.py:222
 msgid "You must enter a numeric value for the VAT rate."
 msgstr ""
 

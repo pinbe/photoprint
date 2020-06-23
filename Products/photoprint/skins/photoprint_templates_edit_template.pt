@@ -39,7 +39,7 @@
         <tr>
           <th i18n:translate="">Formats</th>
           <th i18n:translate="">Finishes</th>
-          <th i18n:translate="">Frame</th>
+          <th i18n:translate="">Frames</th>
         </tr>
         <tbody id="print_options_editor">
           <tr>
