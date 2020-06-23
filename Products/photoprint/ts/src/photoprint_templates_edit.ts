@@ -1,4 +1,9 @@
 import * as d3 from "d3";
+import i18next, {TOptions} from "i18next";
+import HttpApi from 'i18next-http-backend';
+import LanguageDetector from 'i18next-browser-languagedetector'
+
+const _ = (s: string, options?:TOptions): string => i18next.t(s, options);
 
 type Sel = d3.Selection<HTMLElement, any, HTMLElement, any>;
 type I18NString = {[lang: string] : string};
@@ -52,29 +57,29 @@ class PrintOptionsEditor {
                     return `
                     <table class="TwoColumnForm">
                       <tr>
-                        <th>Référence</th>
+                        <th>${_("Reference")}</th>
                         <td data-name="reference">${d.reference}</td>
                       </tr>
                       <tr>
-                        <th>Libellé</th>
+                        <th>${_("Label")}</th>
                         <td>
                           <ul style="list-style: none">${lbl}</ul>
                         </td>
                       </tr>
                       <tr>
-                        <th>Bord court</th>
+                        <th>${_("Short edge")}</th>
                         <td>
                           <span data-name="short_edge">${d.short_edge}</span> cm
                         </td>
                       </tr>
                       <tr>
-                        <th>Bord long</th>
+                        <th>${_("Long edge")}</th>
                         <td>
                           <span data-name="long_edge">${d.long_edge}</span> cm
                         </td>
                       </tr>
                       <tr>
-                        <th>Copies</th>
+                        <th>${_("Copies")}</th>
                         <td>
                           <span data-name="copies">${d.copies}</span>
                         </td>
@@ -84,7 +89,6 @@ class PrintOptionsEditor {
                     }
                 )
         ;
-        console.log(formatsEnterSel);
 
         //         .append('div')
         //     .call(function () {
@@ -124,7 +128,31 @@ class PrintOptionsEditor {
 }
 
 function main() {
-    new PrintOptionsEditor(document.body.getAttribute('data-absolute_url'));
+    const portal_url = document.body.getAttribute('data-portal_url');
+    i18next
+        .use(HttpApi)
+        .use(LanguageDetector)
+        .init({
+            cleanCode: true,
+            ns: ['photoprint',],
+            defaultNS: 'photoprint',
+            backend: {
+                loadPath: portal_url+'/photoprint/jsbuild/locales/{{lng}}/{{ns}}.json',
+            },
+            detection: {
+                order: ['navigator',
+                    'querystring',
+                    'cookie',
+                    'localStorage',
+                    'sessionStorage',
+                    'navigator',
+                    'htmlTag',
+                    'path',
+                    'subdomain'],
+            },
+        })
+        .then(
+            () => new PrintOptionsEditor(document.body.getAttribute('data-absolute_url')));
 }
 
 window.addEventListener('load', ()=>main());
