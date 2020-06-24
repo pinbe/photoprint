@@ -1,11 +1,21 @@
 /* photoprint <dtml-with base_properties> */
+
+#print_options_editor > tr > td {
+  vertical-align: top;
+}
+
 #print_options_editor .TwoColumnForm th::after {
   content: " :";
 }
 
-#print_options_editor div.formats table {
+#print_options_editor table.TwoColumnForm
+{
   border: 1px solid &dtml-highLightColor;;
   width: 100%;
+}
+
+#print_options_editor table.TwoColumnForm th {
+  white-space: nowrap;
 }
 
 #print_options_editor div.buttons {

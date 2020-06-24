@@ -60,7 +60,7 @@ class PrintOffer(SimpleItem) :
                                    __name__='manage_data')
 
     TEMPLATES = {
-        'format' : {
+        'formats' : {
             'reference' : '',
             'label' : {},
             'short_edge' : 0,
@@ -70,14 +70,14 @@ class PrintOffer(SimpleItem) :
             'prices_ranges' : [],
             'finishes' : [],
         },
-        'finishe' : {
+        'finishes' : {
             'reference' : '',
             'label' : {},
             'description' : {},
             'price' : 0,
             'frames' : [],
         },
-        'frame' : {
+        'frames' : {
             'reference' : '',
             'label' : {},
             'description' : {},
@@ -119,9 +119,9 @@ class PrintOffer(SimpleItem) :
                           indent=indent)
 
     security.declareProtected(ManagePrintOffer, 'getTemplate')
-    def getTemplate(self, name, indent=None) :
+    def getTemplate(self, section, indent=None) :
         """ ready to edit new json item """
-        return json.dumps(self.TEMPLATES[name],
+        return json.dumps(self.TEMPLATES[section],
                           encoding='utf-8',
                           cls=_JSONPersistentEncoder,
                           indent=indent)
@@ -130,10 +130,18 @@ class PrintOffer(SimpleItem) :
     @postonly
     def removeOfferItem(self, section, index, REQUEST=None) :
         """ ready to edit new json item """
-        del self.data[section][index]
-        return json.dumps(self.data[section],
-                          encoding='utf-8',
-                          cls=_JSONPersistentEncoder)
+        if index < len(self.data[section]) -1 :
+            del self.data[section][index]
+        return json.dumps({'ack':True},
+                          encoding='utf-8')
+
+    @staticmethod
+    def parseI18nString(s) :
+        s = s.strip().split('\n')
+        s = filter(None, s)
+        s = [line.rsplit('@', 1) for line in s]
+        s = PersistentMapping((lang.strip(), value.strip()) for value, lang in s)
+        return s
 
     security.declareProtected(ManagePrintOffer, 'saveOfferItem')
     @postonly
@@ -148,11 +156,7 @@ class PrintOffer(SimpleItem) :
             payload['long_edge'] = int(payload['long_edge'])
             payload['copies'] = int(payload['copies'])
             payload['price'] = int(payload['price'])
-
-            label = payload['label'].strip().split('\n')
-            label = [line.rsplit('@', 1) for line in label]
-            label = PersistentMapping((lang.strip(), value.strip()) for value, lang in label)
-            payload['label'] = label
+            payload['label'] = PrintOffer.parseI18nString(payload['label'])
 
             prices_ranges = PersistentList()
             for line in filter(None, payload.pop('prices_ranges').strip().split('\n')) :
@@ -164,6 +168,12 @@ class PrintOffer(SimpleItem) :
                                                         'stop': stop,
                                                         'price' : price}))
             payload['prices_ranges'] = prices_ranges
+
+        elif section in ('finishes', 'frames') :
+            payload['label'] = PrintOffer.parseI18nString(payload['label'])
+            payload['description'] = PrintOffer.parseI18nString(payload['description'])
+            payload['price'] = int(payload['price'])
+
 
         if index < len(self.data[section]) :
             self.data[section][index] = payload
