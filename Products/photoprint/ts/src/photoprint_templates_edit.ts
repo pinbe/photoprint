@@ -13,6 +13,7 @@ type PriceRange = {
     stop: number,
     price: number
 };
+
 type Format = {
     reference: string,
     label: I18NString,
@@ -24,8 +25,24 @@ type Format = {
     finishes: string[],
 };
 
+type Finishe = {
+    reference: string,
+    label: I18NString,
+    description: I18NString,
+    price: number,
+    frames: string[]
+}
+
+type Frame = {
+    reference: string,
+    label: I18NString,
+    description: I18NString,
+    price: number,
+}
+
 type PrintInfos = {
-    formats: Format[]
+    formats: Format[],
+    finishes: Finishe[]
 };
 
 class PrintOptionsEditor {
@@ -57,23 +74,23 @@ class PrintOptionsEditor {
             })
     }
 
-    private updateFormats(formats: Array<Format>, editLast=false) {
+    private updateFormats(formats: Array<Format>, editLast = false) {
         const formatUpdate = d3.select(this.formatsWrapper).select('div.formats').selectAll('div')
             .data(formats);
         const formatEnter = formatUpdate.enter().append('div')
         const formatExit = formatUpdate.exit().remove();
 
         formatEnter.merge(formatUpdate)
-            .html((d:Format, i: number) => PrintOptionsEditor.formatViewHtml(d, i))
+            .html((d: Format, i: number) => PrintOptionsEditor.formatViewHtml(d, i))
             .on('click', (d: Format, i: number, g: Array<HTMLDivElement>) => {
                 this.onFormatClick(d, i, g);
             })
         ;
-        if(editLast) {
+        if (editLast) {
             const editbtn: HTMLElement =
                 <HTMLElement>
-                d3.select(this.formatsWrapper).select('div.formats > div:last-child i.btn.edit').node();
-            editbtn.dispatchEvent(new MouseEvent('click', {view: window, bubbles:true, cancelable: true}));
+                    d3.select(this.formatsWrapper).select('div.formats > div:last-child i.btn.edit').node();
+            editbtn.dispatchEvent(new MouseEvent('click', {view: window, bubbles: true, cancelable: true}));
             d3.select(this.formatsWrapper).select('div.formats > div:last-child input')
                 .call((s) => (<HTMLInputElement>s.node()).focus())
             ;
@@ -176,13 +193,12 @@ class PrintOptionsEditor {
         if (target.classList.contains('btn')) {
             evt.stopPropagation();
             evt.preventDefault();
-            if(target.classList.contains('edit')) {
+            if (target.classList.contains('edit')) {
                 target.classList.remove('edit');
                 target.classList.add('validate');
                 target.parentElement.setAttribute('title', _("Save"));
                 this.startEdit(fmt, i, g);
-            }
-            else if (target.classList.contains('delete'))
+            } else if (target.classList.contains('delete'))
                 this.deleteFormat(fmt, i, g);
             else if (target.classList.contains('validate'))
                 this.saveFormat(fmt, i, g);
@@ -191,7 +207,7 @@ class PrintOptionsEditor {
 
     private startEdit(fmt: Format, i: number, g: HTMLDivElement[]) {
         d3.select(g[i]).selectAll('*[data-name]')
-            .each((d, i, g)=> {
+            .each((d, i, g) => {
                 const elt = <HTMLElement>g[i];
                 const name = (elt.getAttribute('data-name'));
                 const parent = elt.parentElement;
@@ -200,14 +216,14 @@ class PrintOptionsEditor {
                     case 'SPAN' :
                         input =
                             <HTMLElement>
-                            d3.select(parent)
-                                .append('input')
-                                .attr('type', 'text')
-                                .attr('name', name)
-                                .attr('value', (<any>fmt)[name])
-                                .attr('pattern', elt.getAttribute('data-pattern'))
-                                .attr('required', true)
-                                .node()
+                                d3.select(parent)
+                                    .append('input')
+                                    .attr('type', 'text')
+                                    .attr('name', name)
+                                    .attr('value', (<any>fmt)[name])
+                                    .attr('pattern', elt.getAttribute('data-pattern'))
+                                    .attr('required', true)
+                                    .node()
                         ;
                         break;
                     case 'UL' :
@@ -215,20 +231,20 @@ class PrintOptionsEditor {
                         const re = new RegExp(elt.getAttribute('data-line_pattern'));
                         elt.querySelectorAll('li').forEach((li: HTMLLIElement) => {
                             const res = re.exec(li.innerText);
-                            for (let i = 1 ; i<res.length ; i++)
+                            for (let i = 1; i < res.length; i++)
                                 txt += res[i];
                             txt += '\n';
                         })
                         txt = txt.trim();
                         input =
                             <HTMLElement>
-                            d3.select(parent)
-                                .append('textarea')
-                                .attr('name', name)
-                                .attr('data-line_pattern', elt.getAttribute('data-line_pattern'))
-                                .text(txt)
-                                .on('input', (d, i, g) => PrintOptionsEditor.checkTextareaLines(<HTMLTextAreaElement>g[i]))
-                                .node()
+                                d3.select(parent)
+                                    .append('textarea')
+                                    .attr('name', name)
+                                    .attr('data-line_pattern', elt.getAttribute('data-line_pattern'))
+                                    .text(txt)
+                                    .on('input', (d, i, g) => PrintOptionsEditor.checkTextareaLines(<HTMLTextAreaElement>g[i]))
+                                    .node()
                         ;
                         break;
 
@@ -270,10 +286,10 @@ class PrintOptionsEditor {
 
         const ok = inpustok && textareasok;
         if (ok) {
-            let kv: {[name:string] : string} = {};
+            let kv: { [name: string]: string } = {};
             d3.select(g[i]).selectAll('input, textarea')
                 .each((d, i, g) => {
-                    const input = <HTMLInputElement|HTMLTextAreaElement>g[i];
+                    const input = <HTMLInputElement | HTMLTextAreaElement>g[i];
                     kv[input.name] = input.value;
                 });
             console.log(kv);
@@ -285,7 +301,7 @@ class PrintOptionsEditor {
                     const updated = <Format>JSON.parse(resp.responseText);
                     let data = <Format[]>d3.select(this.formatsWrapper).select('div.formats')
                         .selectAll('div').data();
-                    data.splice(i,1, updated);
+                    data.splice(i, 1, updated);
                     this.updateFormats(data);
                 }
 
@@ -305,8 +321,7 @@ class PrintOptionsEditor {
             if (!reline.test(line)) {
                 ta.classList.add('invalid');
                 return false;
-            }
-            else {
+            } else {
                 ta.classList.remove('invalid');
             }
         }
