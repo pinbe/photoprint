@@ -9,8 +9,8 @@ const TR_DURATION = 500; // ms
 type Sel = d3.Selection<HTMLElement, any, HTMLElement, any>;
 type I18NString = { [lang: string]: string };
 type PriceRange = {
-    from: number
-    to: number,
+    start: number,
+    stop: number,
     price: number
 };
 type Format = {
@@ -20,12 +20,12 @@ type Format = {
     long_edge: number,
     copies: number,
     price: number,
-    prices_ranges: Array<PriceRange>,
-    finishes: Array<string>,
+    prices_ranges: PriceRange[],
+    finishes: string[],
 };
 
 type PrintInfos = {
-    formats: Array<Format>
+    formats: Format[]
 };
 
 class PrintOptionsEditor {
@@ -105,7 +105,11 @@ class PrintOptionsEditor {
     private static formatViewHtml(fmt: Format, index: number): string {
         let lbl = '';
         for (let [lang, value] of Object.entries(fmt.label)) {
-            lbl += `<li><span>${value}</span>@<span>${lang}</span></li>`
+            lbl += `<li>${value}@${lang}</li>`
+        }
+        let prices_ranges = '';
+        for (let range of fmt.prices_ranges) {
+            prices_ranges += `<li>[${range.start}, ${range.stop}] ${range.price}</li>`;
         }
         return `
                 <table class="TwoColumnForm">
@@ -128,7 +132,7 @@ class PrintOptionsEditor {
                   <tr>
                     <th>${_("Label")}</th>
                     <td>
-                      <ul data-name="label" data-line_pattern="(.*)@(\\w\\w)$" style="list-style: none">${lbl}</ul>
+                      <ul data-name="label" data-line_pattern="(.*)(@)(\\w\\w)$">${lbl}</ul>
                     </td>
                   </tr>
                   <tr>
@@ -147,6 +151,13 @@ class PrintOptionsEditor {
                     <th>${_("Price")}</th>
                     <td>
                       <span data-name="price" data-pattern="^\\d+$">${fmt.price}</span> ${_("€ ET")}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>${_("Scarcity")}</th>
+                    <td>
+                      <ul data-name="prices_ranges"
+                          data-line_pattern="^\\s*$|^\\s*(\\[)\\s*(\\d+)\\s*(,\\s*)(\\d+)\\s*(\\])(\\s*)(\\d+)\\s*$">${prices_ranges}</ul>
                     </td>
                   </tr>
                   <tr>
@@ -200,10 +211,14 @@ class PrintOptionsEditor {
                         ;
                         break;
                     case 'UL' :
-                        let txt: string =
-                            (<I18NString[]><unknown>(Object.entries((<any>fmt)[name])))
-                                .map((item):string => `${item[1]}@${item[0]}`)
-                                .reduce((prev, cur) => `${prev}\n${cur}`, '');
+                        let txt: string = '';
+                        const re = new RegExp(elt.getAttribute('data-line_pattern'));
+                        elt.querySelectorAll('li').forEach((li: HTMLLIElement) => {
+                            const res = re.exec(li.innerText);
+                            for (let i = 1 ; i<res.length ; i++)
+                                txt += res[i];
+                            txt += '\n';
+                        })
                         txt = txt.trim();
                         input =
                             <HTMLElement>

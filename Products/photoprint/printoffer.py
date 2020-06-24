@@ -1,4 +1,6 @@
 # coding=utf-8
+import re
+
 from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
 from AccessControl.requestmethod import postonly
@@ -146,10 +148,22 @@ class PrintOffer(SimpleItem) :
             payload['long_edge'] = int(payload['long_edge'])
             payload['copies'] = int(payload['copies'])
             payload['price'] = int(payload['price'])
+
             label = payload['label'].strip().split('\n')
             label = [line.rsplit('@', 1) for line in label]
-            label = PersistentMapping((lang, value) for value, lang in label)
+            label = PersistentMapping((lang.strip(), value.strip()) for value, lang in label)
             payload['label'] = label
+
+            prices_ranges = PersistentList()
+            for line in filter(None, payload.pop('prices_ranges').strip().split('\n')) :
+                start, stop, price = \
+                    re.search('^\s*\[\s*(\d+)\s*,\s*(\d+)\s*\]\s*(\d+)\s*$',
+                              line.strip()).groups()
+                start, stop, price = [int(i) for i in (start, stop, price)]
+                prices_ranges.append(PersistentMapping({'start':start,
+                                                        'stop': stop,
+                                                        'price' : price}))
+            payload['prices_ranges'] = prices_ranges
 
         if index < len(self.data[section]) :
             self.data[section][index] = payload

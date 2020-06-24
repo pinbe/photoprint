@@ -29,4 +29,8 @@
   border-color: #d20000;
 }
 
+#print_options_editor ul {
+  list-style: none;
+}
+
 /* </dtml-with> */
