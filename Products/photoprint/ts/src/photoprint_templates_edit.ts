@@ -6,44 +6,51 @@ import LanguageDetector from 'i18next-browser-languagedetector'
 const _ = (s: string, options?: TOptions): string => i18next.t(s, options);
 const TR_DURATION = 500; // ms
 
-type Sel = d3.Selection<HTMLElement, any, HTMLElement, any>;
+type AnySel = d3.Selection<HTMLElement, any, HTMLElement, any>;
 type I18NString = { [lang: string]: string };
-type PriceRange = {
-    start: number,
-    stop: number,
-    price: number
-};
 
-type Format = {
-    reference: string,
-    label: I18NString,
+interface PriceRange {
+    start: number;
+    stop: number;
+    price: number;
+}
+
+interface PrintOfferItem {
+    reference: string;
+    label: I18NString;
+    price: number;
+}
+
+interface Format extends PrintOfferItem {
     short_edge: number,
     long_edge: number,
     copies: number,
-    price: number,
     prices_ranges: PriceRange[],
     finishes: string[],
-};
+}
 
-type Finish = {
-    reference: string,
-    label: I18NString,
+interface Finish extends PrintOfferItem {
     description: I18NString,
-    price: number,
     frames: string[]
 }
 
-type Frame = {
-    reference: string,
-    label: I18NString,
+
+interface Frame extends PrintOfferItem {
     description: I18NString,
-    price: number,
 }
 
-type PrintInfos = {
-    formats: Format[],
-    finishes: Finish[]
-};
+interface PrintInfos {
+    formats: Format[];
+    finishes: Finish[];
+    frames: Frame[];
+}
+
+interface SectionInfo {
+    section: string;
+    btnTitle: string;
+    html: (item: PrintOfferItem) => string;
+}
+
 
 const FLOAT_PATTERN = '^\\s*\\d+[\\.,]?\\d*\\s*$'
 
@@ -52,43 +59,44 @@ class PrintOptionsEditor {
     private static FINISHES_SECTION = 1;
     private static FRAMES_SECTION = 2;
 
-    private static SECTIONS_INFOS = [
-        {
-            section: 'formats',
-            btnTitle: _("Add new format…"),
-            html: PrintOptionsEditor.formatViewHtml
-        },
-        {
-            section: 'finishes',
-            btnTitle: _("Add new finish…"),
-            html: PrintOptionsEditor.finishViewHtml
-        },
-        {
-            section: 'frames',
-            btnTitle: _("Add new frame…"),
-            html: PrintOptionsEditor.frameViewHtml
-        },
-    ]
-
     private absUrl: string;
     private cells: NodeListOf<HTMLTableDataCellElement>;
+    private readonly SECTIONS_INFOS: SectionInfo[];
 
     constructor(absUrl: string) {
+        this.SECTIONS_INFOS = [
+            {
+                section: 'formats',
+                btnTitle: _("Add new format…"),
+                html: PrintOptionsEditor.formatViewHtml
+            },
+            {
+                section: 'finishes',
+                btnTitle: _("Add new finish…"),
+                html: PrintOptionsEditor.finishViewHtml
+            },
+            {
+                section: 'frames',
+                btnTitle: _("Add new frame…"),
+                html: PrintOptionsEditor.frameViewHtml
+            },
+        ]
+
         this.absUrl = absUrl;
         this.cells = document.querySelectorAll<HTMLTableDataCellElement>('#print_options_editor > tr > td');
 
         this.initWrappersAndButtons();
         d3.json(`${this.absUrl}/printingOptions/printoffer/json`)
             .then((infos: PrintInfos) => {
-                for (let i = 0; i < PrintOptionsEditor.SECTIONS_INFOS.length; i++) {
-                    this.updateSection(i, (<any>infos)[PrintOptionsEditor.SECTIONS_INFOS[i].section])
+                for (let i = 0; i < this.SECTIONS_INFOS.length; i++) {
+                    this.updateSection(i, (<any>infos)[this.SECTIONS_INFOS[i].section])
                 }
             })
     }
 
     private initWrappersAndButtons() {
         let cells = document.querySelectorAll<HTMLTableDataCellElement>('#print_options_editor > tr > td');
-        const infos = PrintOptionsEditor.SECTIONS_INFOS;
+        const infos = this.SECTIONS_INFOS;
         for (let i = 0; i < infos.length; i++) {
             d3.select(cells[i])
                 .append('div')
@@ -109,7 +117,7 @@ class PrintOptionsEditor {
 
     private updateSection(sectionIndex: number, data: any, editLast = false) {
         const updateSel = d3.select(this.cells[sectionIndex])
-            .select(`div.${PrintOptionsEditor.SECTIONS_INFOS[sectionIndex].section}`)
+            .select(`div.${this.SECTIONS_INFOS[sectionIndex].section}`)
             .selectAll('div')
             .data(data);
         const enterSel = updateSel.enter().append('div');
@@ -117,8 +125,7 @@ class PrintOptionsEditor {
 
 
         enterSel.merge(updateSel)
-            // @ts-ignore
-            .html(PrintOptionsEditor.SECTIONS_INFOS[sectionIndex].html)
+            .html(this.SECTIONS_INFOS[sectionIndex].html)
             .on('click', (d: any, i: number, g: HTMLDivElement[]) => {
                 this.onItemClick(sectionIndex, d, i, g);
             })
@@ -127,11 +134,11 @@ class PrintOptionsEditor {
         if (editLast) {
             const editbtn: HTMLElement =
                 <HTMLElement>d3.select(this.cells[sectionIndex])
-                    .select(`div.${PrintOptionsEditor.SECTIONS_INFOS[sectionIndex].section} > div:last-child i.btn.edit`)
+                    .select(`div.${this.SECTIONS_INFOS[sectionIndex].section} > div:last-child i.btn.edit`)
                     .node();
             editbtn.dispatchEvent(new MouseEvent('click', {view: window, bubbles: true, cancelable: true}));
             d3.select(this.cells[sectionIndex])
-                .select(`div.${PrintOptionsEditor.SECTIONS_INFOS[sectionIndex].section} > div:last-child input`)
+                .select(`div.${this.SECTIONS_INFOS[sectionIndex].section} > div:last-child input`)
                 .call((s) => (<HTMLInputElement>s.node()).focus())
             ;
         }
@@ -155,7 +162,8 @@ class PrintOptionsEditor {
         `;
     }
 
-    private static formatViewHtml(fmt: Format, index: number): string {
+    private static formatViewHtml(item: PrintOfferItem): string {
+        const fmt = <Format>item;
         let lbl = '';
         for (let [lang, value] of Object.entries(fmt.label)) {
             lbl += `<li>${value}@${lang}</li>`
@@ -212,7 +220,8 @@ class PrintOptionsEditor {
     }
 
 
-    private static finishViewHtml(finish: Finish): string {
+    private static finishViewHtml(item: PrintOfferItem): string {
+        const finish = <Finish>item;
         const label = Object.entries(finish.label)
             .map(([lang, value]) => `<li>${value}@${lang}</li>`)
             .reduce((a, b) => a + b, '');
@@ -251,7 +260,8 @@ class PrintOptionsEditor {
         return PrintOptionsEditor.htmlViewLayout(rows);
     }
 
-    private static frameViewHtml(frame: Finish): string {
+    private static frameViewHtml(item: PrintOfferItem): string {
+        const frame = <Frame>item;
         const label = Object.entries(frame.label)
             .map(([lang, value]) => `<li>${value}@${lang}</li>`)
             .reduce((a, b) => a + b, '');
@@ -331,7 +341,7 @@ class PrintOptionsEditor {
         console.log('createItem', sectionIndex);
 
         let params: FormData = new FormData();
-        params.append('section', PrintOptionsEditor.SECTIONS_INFOS[sectionIndex].section);
+        params.append('section', this.SECTIONS_INFOS[sectionIndex].section);
         let url = `${this.absUrl}/printingOptions/printoffer/getTemplate`;
         d3.json(
             url,
@@ -341,7 +351,7 @@ class PrintOptionsEditor {
             }
         ).then((format: Format) => {
             let data = d3.select(this.cells[sectionIndex])
-                .select(`div.${PrintOptionsEditor.SECTIONS_INFOS[sectionIndex].section}`)
+                .select(`div.${this.SECTIONS_INFOS[sectionIndex].section}`)
                 .selectAll('div').data();
             data.push(format);
             this.updateSection(sectionIndex, data, true);
@@ -442,7 +452,7 @@ class PrintOptionsEditor {
                 if (resp.status == 200) {
                     const updated = JSON.parse(resp.responseText);
                     let data = <[any]>d3.select(this.cells[sectionIndex])
-                        .select(`div.${PrintOptionsEditor.SECTIONS_INFOS[sectionIndex].section}`)
+                        .select(`div.${this.SECTIONS_INFOS[sectionIndex].section}`)
                         .selectAll('div').data();
                     data.splice(i, 1, updated);
                     this.updateSection(sectionIndex, data);
@@ -450,7 +460,7 @@ class PrintOptionsEditor {
 
             })
             const formdata = new FormData();
-            formdata.append('section', PrintOptionsEditor.SECTIONS_INFOS[sectionIndex].section);
+            formdata.append('section', this.SECTIONS_INFOS[sectionIndex].section);
             formdata.append('index:int', Number(i).toString(10));
             formdata.append('jsondata', JSON.stringify(kv));
             req.send(formdata);
@@ -461,7 +471,7 @@ class PrintOptionsEditor {
     private removeItem(sectionIndex: number, i: number, g: HTMLDivElement[]) {
         const url = `${this.absUrl}/printingOptions/printoffer/removeOfferItem`;
         const params = new FormData();
-        params.append('section', PrintOptionsEditor.SECTIONS_INFOS[sectionIndex].section);
+        params.append('section', this.SECTIONS_INFOS[sectionIndex].section);
         params.append('index:int', Number(i).toString(10));
         d3.json(url, {body: params, method: 'POST'})
             .then((res: { ack: boolean }) => {
