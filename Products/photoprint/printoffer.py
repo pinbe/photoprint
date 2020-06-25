@@ -63,10 +63,10 @@ class PrintOffer(SimpleItem) :
         'formats' : {
             'reference' : '',
             'label' : {},
-            'short_edge' : 0,
-            'long_edge': 0,
-            'copies' : 0,
-            'price' : 0,
+            'short_edge' : 0.,
+            'long_edge': 0.,
+            'copies' : 0.,
+            'price' : 0.,
             'prices_ranges' : [],
             'finishes' : [],
         },
@@ -74,14 +74,14 @@ class PrintOffer(SimpleItem) :
             'reference' : '',
             'label' : {},
             'description' : {},
-            'price' : 0,
+            'price' : 0.,
             'frames' : [],
         },
         'frames' : {
             'reference' : '',
             'label' : {},
             'description' : {},
-            'price' : 0,
+            'price' : 0.,
         }
     }
 
@@ -143,6 +143,10 @@ class PrintOffer(SimpleItem) :
         s = PersistentMapping((lang.strip(), value.strip()) for value, lang in s)
         return s
 
+    @staticmethod
+    def parseFloat(s) :
+        return float(s.replace(',', '.'))
+
     security.declareProtected(ManagePrintOffer, 'saveOfferItem')
     @postonly
     def saveOfferItem(self, section, index, jsondata, REQUEST=None) :
@@ -152,18 +156,18 @@ class PrintOffer(SimpleItem) :
             return
 
         if section == 'formats' :
-            payload['short_edge'] = int(payload['short_edge'])
-            payload['long_edge'] = int(payload['long_edge'])
+            payload['short_edge'] = PrintOffer.parseFloat(payload['short_edge'])
+            payload['long_edge'] = PrintOffer.parseFloat(payload['long_edge'])
             payload['copies'] = int(payload['copies'])
-            payload['price'] = int(payload['price'])
+            payload['price'] = PrintOffer.parseFloat(payload['price'])
             payload['label'] = PrintOffer.parseI18nString(payload['label'])
 
             prices_ranges = PersistentList()
             for line in filter(None, payload.pop('prices_ranges').strip().split('\n')) :
                 start, stop, price = \
-                    re.search('^\s*\[\s*(\d+)\s*,\s*(\d+)\s*\]\s*(\d+)\s*$',
+                    re.search('^\s*\[\s*(\d+)\s*,\s*(\d+)\s*\]\s*(\d+[\.,]?\d*)\s*$',
                               line.strip()).groups()
-                start, stop, price = [int(i) for i in (start, stop, price)]
+                start, stop, price = int(start), int(stop), PrintOffer.parseFloat(price)
                 prices_ranges.append(PersistentMapping({'start':start,
                                                         'stop': stop,
                                                         'price' : price}))
@@ -172,7 +176,7 @@ class PrintOffer(SimpleItem) :
         elif section in ('finishes', 'frames') :
             payload['label'] = PrintOffer.parseI18nString(payload['label'])
             payload['description'] = PrintOffer.parseI18nString(payload['description'])
-            payload['price'] = int(payload['price'])
+            payload['price'] = PrintOffer.parseFloat(payload['price'])
 
 
         if index < len(self.data[section]) :

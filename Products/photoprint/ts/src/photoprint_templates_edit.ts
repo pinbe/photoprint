@@ -45,6 +45,8 @@ type PrintInfos = {
     finishes: Finish[]
 };
 
+const FLOAT_PATTERN = '^\\s*\\d+[\\.,]?\\d*\\s*$'
+
 class PrintOptionsEditor {
     private static FORMATS_SECTION = 0;
     private static FINISHES_SECTION = 1;
@@ -178,26 +180,26 @@ class PrintOptionsEditor {
           <tr>
             <th>${_("Short edge")}</th>
             <td>
-              <span data-name="short_edge" data-pattern="^\\d+$">${fmt.short_edge}</span> cm
+              <span data-name="short_edge" data-pattern="${FLOAT_PATTERN}">${fmt.short_edge}</span> cm
             </td>
           </tr>
           <tr>
             <th>${_("Long edge")}</th>
             <td>
-              <span data-name="long_edge" data-pattern="^\\d+$">${fmt.long_edge}</span> cm
+              <span data-name="long_edge" data-pattern="${FLOAT_PATTERN}">${fmt.long_edge}</span> cm
             </td>
           </tr>
           <tr>
             <th>${_("Price")}</th>
             <td>
-              <span data-name="price" data-pattern="^\\d+$">${fmt.price}</span> ${_("€ ET")}
+              <span data-name="price" data-pattern="${FLOAT_PATTERN}">${fmt.price}</span> ${_("€ ET")}
             </td>
           </tr>
           <tr>
             <th>${_("Scarcity")}</th>
             <td>
               <ul data-name="prices_ranges"
-                  data-line_pattern="^\\s*$|^\\s*(\\[)\\s*(\\d+)\\s*(,\\s*)(\\d+)\\s*(\\])(\\s*)(\\d+)\\s*$">${prices_ranges}</ul>
+                  data-line_pattern="^\\s*$|^\\s*(\\[)\\s*(\\d+)\\s*(,\\s*)(\\d+)\\s*(\\])(\\s*)(\\d+[\\.,]?\\d*)\\s*$">${prices_ranges}</ul>
             </td>
           </tr>
           <tr>
@@ -241,7 +243,7 @@ class PrintOptionsEditor {
           <tr>
             <th>${_("Price")}</th>
             <td>
-              <span data-name="price" data-pattern="^\\d+$">${finish.price}</span> ${_("€ ET")}
+              <span data-name="price" data-pattern="${FLOAT_PATTERN}">${finish.price}</span> ${_("€ ET")}
             </td>
           </tr>
           
@@ -280,7 +282,7 @@ class PrintOptionsEditor {
           <tr>
             <th>${_("Price")}</th>
             <td>
-              <span data-name="price" data-pattern="^\\d+$">${frame.price}</span> ${_("€ ET")}
+              <span data-name="price" data-pattern="${FLOAT_PATTERN}">${frame.price}</span> ${_("€ ET")}
             </td>
           </tr>
           
