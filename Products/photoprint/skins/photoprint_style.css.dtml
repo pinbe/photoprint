@@ -45,6 +45,19 @@
 
 #print_options_editor textarea {
   width: 100%;
-  height: 4em;
+  height: 6em;
+}
+
+
+#print_options_editor .cols-headers h2 {
+  text-align: center;
+}
+
+#print_options_editor svg {
+  border: 1px dashed #b4098c;
+}
+
+#print_options_editor .bottom-buttons > div {
+  text-align: center;
 }
 /* </dtml-with> */

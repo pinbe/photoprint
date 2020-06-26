@@ -49,6 +49,7 @@ interface PrintInfos {
 interface SectionInfo {
     section: string;
     btnTitle: string;
+    title: string;
     html: (item: PrintOfferItem) => string;
 }
 
@@ -68,21 +69,25 @@ class PrintOptionsEditor {
     private htmlTmpShape: AnySel;
     private colwidth: number;
     private editorSelector: string;
+    private headerHeight: number;
 
     constructor(absUrl: string, editorSelector: string) {
         this.SECTIONS_INFOS = [
             {
                 section: 'formats',
+                title: _('Formats'),
                 btnTitle: _("Add new format…"),
                 html: PrintOptionsEditor.formatViewHtml
             },
             {
                 section: 'finishes',
+                title: _('Finishes'),
                 btnTitle: _("Add new finish…"),
                 html: PrintOptionsEditor.finishViewHtml
             },
             {
                 section: 'frames',
+                title: _('Frames'),
                 btnTitle: _("Add new frame…"),
                 html: PrintOptionsEditor.frameViewHtml
             },
@@ -99,10 +104,35 @@ class PrintOptionsEditor {
             .style('width', `${this.colwidth}px`)
 
 
-        d3.select(editorSelector)
+        const svg = d3.select(editorSelector)
             .append('svg:svg')
             .attr('width', `${wrapperRect.width}px`)
-            .attr('height', '0px')
+            .attr('height', '0px');
+
+        // header
+        this.headerHeight = 0;
+        svg.append('g')
+            .attr('class', 'cols-headers')
+            .selectAll('foreignObject')
+            .data(this.SECTIONS_INFOS)
+            .enter()
+            .append('foreignObject')
+            .each((d, i, g) => {
+                const html = `<div><h2>${d.title}</h2></div>`;
+                const height = this.getHtmlHeight(html);
+                this.headerHeight = (this.headerHeight < height) ? height : this.headerHeight;
+                d3.select(g[i])
+                    .attr('width', `${this.colwidth}px`)
+                    .attr('height', `${height}px`)
+                    .attr('transform', `translate(${i * (this.colwidth + PrintOptionsEditor.COLS_MARGIN)}, 0)`)
+                    .html(html)
+                ;
+            })
+        ;
+
+        svg.append('g')
+            .attr('class', 'printoffer-items')
+            .attr('transform', `translate(0, ${this.headerHeight})`)
             .selectAll('g')
             .data<SectionInfo>(this.SECTIONS_INFOS)
             .enter()
@@ -116,9 +146,7 @@ class PrintOptionsEditor {
                 d3.select(editorSelector)
                     .selectAll<SVGGElement, SectionInfo>('g.section')
                     .each((d: SectionInfo, i, g) =>
-                        this.updateSection(d,
-                            <PrintOfferItem[]>(<any>infos)[this.SECTIONS_INFOS[i].section],
-                            g[i]))
+                        this.updateSection(d, <PrintOfferItem[]>(<any>infos)[this.SECTIONS_INFOS[i].section]))
                 ;
                 this.updateLayout();
             })
@@ -155,18 +183,52 @@ class PrintOptionsEditor {
 
     private updateSection(sectionInfo: SectionInfo,
                           items: PrintOfferItem[],
-                          parentElt: SVGGElement,
+                          // parentElt: SVGGElement,
                           editLast = false) {
-        const updateSel = d3.select(parentElt)
-            .selectAll('foreignObject')
+        const sectionSel = d3.select(this.editorSelector).select(`.section.${sectionInfo.section}`);
+        const updateSel = sectionSel
+            .selectAll('foreignObject.item')
             .data(items);
-        const enterSel = updateSel.enter().append('foreignObject');
+        const enterSel = updateSel.enter()
+            .append('foreignObject')
+            .attr('class', 'item')
+        ;
         enterSel.append('xhtml:div');
         const exitSel = updateSel.exit().remove();
 
         enterSel.merge(updateSel)
             .each((item: PrintOfferItem, i, g) => {
                 this.updateItemView(sectionInfo, <PrintOfferItemSel>d3.select(g[i]))
+            })
+        ;
+        if (editLast) {
+            const nodes = enterSel.nodes();
+            this.startEditItem(<PrintOfferItemSel>d3.select(nodes[nodes.length - 1]), true)
+        }
+
+        sectionSel
+            .selectAll('foreignObject.bottom-buttons')
+            .data([sectionInfo])
+            .enter()
+            .append('foreignObject')
+            .attr('class', 'bottom-buttons')
+            .each((d, i, g) => {
+                const html =
+                    `<div>
+                        <a href="#" title="${sectionInfo.btnTitle}">
+                          <i class="btn add fas fa-plus"></i>
+                        </a>
+                     </div>`
+                ;
+                const height = this.getHtmlHeight(html);
+                d3.select(g[i])
+                    .attr('width', `${this.colwidth}px`)
+                    .attr('height', `${height}px`)
+                    .html(html)
+                    .on('click', () => this.onBottomBtnClick(sectionInfo))
+                    .select('div')
+                    .style('height', `${height}px`)
+                ;
             })
         ;
     }
@@ -189,30 +251,40 @@ class PrintOptionsEditor {
     }
 
     private updateLayout() {
-        let svgheight = parseFloat(d3.select(this.editorSelector).select('svg').attr('height'));
-        d3.select(this.editorSelector)
-            .selectAll('g')
+        let maxColHeight = 0;
+        d3.select(this.editorSelector).select('g.printoffer-items')
+            .selectAll('g') // sections
             .each((d, i, g) => {
-                const heights: number[] =
-                    d3.select(g[i]).selectAll('foreignObject > div').nodes().map((node: HTMLDivElement) => parseFloat(node.style.height));
+                const divs = <HTMLDivElement[]>d3.select(g[i])
+                    .selectAll('foreignObject.item > div')
+                    .nodes().concat(d3.select(g[i]).selectAll('foreignObject.bottom-buttons > div').nodes());
 
-                const colheight = heights.reduce((a, b) => a + b, 0) + PrintOptionsEditor.ROW_MARGIN * heights.length;
-                if (svgheight < colheight) {
-                    svgheight = colheight;
-                    d3.select(this.editorSelector).select('svg')
-                        .attr('height', `${svgheight}px`);
+                let colHeight = 0;
+                for (let j = 0; j < divs.length; j++) {
+                    const fo = divs[j].parentElement;
+                    d3.select(fo)
+                        .transition().duration(TR_DURATION)
+                        .attr('transform', `translate(0,${colHeight})`)
+                    ;
+                    colHeight += parseFloat(divs[j].style.height) + PrintOptionsEditor.ROW_MARGIN;
                 }
-
-                d3.select(g[i]).selectAll('foreignObject')
-                    .each((_, ii, gg) => {
-                        let y = heights.slice(0, ii).reduce((a, b) => a + b, 0);
-                        y += ii * PrintOptionsEditor.ROW_MARGIN;
-                        d3.select(gg[ii])
-                            .transition().duration(TR_DURATION)
-                            .attr('transform', `translate(0, ${y})`)
-                        ;
-                    })
+                maxColHeight = Math.max(maxColHeight, colHeight);
+                // const colheight = heights.reduce((a, b) => a + b, 0) + PrintOptionsEditor.ROW_MARGIN * heights.length;
+                // maxColHeight = Math.max(maxColHeight, colheight);
+                // d3.select(g[i]).selectAll('foreignObject')
+                //     .each((_, ii, gg) => {
+                //         let y = heights.slice(0, ii).reduce((a, b) => a + b, 0);
+                //         y += ii * PrintOptionsEditor.ROW_MARGIN;
+                //         d3.select(gg[ii])
+                //             .transition().duration(TR_DURATION)
+                //             .attr('transform', `translate(0, ${y})`)
+                //         ;
+                //     })
             })
+        ;
+        d3.select(this.editorSelector).select('svg')
+            .transition().duration(TR_DURATION)
+            .attr('height', `${this.headerHeight + maxColHeight}px`)
         ;
     }
 
@@ -386,29 +458,41 @@ class PrintOptionsEditor {
         return true;
     }
 
-    // private createItem(sectionIndex: number) {
-    //     const evt = d3.event;
-    //     evt.stopPropagation();
-    //     evt.preventDefault();
-    //     console.log('createItem', sectionIndex);
-    //
-    //     let params: FormData = new FormData();
-    //     params.append('section', this.SECTIONS_INFOS[sectionIndex].section);
-    //     let url = `${this.absUrl}/printingOptions/printoffer/getTemplate`;
-    //     d3.json(
-    //         url,
-    //         {
-    //             body: params,
-    //             method: 'POST'
-    //         }
-    //     ).then((format: Format) => {
-    //         let data = d3.select(this.cells[sectionIndex])
-    //             .select(`div.${this.SECTIONS_INFOS[sectionIndex].section}`)
-    //             .selectAll('div').data();
-    //         data.push(format);
-    //         this.updateSection(sectionIndex, data, true);
-    //     });
-    // }
+    private onBottomBtnClick(sectionInfo: SectionInfo) {
+        const evt = d3.event;
+        const target = evt.target;
+        if (target.classList.contains('btn')) {
+            evt.stopPropagation();
+            evt.preventDefault();
+            if (target.classList.contains('add')) {
+                this.createPrintOfferItem(sectionInfo);
+            }
+        }
+
+
+    }
+
+    private createPrintOfferItem(sectionInfo:SectionInfo) {
+        let params: FormData = new FormData();
+        params.append('section', sectionInfo.section);
+        let url = `${this.absUrl}/printingOptions/printoffer/getTemplate`;
+        d3.json(
+            url,
+            {
+                body: params,
+                method: 'POST'
+            }
+        ).then((item: PrintOfferItem) => {
+            const data = d3.select(this.editorSelector)
+                .select(`.section.${sectionInfo.section}`)
+                .selectAll('foreignObject.item')
+                .data()
+            data.push(item);
+            this.updateSection(sectionInfo, <PrintOfferItem[]>data, true);
+            this.updateLayout();
+        });
+
+    }
 
     private onItemClick(itemSel: PrintOfferItemSel) {
         const evt = d3.event;
@@ -417,9 +501,6 @@ class PrintOptionsEditor {
             evt.stopPropagation();
             evt.preventDefault();
             if (target.classList.contains('edit')) {
-                target.classList.remove('edit');
-                target.classList.add('validate');
-                target.parentElement.setAttribute('title', _("Save"));
                 this.startEditItem(itemSel);
             } else if (target.classList.contains('delete')) {
                 this.removeItem(itemSel);
@@ -429,7 +510,12 @@ class PrintOptionsEditor {
         }
     }
 
-    private startEditItem(itemSel: PrintOfferItemSel) {
+    private startEditItem(itemSel: PrintOfferItemSel, skipLayoutUpdate = false) {
+        const btn = <HTMLElement>itemSel.select('i.btn.edit').node();
+        btn.classList.remove('edit');
+        btn.classList.add('validate');
+        btn.parentElement.setAttribute('title', _("Save"));
+
         const itemD = itemSel.datum();
         itemSel.selectAll('*[data-name]')
             .each((_, i_, g_) => {
@@ -483,7 +569,9 @@ class PrintOptionsEditor {
         itemSel
             .attr('height', `${height}px`)
         ;
-        this.updateLayout();
+        (<HTMLInputElement>itemSel.select('input').node()).focus();
+        if (!skipLayoutUpdate)
+            this.updateLayout();
     }
 
     private saveItem(itemSel: PrintOfferItemSel/*sectionIndex: number, i: number, g: HTMLDivElement[]*/) {
@@ -506,7 +594,7 @@ class PrintOptionsEditor {
                 })
             ;
             const sectionSel = d3.select(itemSel.node().parentElement);
-            const sectionData = <PrintOfferItem[]>sectionSel.selectAll('foreignObject').data();
+            const sectionData = <PrintOfferItem[]>sectionSel.selectAll('foreignObject.item').data();
 
             let req = new XMLHttpRequest();
             req.open('POST', `${this.absUrl}/printingOptions/printoffer/saveOfferItem`)
@@ -542,7 +630,7 @@ class PrintOptionsEditor {
 
     private removeItem(itemSel: PrintOfferItemSel/*section:string, itemIndex: number, itemUIElt: HTMLDivElement*/) {
         const sectionSel = d3.select(itemSel.node().parentElement);
-        const sectionData = <PrintOfferItem[]>sectionSel.selectAll('foreignObject').data();
+        const sectionData = <PrintOfferItem[]>sectionSel.selectAll('foreignObject.item').data();
         let itemIndex: number;
         for (itemIndex = 0; itemIndex <= sectionData.length; itemIndex++) {
             if (itemSel.datum() === sectionData[itemIndex])

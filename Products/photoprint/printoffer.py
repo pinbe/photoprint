@@ -130,7 +130,7 @@ class PrintOffer(SimpleItem) :
     @postonly
     def removeOfferItem(self, section, index, REQUEST=None) :
         """ ready to edit new json item """
-        if index < len(self.data[section]) -1 :
+        if index < len(self.data[section]) :
             del self.data[section][index]
         return json.dumps({'ack':True},
                           encoding='utf-8')
