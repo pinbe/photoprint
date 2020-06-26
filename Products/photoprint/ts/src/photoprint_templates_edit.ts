@@ -110,7 +110,7 @@ class PrintOptionsEditor {
             .attr('transform', (d, i) => `translate(${i * (this.colwidth + PrintOptionsEditor.COLS_MARGIN)},0)`)
             .attr('class', (d) => `section ${d.section}`)
         ;
-        // console.log(document.querySelector('svg'));
+
         d3.json(`${this.absUrl}/printingOptions/printoffer/json`)
             .then((infos: PrintInfos) => {
                 d3.select(editorSelector)
