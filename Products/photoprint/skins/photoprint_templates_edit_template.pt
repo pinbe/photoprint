@@ -34,21 +34,21 @@
         <input type="submit" name="deleteOptionContainer" style="margin-top:3em"
                value="Delete options defined at this level" i18n:attributes="value"/>
       </form>
-
-      <table>
-        <tr>
-          <th i18n:translate="">Formats</th>
-          <th i18n:translate="">Finishes</th>
-          <th i18n:translate="">Frames</th>
-        </tr>
-        <tbody id="print_options_editor">
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-        </tbody>
-      </table>
+      <div id="print_options_editor"></div>
+<!--?      <table>-->
+<!--?        <tr>-->
+<!--?          <th i18n:translate="">Formats</th>-->
+<!--?          <th i18n:translate="">Finishes</th>-->
+<!--?          <th i18n:translate="">Frames</th>-->
+<!--?        </tr>-->
+<!--?        <tbody id="print_options_editor">-->
+<!--?          <tr>-->
+<!--?            <td></td>-->
+<!--?            <td></td>-->
+<!--?            <td></td>-->
+<!--?          </tr>-->
+<!--?        </tbody>-->
+<!--?      </table>-->
       
     </div>
   </body>

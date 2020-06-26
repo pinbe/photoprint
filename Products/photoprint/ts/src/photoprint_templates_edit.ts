@@ -7,6 +7,7 @@ const _ = (s: string, options?: TOptions): string => i18next.t(s, options);
 const TR_DURATION = 500; // ms
 
 type AnySel = d3.Selection<HTMLElement, any, HTMLElement, any>;
+type PrintOfferItemSel = d3.Selection<SVGForeignObjectElement, PrintOfferItem, undefined, unknown>;
 type I18NString = { [lang: string]: string };
 
 interface PriceRange {
@@ -55,6 +56,8 @@ interface SectionInfo {
 const FLOAT_PATTERN = '^\\s*\\d+[\\.,]?\\d*\\s*$'
 
 class PrintOptionsEditor {
+    private static COLS_MARGIN = 50;
+    private static ROW_MARGIN = 5;
     private static FORMATS_SECTION = 0;
     private static FINISHES_SECTION = 1;
     private static FRAMES_SECTION = 2;
@@ -62,8 +65,11 @@ class PrintOptionsEditor {
     private absUrl: string;
     private cells: NodeListOf<HTMLTableDataCellElement>;
     private readonly SECTIONS_INFOS: SectionInfo[];
+    private htmlTmpShape: AnySel;
+    private colwidth: number;
+    private editorSelector: string;
 
-    constructor(absUrl: string) {
+    constructor(absUrl: string, editorSelector: string) {
         this.SECTIONS_INFOS = [
             {
                 section: 'formats',
@@ -81,67 +87,133 @@ class PrintOptionsEditor {
                 html: PrintOptionsEditor.frameViewHtml
             },
         ]
-
         this.absUrl = absUrl;
-        this.cells = document.querySelectorAll<HTMLTableDataCellElement>('#print_options_editor > tr > td');
+        this.editorSelector = editorSelector;
 
-        this.initWrappersAndButtons();
+        const wrapper = document.querySelector<HTMLDivElement>(this.editorSelector);
+        const wrapperRect = wrapper.getBoundingClientRect();
+        this.colwidth = (wrapperRect.width - PrintOptionsEditor.COLS_MARGIN * (this.SECTIONS_INFOS.length - 1)) / this.SECTIONS_INFOS.length;
+        this.htmlTmpShape = <AnySel>d3.select(editorSelector)
+            .append('div')
+            .style('position', 'absolute')
+            .style('width', `${this.colwidth}px`)
+
+
+        d3.select(editorSelector)
+            .append('svg:svg')
+            .attr('width', `${wrapperRect.width}px`)
+            .attr('height', '0px')
+            .selectAll('g')
+            .data<SectionInfo>(this.SECTIONS_INFOS)
+            .enter()
+            .append('g')
+            .attr('transform', (d, i) => `translate(${i * (this.colwidth + PrintOptionsEditor.COLS_MARGIN)},0)`)
+            .attr('class', (d) => `section ${d.section}`)
+        ;
+        // console.log(document.querySelector('svg'));
         d3.json(`${this.absUrl}/printingOptions/printoffer/json`)
             .then((infos: PrintInfos) => {
-                for (let i = 0; i < this.SECTIONS_INFOS.length; i++) {
-                    this.updateSection(i, (<any>infos)[this.SECTIONS_INFOS[i].section])
-                }
-            })
-    }
-
-    private initWrappersAndButtons() {
-        let cells = document.querySelectorAll<HTMLTableDataCellElement>('#print_options_editor > tr > td');
-        const infos = this.SECTIONS_INFOS;
-        for (let i = 0; i < infos.length; i++) {
-            d3.select(cells[i])
-                .append('div')
-                .attr('class', infos[i].section)
-            ;
-            d3.select(cells[i])
-                .append('div')
-                .attr('class', 'buttons')
-                .append('a')
-                .on('click', () => this.createItem(i))
-                .attr('href', '#')
-                .attr('title', infos[i].btnTitle)
-                .append('i')
-                .attr('class', 'fas fa-plus')
-            ;
-        }
-    }
-
-    private updateSection(sectionIndex: number, data: any, editLast = false) {
-        const updateSel = d3.select(this.cells[sectionIndex])
-            .select(`div.${this.SECTIONS_INFOS[sectionIndex].section}`)
-            .selectAll('div')
-            .data(data);
-        const enterSel = updateSel.enter().append('div');
-        const exitSel = updateSel.exit().remove();
-
-
-        enterSel.merge(updateSel)
-            .html(this.SECTIONS_INFOS[sectionIndex].html)
-            .on('click', (d: any, i: number, g: HTMLDivElement[]) => {
-                this.onItemClick(sectionIndex, d, i, g);
+                d3.select(editorSelector)
+                    .selectAll<SVGGElement, SectionInfo>('g.section')
+                    .each((d: SectionInfo, i, g) =>
+                        this.updateSection(d,
+                            <PrintOfferItem[]>(<any>infos)[this.SECTIONS_INFOS[i].section],
+                            g[i]))
+                ;
+                this.updateLayout();
             })
         ;
+    }
 
-        if (editLast) {
-            const editbtn: HTMLElement =
-                <HTMLElement>d3.select(this.cells[sectionIndex])
-                    .select(`div.${this.SECTIONS_INFOS[sectionIndex].section} > div:last-child i.btn.edit`)
-                    .node();
-            editbtn.dispatchEvent(new MouseEvent('click', {view: window, bubbles: true, cancelable: true}));
-            d3.select(this.cells[sectionIndex])
-                .select(`div.${this.SECTIONS_INFOS[sectionIndex].section} > div:last-child input`)
-                .call((s) => (<HTMLInputElement>s.node()).focus())
-            ;
-        }
+    private getHtmlHeight(html: string): number {
+        this.htmlTmpShape.html(html)
+        const height = this.htmlTmpShape.node().getBoundingClientRect().height;
+        this.htmlTmpShape.html('')
+        return height;
+    }
+
+    // private initWrappersAndButtons() {
+    //     let cells = document.querySelectorAll<HTMLTableDataCellElement>('#print_options_editor > tr > td');
+    //     const infos = this.SECTIONS_INFOS;
+    //     for (let i = 0; i < infos.length; i++) {
+    //         d3.select(cells[i])
+    //             .append('div')
+    //             .attr('class', infos[i].section)
+    //         ;
+    //         d3.select(cells[i])
+    //             .append('div')
+    //             .attr('class', 'buttons')
+    //             .append('a')
+    //             .on('click', () => this.createItem(i))
+    //             .attr('href', '#')
+    //             .attr('title', infos[i].btnTitle)
+    //             .append('i')
+    //             .attr('class', 'fas fa-plus')
+    //         ;
+    //     }
+    // }
+
+    private updateSection(sectionInfo: SectionInfo,
+                          items: PrintOfferItem[],
+                          parentElt: SVGGElement,
+                          editLast = false) {
+        const updateSel = d3.select(parentElt)
+            .selectAll('foreignObject')
+            .data(items);
+        const enterSel = updateSel.enter().append('foreignObject');
+        enterSel.append('xhtml:div');
+        const exitSel = updateSel.exit().remove();
+
+        enterSel.merge(updateSel)
+            .each((item: PrintOfferItem, i, g) => {
+                this.updateItemView(sectionInfo, <PrintOfferItemSel>d3.select(g[i]))
+            })
+        ;
+    }
+
+    private updateItemView(sectionInfo: SectionInfo, itemSel: PrintOfferItemSel) {
+        const html = sectionInfo.html(itemSel.datum());
+        const height = this.getHtmlHeight(html);
+        itemSel.select('div') // item ui
+            .style('width', `${this.colwidth}px`)
+            .style('height', `${height}px`)
+            .html(html)
+            .on('click', () => {
+                this.onItemClick(itemSel)
+            })
+        ;
+        itemSel // foreignObject need to be sized explicitly
+            .attr('width', `${this.colwidth}px`)
+            .attr('height', `${height}px`)
+        ;
+    }
+
+    private updateLayout() {
+        let svgheight = parseFloat(d3.select(this.editorSelector).select('svg').attr('height'));
+        d3.select(this.editorSelector)
+            .selectAll('g')
+            .each((d, i, g) => {
+                const heights: number[] =
+                    d3.select(g[i]).selectAll('foreignObject > div').nodes().map((node: HTMLDivElement) => parseFloat(node.style.height));
+
+                const colheight = heights.reduce((a, b) => a + b, 0) + PrintOptionsEditor.ROW_MARGIN * heights.length;
+                if (svgheight < colheight) {
+                    svgheight = colheight;
+                    d3.select(this.editorSelector).select('svg')
+                        .attr('height', `${svgheight}px`);
+                }
+
+                d3.select(g[i]).selectAll('foreignObject')
+                    .each((_, ii, gg) => {
+                        let y = heights.slice(0, ii).reduce((a, b) => a + b, 0);
+                        y += ii * PrintOptionsEditor.ROW_MARGIN;
+                        d3.select(gg[ii])
+                            .transition().duration(TR_DURATION)
+                            .attr('transform', `translate(0, ${y})`)
+                        ;
+                    })
+            })
+        ;
     }
 
     private static htmlViewLayout(htmlrows: string): string {
@@ -300,26 +372,6 @@ class PrintOptionsEditor {
         return PrintOptionsEditor.htmlViewLayout(rows);
     }
 
-    private deleteFormat(fmt: Format, i: number, g: HTMLDivElement[]) {
-        const url = `${this.absUrl}/printingOptions/printoffer/removeOfferItem`;
-        const params = new FormData();
-        params.append('section', 'formats')
-        params.append('index:int', Number(i).toString(10));
-        d3.json(url, {body: params, method: 'POST'})
-            .then(() => {
-                const height = g[i].getBoundingClientRect().height;
-                d3.select(g[i])
-                    .style('height', `${height}px`)
-                    .style('opacity', '1')
-                    .style('overflow', 'hidden')
-                    .transition().duration(TR_DURATION)
-                    .style('height', '0px')
-                    .style('opacity', '0')
-                    .remove()
-                ;
-            });
-    }
-
     private static checkTextareaLines(ta: HTMLTextAreaElement): boolean {
         const lines: string[] = ta.value.split('\n');
         const reline = new RegExp(ta.getAttribute('data-line_pattern'));
@@ -334,31 +386,31 @@ class PrintOptionsEditor {
         return true;
     }
 
-    private createItem(sectionIndex: number) {
-        const evt = d3.event;
-        evt.stopPropagation();
-        evt.preventDefault();
-        console.log('createItem', sectionIndex);
+    // private createItem(sectionIndex: number) {
+    //     const evt = d3.event;
+    //     evt.stopPropagation();
+    //     evt.preventDefault();
+    //     console.log('createItem', sectionIndex);
+    //
+    //     let params: FormData = new FormData();
+    //     params.append('section', this.SECTIONS_INFOS[sectionIndex].section);
+    //     let url = `${this.absUrl}/printingOptions/printoffer/getTemplate`;
+    //     d3.json(
+    //         url,
+    //         {
+    //             body: params,
+    //             method: 'POST'
+    //         }
+    //     ).then((format: Format) => {
+    //         let data = d3.select(this.cells[sectionIndex])
+    //             .select(`div.${this.SECTIONS_INFOS[sectionIndex].section}`)
+    //             .selectAll('div').data();
+    //         data.push(format);
+    //         this.updateSection(sectionIndex, data, true);
+    //     });
+    // }
 
-        let params: FormData = new FormData();
-        params.append('section', this.SECTIONS_INFOS[sectionIndex].section);
-        let url = `${this.absUrl}/printingOptions/printoffer/getTemplate`;
-        d3.json(
-            url,
-            {
-                body: params,
-                method: 'POST'
-            }
-        ).then((format: Format) => {
-            let data = d3.select(this.cells[sectionIndex])
-                .select(`div.${this.SECTIONS_INFOS[sectionIndex].section}`)
-                .selectAll('div').data();
-            data.push(format);
-            this.updateSection(sectionIndex, data, true);
-        });
-    }
-
-    private onItemClick(sectionIndex: number, d: any, i: number, g: HTMLDivElement[]) {
+    private onItemClick(itemSel: PrintOfferItemSel) {
         const evt = d3.event;
         const target = evt.target;
         if (target.classList.contains('btn')) {
@@ -368,17 +420,18 @@ class PrintOptionsEditor {
                 target.classList.remove('edit');
                 target.classList.add('validate');
                 target.parentElement.setAttribute('title', _("Save"));
-                this.startEditItem(sectionIndex, d, i, g);
+                this.startEditItem(itemSel);
             } else if (target.classList.contains('delete')) {
-                this.removeItem(sectionIndex, i, g);
+                this.removeItem(itemSel);
             } else if (target.classList.contains('validate')) {
-                this.saveItem(sectionIndex, i, g);
+                this.saveItem(itemSel);
             }
         }
     }
 
-    private startEditItem(sectionIndex: number, data: any, i: number, g: HTMLDivElement[]) {
-        d3.select(g[i]).selectAll('*[data-name]')
+    private startEditItem(itemSel: PrintOfferItemSel) {
+        const itemD = itemSel.datum();
+        itemSel.selectAll('*[data-name]')
             .each((_, i_, g_) => {
                 const elt = <HTMLElement>g_[i_];
                 const name = (elt.getAttribute('data-name'));
@@ -392,7 +445,7 @@ class PrintOptionsEditor {
                                     .append('input')
                                     .attr('type', 'text')
                                     .attr('name', name)
-                                    .attr('value', (<any>data)[name])
+                                    .attr('value', (<any>itemD)[name])
                                     .attr('pattern', elt.getAttribute('data-pattern'))
                                     .attr('required', true)
                                     .node()
@@ -423,27 +476,37 @@ class PrintOptionsEditor {
                 }
                 parent.replaceChild(input, elt);
             });
+        const height = this.getHtmlHeight(itemSel.select('div').style('height', undefined).html())
+        itemSel.select('div')
+            .style('height', `${height}px`)
+        ;
+        itemSel
+            .attr('height', `${height}px`)
+        ;
+        this.updateLayout();
     }
 
-    private saveItem(sectionIndex: number, i: number, g: HTMLDivElement[]) {
+    private saveItem(itemSel: PrintOfferItemSel/*sectionIndex: number, i: number, g: HTMLDivElement[]*/) {
         const inpustok =
-            d3.select(g[i]).selectAll('input').nodes()
+            itemSel.selectAll('input').nodes()
                 .map<boolean>((elt: HTMLInputElement) => elt.validity.valid)
                 .reduce((a, b) => a && b, true);
 
         const textareasok =
-            d3.select(g[i]).selectAll('textarea').nodes()
+            itemSel.selectAll('textarea').nodes()
                 .map<boolean>((elt: HTMLTextAreaElement) => PrintOptionsEditor.checkTextareaLines(elt))
                 .reduce((a, b) => a && b, true);
 
-        const ok = inpustok && textareasok;
-        if (ok) {
+        if (inpustok && textareasok) {
             let kv: { [name: string]: string } = {};
-            d3.select(g[i]).selectAll('input, textarea')
+            itemSel.selectAll('input, textarea')
                 .each((d, i, g) => {
                     const input = <HTMLInputElement | HTMLTextAreaElement>g[i];
                     kv[input.name] = input.value;
-                });
+                })
+            ;
+            const sectionSel = d3.select(itemSel.node().parentElement);
+            const sectionData = <PrintOfferItem[]>sectionSel.selectAll('foreignObject').data();
 
             let req = new XMLHttpRequest();
             req.open('POST', `${this.absUrl}/printingOptions/printoffer/saveOfferItem`)
@@ -451,40 +514,57 @@ class PrintOptionsEditor {
                 const resp = <XMLHttpRequest>(ev.target);
                 if (resp.status == 200) {
                     const updated = JSON.parse(resp.responseText);
-                    let data = <[any]>d3.select(this.cells[sectionIndex])
-                        .select(`div.${this.SECTIONS_INFOS[sectionIndex].section}`)
-                        .selectAll('div').data();
-                    data.splice(i, 1, updated);
-                    this.updateSection(sectionIndex, data);
+                    itemSel.datum(updated);
+                    this.updateItemView(<SectionInfo>sectionSel.datum(), itemSel)
+                    this.updateLayout();
                 }
 
             })
+            let itemIndex: number;
+            for (itemIndex = 0; itemIndex <= sectionData.length; itemIndex++) {
+                if (itemSel.datum() === sectionData[itemIndex])
+                    break;
+            }
+
+            if (itemIndex === sectionData.length) {
+                console.error('item to be saved not found');
+                return;
+            }
+
             const formdata = new FormData();
-            formdata.append('section', this.SECTIONS_INFOS[sectionIndex].section);
-            formdata.append('index:int', Number(i).toString(10));
+            formdata.append('section', (<SectionInfo>sectionSel.datum()).section);
+            formdata.append('index:int', Number(itemIndex).toString(10));
             formdata.append('jsondata', JSON.stringify(kv));
             req.send(formdata);
         }
 
     }
 
-    private removeItem(sectionIndex: number, i: number, g: HTMLDivElement[]) {
+    private removeItem(itemSel: PrintOfferItemSel/*section:string, itemIndex: number, itemUIElt: HTMLDivElement*/) {
+        const sectionSel = d3.select(itemSel.node().parentElement);
+        const sectionData = <PrintOfferItem[]>sectionSel.selectAll('foreignObject').data();
+        let itemIndex: number;
+        for (itemIndex = 0; itemIndex <= sectionData.length; itemIndex++) {
+            if (itemSel.datum() === sectionData[itemIndex])
+                break;
+        }
+        if (itemIndex === sectionData.length) {
+            console.error('item to be removed not found');
+            return;
+        }
+
         const url = `${this.absUrl}/printingOptions/printoffer/removeOfferItem`;
         const params = new FormData();
-        params.append('section', this.SECTIONS_INFOS[sectionIndex].section);
-        params.append('index:int', Number(i).toString(10));
+        params.append('section', (<SectionInfo>sectionSel.datum()).section);
+        params.append('index:int', Number(itemIndex).toString(10));
         d3.json(url, {body: params, method: 'POST'})
             .then((res: { ack: boolean }) => {
                 if (res.ack) {
-                    const height = g[i].getBoundingClientRect().height;
-                    d3.select(g[i])
-                        .style('height', `${height}px`)
-                        .style('opacity', '1')
-                        .style('overflow', 'hidden')
+                    itemSel.style('opacity', '1')
                         .transition().duration(TR_DURATION)
-                        .style('height', '0px')
                         .style('opacity', '0')
                         .remove()
+                        .on('end', () => this.updateLayout())
                     ;
                 }
             });
@@ -518,7 +598,7 @@ function main() {
             },
         })
         .then(
-            () => new PrintOptionsEditor(document.body.getAttribute('data-absolute_url')));
+            () => new PrintOptionsEditor(document.body.getAttribute('data-absolute_url'), '#print_options_editor'));
 }
 
 window.addEventListener('load', () => main());
