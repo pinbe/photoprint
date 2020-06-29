@@ -160,27 +160,6 @@ class PrintOptionsEditor {
         return height;
     }
 
-    // private initWrappersAndButtons() {
-    //     let cells = document.querySelectorAll<HTMLTableDataCellElement>('#print_options_editor > tr > td');
-    //     const infos = this.SECTIONS_INFOS;
-    //     for (let i = 0; i < infos.length; i++) {
-    //         d3.select(cells[i])
-    //             .append('div')
-    //             .attr('class', infos[i].section)
-    //         ;
-    //         d3.select(cells[i])
-    //             .append('div')
-    //             .attr('class', 'buttons')
-    //             .append('a')
-    //             .on('click', () => this.createItem(i))
-    //             .attr('href', '#')
-    //             .attr('title', infos[i].btnTitle)
-    //             .append('i')
-    //             .attr('class', 'fas fa-plus')
-    //         ;
-    //     }
-    // }
-
     private updateSection(sectionInfo: SectionInfo,
                           items: PrintOfferItem[],
                           // parentElt: SVGGElement,
@@ -269,17 +248,6 @@ class PrintOptionsEditor {
                     colHeight += parseFloat(divs[j].style.height) + PrintOptionsEditor.ROW_MARGIN;
                 }
                 maxColHeight = Math.max(maxColHeight, colHeight);
-                // const colheight = heights.reduce((a, b) => a + b, 0) + PrintOptionsEditor.ROW_MARGIN * heights.length;
-                // maxColHeight = Math.max(maxColHeight, colheight);
-                // d3.select(g[i]).selectAll('foreignObject')
-                //     .each((_, ii, gg) => {
-                //         let y = heights.slice(0, ii).reduce((a, b) => a + b, 0);
-                //         y += ii * PrintOptionsEditor.ROW_MARGIN;
-                //         d3.select(gg[ii])
-                //             .transition().duration(TR_DURATION)
-                //             .attr('transform', `translate(0, ${y})`)
-                //         ;
-                //     })
             })
         ;
         d3.select(this.editorSelector).select('svg')
