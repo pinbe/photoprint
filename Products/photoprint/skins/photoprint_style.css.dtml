@@ -60,4 +60,11 @@
 #print_options_editor .bottom-buttons > div {
   text-align: center;
 }
+
+#print_options_editor path.outlet,
+#print_options_editor path.inlet
+{
+  fill: &dtml-highLightColor;;
+  cursor: pointer;
+}
 /* </dtml-with> */

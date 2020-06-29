@@ -7,7 +7,7 @@ const _ = (s: string, options?: TOptions): string => i18next.t(s, options);
 const TR_DURATION = 500; // ms
 
 type AnySel = d3.Selection<HTMLElement, any, HTMLElement, any>;
-type PrintOfferItemSel = d3.Selection<SVGForeignObjectElement, PrintOfferItem, undefined, unknown>;
+type PrintOfferItemSel = d3.Selection<SVGForeignObjectElement, IPrintOfferItem, undefined, unknown>;
 type I18NString = { [lang: string]: string };
 
 interface PriceRange {
@@ -16,13 +16,13 @@ interface PriceRange {
     price: number;
 }
 
-interface PrintOfferItem {
+interface IPrintOfferItem {
     reference: string;
     label: I18NString;
     price: number;
 }
 
-interface Format extends PrintOfferItem {
+interface Format extends IPrintOfferItem {
     short_edge: number,
     long_edge: number,
     copies: number,
@@ -30,13 +30,13 @@ interface Format extends PrintOfferItem {
     finishes: string[],
 }
 
-interface Finish extends PrintOfferItem {
+interface Finish extends IPrintOfferItem {
     description: I18NString,
     frames: string[]
 }
 
 
-interface Frame extends PrintOfferItem {
+interface Frame extends IPrintOfferItem {
     description: I18NString,
 }
 
@@ -50,7 +50,260 @@ interface SectionInfo {
     section: string;
     btnTitle: string;
     title: string;
-    html: (item: PrintOfferItem) => string;
+    html: (item: IPrintOfferItem) => string;
+}
+
+class PrintOfferItem implements IPrintOfferItem {
+    label: I18NString;
+    price: number;
+    reference: string;
+    private editor: PrintOptionsEditor;
+    private sectionInfo: SectionInfo;
+    private sel: d3.Selection<SVGForeignObjectElement, PrintOfferItem, any, any>;
+    private outlet: d3.Selection<SVGPathElement, PrintOfferItem, any, any>;
+    private inlet: d3.Selection<SVGPathElement, PrintOfferItem, any, any>;
+
+    constructor(editor: PrintOptionsEditor,
+                sectionInfo: SectionInfo,
+                itemJsonData: IPrintOfferItem) {
+        this.updateData(itemJsonData);
+        this.editor = editor;
+        this.sectionInfo = sectionInfo;
+        this.sel = null;
+        this.outlet = null;
+        this.inlet = null;
+    }
+
+    private updateData(itemJsonData: IPrintOfferItem) {
+        for (let [name, value] of Object.entries(itemJsonData))
+            (<any>this)[name] = value;
+    }
+
+    draw(fo: SVGForeignObjectElement) {
+        this.sel = d3.select(fo);
+        const html = this.sectionInfo.html(this);
+        const height = this.editor.getHtmlHeight(html);
+        const width = this.editor.colwidth;
+        this.sel.select('div') // item ui
+            .style('width', `${width}px`)
+            .style('height', `${height}px`)
+            .html(html)
+            .on('click', () => {
+                this.onClick();
+            })
+        ;
+        this.sel // foreignObject need to be sized explicitly
+            .attr('width', `${width}px`)
+            .attr('height', `${height}px`)
+        ;
+        if (this.sectionInfo.section !== 'frames' && this.outlet === null) {
+            this.outlet = this.editor.arcsSel
+                .append<SVGPathElement>('path')
+                .datum(this)
+                .attr('class', 'outlet')
+                .attr('d', 'M0,0A8,8,0,0,1,0,16Z')
+                .attr('transform', `translate(${width}, ${height / 2})`)
+            ;
+        }
+        if (this.sectionInfo.section !== 'formats' && this.inlet === null) {
+            this.inlet = this.editor.arcsSel
+                .append<SVGPathElement>('path')
+                .datum(this)
+                .attr('class', 'inlet')
+                .attr('d', 'M0,0A8,8,0,0,1,0,16Z')
+                .attr('transform', `translate(0, ${height / 2}) rotate(180)`)
+            ;
+        }
+    }
+
+    moveTo(x: number, y: number) {
+        this.sel.transition().duration(TR_DURATION)
+            .attr('transform', `translate(${x}, ${y})`)
+
+        const rect = (<HTMLDivElement>this.sel.select('div').node()).getBoundingClientRect();
+        if(this.outlet !== null)
+            this.outlet.transition().duration(TR_DURATION)
+                .attr('transform', `translate(${x + rect.width}, ${y + rect.height / 2})`)
+            ;
+
+        if(this.inlet !== null)
+            this.inlet.transition().duration(TR_DURATION)
+                .attr('transform', `translate(${x}, ${y + rect.height / 2}) rotate(180)`)
+            ;
+
+    }
+
+    private onClick() {
+        const evt = d3.event;
+        const target = evt.target;
+        if (target.classList.contains('btn')) {
+            evt.stopPropagation();
+            evt.preventDefault();
+            if (target.classList.contains('edit')) {
+                this.startEdit();
+            } else if (target.classList.contains('delete')) {
+                this.remove();
+            } else if (target.classList.contains('validate')) {
+                this.save();
+            }
+        }
+    }
+
+    startEdit(skipLayoutUpdate = false) {
+        const btn = <HTMLElement>this.sel.select('i.btn.edit').node();
+        btn.classList.remove('edit');
+        btn.classList.add('validate');
+        btn.parentElement.setAttribute('title', _("Save"));
+
+        this.sel.selectAll('*[data-name]')
+            .each((_, i_, g_) => {
+                const elt = <HTMLElement>g_[i_];
+                const name = (elt.getAttribute('data-name'));
+                const parent = elt.parentElement;
+                let input: HTMLElement;
+                switch (elt.tagName) {
+                    case 'SPAN' :
+                        input =
+                            <HTMLElement>
+                                d3.select(parent)
+                                    .append('input')
+                                    .attr('type', 'text')
+                                    .attr('name', name)
+                                    .attr('value', (<any>this)[name])
+                                    .attr('pattern', elt.getAttribute('data-pattern'))
+                                    .attr('required', true)
+                                    .node()
+                        ;
+                        break;
+                    case 'UL' :
+                        let txt: string = '';
+                        const re = new RegExp(elt.getAttribute('data-line_pattern'));
+                        elt.querySelectorAll('li').forEach((li: HTMLLIElement) => {
+                            const res = re.exec(li.innerText);
+                            for (let j = 1; j < res.length; j++)
+                                txt += res[j];
+                            txt += '\n';
+                        })
+                        txt = txt.trim();
+                        input =
+                            <HTMLElement>
+                                d3.select(parent)
+                                    .append('textarea')
+                                    .attr('name', name)
+                                    .attr('data-line_pattern', elt.getAttribute('data-line_pattern'))
+                                    .text(txt)
+                                    .on('input', (d, i, g) => PrintOptionsEditor.checkTextareaLines(<HTMLTextAreaElement>g[i]))
+                                    .node()
+                        ;
+                        break;
+
+                }
+                parent.replaceChild(input, elt);
+            });
+        const height = this.editor.getHtmlHeight(this.sel.select('div').style('height', undefined).html())
+        this.sel.select('div')
+            .style('height', `${height}px`)
+        ;
+        this.sel
+            .attr('height', `${height}px`)
+        ;
+        (<HTMLInputElement>this.sel.select('input').node()).focus();
+        if (!skipLayoutUpdate)
+            this.editor.updateLayout();
+
+    }
+
+    private remove() {
+        const itemSel = this.sel;
+        const sectionSel = d3.select(itemSel.node().parentElement);
+        const sectionData = <IPrintOfferItem[]>sectionSel.selectAll('foreignObject.item').data();
+        let itemIndex: number;
+        for (itemIndex = 0; itemIndex <= sectionData.length; itemIndex++) {
+            if (itemSel.datum() === sectionData[itemIndex])
+                break;
+        }
+        if (itemIndex === sectionData.length) {
+            console.error('item to be removed not found');
+            return;
+        }
+
+        const url = `${this.editor.absUrl}/printingOptions/printoffer/removeOfferItem`;
+        const params = new FormData();
+        params.append('section', (<SectionInfo>sectionSel.datum()).section);
+        params.append('index:int', Number(itemIndex).toString(10));
+        d3.json(url, {body: params, method: 'POST'})
+            .then((res: { ack: boolean }) => {
+                if (res.ack) {
+                    if(this.outlet)
+                        this.outlet.style('opacity', '1')
+                        .transition().duration(TR_DURATION)
+                        .style('opacity', '0')
+                        .remove()
+                    ;
+                    itemSel.style('opacity', '1')
+                        .transition().duration(TR_DURATION)
+                        .style('opacity', '0')
+                        .remove()
+                        .on('end', () => this.editor.updateLayout())
+                    ;
+                }
+            });
+    }
+
+    private save() {
+        const itemSel = this.sel;
+        const inpustok =
+            itemSel.selectAll('input').nodes()
+                .map<boolean>((elt: HTMLInputElement) => elt.validity.valid)
+                .reduce((a, b) => a && b, true);
+
+        const textareasok =
+            itemSel.selectAll('textarea').nodes()
+                .map<boolean>((elt: HTMLTextAreaElement) => PrintOptionsEditor.checkTextareaLines(elt))
+                .reduce((a, b) => a && b, true);
+
+        if (inpustok && textareasok) {
+            let kv: { [name: string]: string } = {};
+            itemSel.selectAll('input, textarea')
+                .each((d, i, g) => {
+                    const input = <HTMLInputElement | HTMLTextAreaElement>g[i];
+                    kv[input.name] = input.value;
+                })
+            ;
+            const sectionSel = d3.select(itemSel.node().parentElement);
+            const sectionData = <IPrintOfferItem[]>sectionSel.selectAll('foreignObject.item').data();
+
+            let req = new XMLHttpRequest();
+            req.open('POST', `${this.editor.absUrl}/printingOptions/printoffer/saveOfferItem`)
+            req.addEventListener('load', ev => {
+                const resp = <XMLHttpRequest>(ev.target);
+                if (resp.status == 200) {
+                    const updated = JSON.parse(resp.responseText);
+                    this.updateData(<IPrintOfferItem>updated);
+                    this.draw(itemSel.node());
+                    // this.updateItemView(<SectionInfo>sectionSel.datum(), itemSel)
+                    this.editor.updateLayout();
+                }
+
+            })
+            let itemIndex: number;
+            for (itemIndex = 0; itemIndex <= sectionData.length; itemIndex++) {
+                if (itemSel.datum() === sectionData[itemIndex])
+                    break;
+            }
+
+            if (itemIndex === sectionData.length) {
+                console.error('item to be saved not found');
+                return;
+            }
+
+            const formdata = new FormData();
+            formdata.append('section', (<SectionInfo>sectionSel.datum()).section);
+            formdata.append('index:int', Number(itemIndex).toString(10));
+            formdata.append('jsondata', JSON.stringify(kv));
+            req.send(formdata);
+        }
+    }
 }
 
 
@@ -63,13 +316,14 @@ class PrintOptionsEditor {
     private static FINISHES_SECTION = 1;
     private static FRAMES_SECTION = 2;
 
-    private absUrl: string;
+    absUrl: string;
     private cells: NodeListOf<HTMLTableDataCellElement>;
     private readonly SECTIONS_INFOS: SectionInfo[];
     private htmlTmpShape: AnySel;
-    private colwidth: number;
+    colwidth: number;
     private editorSelector: string;
     private headerHeight: number;
+    public readonly arcsSel: d3.Selection<SVGGElement, unknown, HTMLElement, any>;
 
     constructor(absUrl: string, editorSelector: string) {
         this.SECTIONS_INFOS = [
@@ -132,28 +386,35 @@ class PrintOptionsEditor {
 
         svg.append('g')
             .attr('class', 'printoffer-items')
-            .attr('transform', `translate(0, ${this.headerHeight})`)
+            // .attr('transform', `translate(0, ${this.headerHeight})`)
             .selectAll('g')
             .data<SectionInfo>(this.SECTIONS_INFOS)
             .enter()
             .append('g')
-            .attr('transform', (d, i) => `translate(${i * (this.colwidth + PrintOptionsEditor.COLS_MARGIN)},0)`)
+            // .attr('transform', (d, i) => `translate(${i * (this.colwidth + PrintOptionsEditor.COLS_MARGIN)},0)`)
             .attr('class', (d) => `section ${d.section}`)
+        ;
+
+        this.arcsSel = svg.append<SVGGElement>('g')
+            .attr('class', 'links')
+        // .attr('transform', `translate(0, ${this.headerHeight})`)
         ;
 
         d3.json(`${this.absUrl}/printingOptions/printoffer/json`)
             .then((infos: PrintInfos) => {
                 d3.select(editorSelector)
                     .selectAll<SVGGElement, SectionInfo>('g.section')
-                    .each((d: SectionInfo, i, g) =>
-                        this.updateSection(d, <PrintOfferItem[]>(<any>infos)[this.SECTIONS_INFOS[i].section]))
+                    .each((d: SectionInfo, i) =>
+                        this.updateSection(d,
+                            (<IPrintOfferItem[]>(<any>infos)[this.SECTIONS_INFOS[i].section])
+                                .map<PrintOfferItem>(item => new PrintOfferItem(this, d, item))))
                 ;
                 this.updateLayout();
             })
         ;
     }
 
-    private getHtmlHeight(html: string): number {
+    getHtmlHeight(html: string): number {
         this.htmlTmpShape.html(html)
         const height = this.htmlTmpShape.node().getBoundingClientRect().height;
         this.htmlTmpShape.html('')
@@ -162,7 +423,6 @@ class PrintOptionsEditor {
 
     private updateSection(sectionInfo: SectionInfo,
                           items: PrintOfferItem[],
-                          // parentElt: SVGGElement,
                           editLast = false) {
         const sectionSel = d3.select(this.editorSelector).select(`.section.${sectionInfo.section}`);
         const updateSel = sectionSel
@@ -173,16 +433,17 @@ class PrintOptionsEditor {
             .attr('class', 'item')
         ;
         enterSel.append('xhtml:div');
-        const exitSel = updateSel.exit().remove();
+        /*const exitSel =*/
+        updateSel.exit().remove();
 
         enterSel.merge(updateSel)
             .each((item: PrintOfferItem, i, g) => {
-                this.updateItemView(sectionInfo, <PrintOfferItemSel>d3.select(g[i]))
+                item.draw(<SVGForeignObjectElement>g[i]);
             })
         ;
         if (editLast) {
-            const nodes = enterSel.nodes();
-            this.startEditItem(<PrintOfferItemSel>d3.select(nodes[nodes.length - 1]), true)
+            const nodes = <SVGForeignObjectElement[]>enterSel.nodes();
+            d3.select<SVGForeignObjectElement, PrintOfferItem>(nodes[nodes.length - 1]).datum().startEdit(true);
         }
 
         sectionSel
@@ -212,41 +473,32 @@ class PrintOptionsEditor {
         ;
     }
 
-    private updateItemView(sectionInfo: SectionInfo, itemSel: PrintOfferItemSel) {
-        const html = sectionInfo.html(itemSel.datum());
-        const height = this.getHtmlHeight(html);
-        itemSel.select('div') // item ui
-            .style('width', `${this.colwidth}px`)
-            .style('height', `${height}px`)
-            .html(html)
-            .on('click', () => {
-                this.onItemClick(itemSel)
-            })
-        ;
-        itemSel // foreignObject need to be sized explicitly
-            .attr('width', `${this.colwidth}px`)
-            .attr('height', `${height}px`)
-        ;
-    }
-
-    private updateLayout() {
+    updateLayout() {
         let maxColHeight = 0;
         d3.select(this.editorSelector).select('g.printoffer-items')
             .selectAll('g') // sections
             .each((d, i, g) => {
-                const divs = <HTMLDivElement[]>d3.select(g[i])
+                let divs = <HTMLDivElement[]>d3.select(g[i])
                     .selectAll('foreignObject.item > div')
-                    .nodes().concat(d3.select(g[i]).selectAll('foreignObject.bottom-buttons > div').nodes());
+                    .nodes()
 
                 let colHeight = 0;
                 for (let j = 0; j < divs.length; j++) {
-                    const fo = divs[j].parentElement;
-                    d3.select(fo)
-                        .transition().duration(TR_DURATION)
-                        .attr('transform', `translate(0,${colHeight})`)
+                    const fo = <SVGForeignObjectElement><unknown>divs[j].parentElement;
+                    d3.select<SVGForeignObjectElement, PrintOfferItem>(fo)
+                        .datum().moveTo(i * (this.colwidth + PrintOptionsEditor.COLS_MARGIN), colHeight + this.headerHeight)
                     ;
                     colHeight += parseFloat(divs[j].style.height) + PrintOptionsEditor.ROW_MARGIN;
                 }
+
+                divs = <HTMLDivElement[]>d3.select(g[i]).selectAll('foreignObject.bottom-buttons > div').nodes();
+                for (let j = 0; j < divs.length; j++) {
+                    const fo = <SVGForeignObjectElement><unknown>divs[j].parentElement;
+                    d3.select<SVGForeignObjectElement, PrintOfferItem>(fo)
+                        .transition().duration(TR_DURATION)
+                        .attr('transform', `translate(${i * (this.colwidth + PrintOptionsEditor.COLS_MARGIN)},${colHeight + this.headerHeight})`);
+                }
+                colHeight += parseFloat(divs[0].style.height);
                 maxColHeight = Math.max(maxColHeight, colHeight);
             })
         ;
@@ -274,7 +526,7 @@ class PrintOptionsEditor {
         `;
     }
 
-    private static formatViewHtml(item: PrintOfferItem): string {
+    private static formatViewHtml(item: IPrintOfferItem): string {
         const fmt = <Format>item;
         let lbl = '';
         for (let [lang, value] of Object.entries(fmt.label)) {
@@ -332,7 +584,7 @@ class PrintOptionsEditor {
     }
 
 
-    private static finishViewHtml(item: PrintOfferItem): string {
+    private static finishViewHtml(item: IPrintOfferItem): string {
         const finish = <Finish>item;
         const label = Object.entries(finish.label)
             .map(([lang, value]) => `<li>${value}@${lang}</li>`)
@@ -372,7 +624,7 @@ class PrintOptionsEditor {
         return PrintOptionsEditor.htmlViewLayout(rows);
     }
 
-    private static frameViewHtml(item: PrintOfferItem): string {
+    private static frameViewHtml(item: IPrintOfferItem): string {
         const frame = <Frame>item;
         const label = Object.entries(frame.label)
             .map(([lang, value]) => `<li>${value}@${lang}</li>`)
@@ -412,7 +664,7 @@ class PrintOptionsEditor {
         return PrintOptionsEditor.htmlViewLayout(rows);
     }
 
-    private static checkTextareaLines(ta: HTMLTextAreaElement): boolean {
+    static checkTextareaLines(ta: HTMLTextAreaElement): boolean {
         const lines: string[] = ta.value.split('\n');
         const reline = new RegExp(ta.getAttribute('data-line_pattern'));
         for (let line of lines) {
@@ -440,7 +692,7 @@ class PrintOptionsEditor {
 
     }
 
-    private createPrintOfferItem(sectionInfo:SectionInfo) {
+    private createPrintOfferItem(sectionInfo: SectionInfo) {
         let params: FormData = new FormData();
         params.append('section', sectionInfo.section);
         let url = `${this.absUrl}/printingOptions/printoffer/getTemplate`;
@@ -450,180 +702,16 @@ class PrintOptionsEditor {
                 body: params,
                 method: 'POST'
             }
-        ).then((item: PrintOfferItem) => {
+        ).then((item: IPrintOfferItem) => {
             const data = d3.select(this.editorSelector)
                 .select(`.section.${sectionInfo.section}`)
                 .selectAll('foreignObject.item')
                 .data()
-            data.push(item);
+            data.push(new PrintOfferItem(this, sectionInfo, item));
             this.updateSection(sectionInfo, <PrintOfferItem[]>data, true);
             this.updateLayout();
         });
 
-    }
-
-    private onItemClick(itemSel: PrintOfferItemSel) {
-        const evt = d3.event;
-        const target = evt.target;
-        if (target.classList.contains('btn')) {
-            evt.stopPropagation();
-            evt.preventDefault();
-            if (target.classList.contains('edit')) {
-                this.startEditItem(itemSel);
-            } else if (target.classList.contains('delete')) {
-                this.removeItem(itemSel);
-            } else if (target.classList.contains('validate')) {
-                this.saveItem(itemSel);
-            }
-        }
-    }
-
-    private startEditItem(itemSel: PrintOfferItemSel, skipLayoutUpdate = false) {
-        const btn = <HTMLElement>itemSel.select('i.btn.edit').node();
-        btn.classList.remove('edit');
-        btn.classList.add('validate');
-        btn.parentElement.setAttribute('title', _("Save"));
-
-        const itemD = itemSel.datum();
-        itemSel.selectAll('*[data-name]')
-            .each((_, i_, g_) => {
-                const elt = <HTMLElement>g_[i_];
-                const name = (elt.getAttribute('data-name'));
-                const parent = elt.parentElement;
-                let input: HTMLElement;
-                switch (elt.tagName) {
-                    case 'SPAN' :
-                        input =
-                            <HTMLElement>
-                                d3.select(parent)
-                                    .append('input')
-                                    .attr('type', 'text')
-                                    .attr('name', name)
-                                    .attr('value', (<any>itemD)[name])
-                                    .attr('pattern', elt.getAttribute('data-pattern'))
-                                    .attr('required', true)
-                                    .node()
-                        ;
-                        break;
-                    case 'UL' :
-                        let txt: string = '';
-                        const re = new RegExp(elt.getAttribute('data-line_pattern'));
-                        elt.querySelectorAll('li').forEach((li: HTMLLIElement) => {
-                            const res = re.exec(li.innerText);
-                            for (let j = 1; j < res.length; j++)
-                                txt += res[j];
-                            txt += '\n';
-                        })
-                        txt = txt.trim();
-                        input =
-                            <HTMLElement>
-                                d3.select(parent)
-                                    .append('textarea')
-                                    .attr('name', name)
-                                    .attr('data-line_pattern', elt.getAttribute('data-line_pattern'))
-                                    .text(txt)
-                                    .on('input', (d, i, g) => PrintOptionsEditor.checkTextareaLines(<HTMLTextAreaElement>g[i]))
-                                    .node()
-                        ;
-                        break;
-
-                }
-                parent.replaceChild(input, elt);
-            });
-        const height = this.getHtmlHeight(itemSel.select('div').style('height', undefined).html())
-        itemSel.select('div')
-            .style('height', `${height}px`)
-        ;
-        itemSel
-            .attr('height', `${height}px`)
-        ;
-        (<HTMLInputElement>itemSel.select('input').node()).focus();
-        if (!skipLayoutUpdate)
-            this.updateLayout();
-    }
-
-    private saveItem(itemSel: PrintOfferItemSel/*sectionIndex: number, i: number, g: HTMLDivElement[]*/) {
-        const inpustok =
-            itemSel.selectAll('input').nodes()
-                .map<boolean>((elt: HTMLInputElement) => elt.validity.valid)
-                .reduce((a, b) => a && b, true);
-
-        const textareasok =
-            itemSel.selectAll('textarea').nodes()
-                .map<boolean>((elt: HTMLTextAreaElement) => PrintOptionsEditor.checkTextareaLines(elt))
-                .reduce((a, b) => a && b, true);
-
-        if (inpustok && textareasok) {
-            let kv: { [name: string]: string } = {};
-            itemSel.selectAll('input, textarea')
-                .each((d, i, g) => {
-                    const input = <HTMLInputElement | HTMLTextAreaElement>g[i];
-                    kv[input.name] = input.value;
-                })
-            ;
-            const sectionSel = d3.select(itemSel.node().parentElement);
-            const sectionData = <PrintOfferItem[]>sectionSel.selectAll('foreignObject.item').data();
-
-            let req = new XMLHttpRequest();
-            req.open('POST', `${this.absUrl}/printingOptions/printoffer/saveOfferItem`)
-            req.addEventListener('load', ev => {
-                const resp = <XMLHttpRequest>(ev.target);
-                if (resp.status == 200) {
-                    const updated = JSON.parse(resp.responseText);
-                    itemSel.datum(updated);
-                    this.updateItemView(<SectionInfo>sectionSel.datum(), itemSel)
-                    this.updateLayout();
-                }
-
-            })
-            let itemIndex: number;
-            for (itemIndex = 0; itemIndex <= sectionData.length; itemIndex++) {
-                if (itemSel.datum() === sectionData[itemIndex])
-                    break;
-            }
-
-            if (itemIndex === sectionData.length) {
-                console.error('item to be saved not found');
-                return;
-            }
-
-            const formdata = new FormData();
-            formdata.append('section', (<SectionInfo>sectionSel.datum()).section);
-            formdata.append('index:int', Number(itemIndex).toString(10));
-            formdata.append('jsondata', JSON.stringify(kv));
-            req.send(formdata);
-        }
-
-    }
-
-    private removeItem(itemSel: PrintOfferItemSel/*section:string, itemIndex: number, itemUIElt: HTMLDivElement*/) {
-        const sectionSel = d3.select(itemSel.node().parentElement);
-        const sectionData = <PrintOfferItem[]>sectionSel.selectAll('foreignObject.item').data();
-        let itemIndex: number;
-        for (itemIndex = 0; itemIndex <= sectionData.length; itemIndex++) {
-            if (itemSel.datum() === sectionData[itemIndex])
-                break;
-        }
-        if (itemIndex === sectionData.length) {
-            console.error('item to be removed not found');
-            return;
-        }
-
-        const url = `${this.absUrl}/printingOptions/printoffer/removeOfferItem`;
-        const params = new FormData();
-        params.append('section', (<SectionInfo>sectionSel.datum()).section);
-        params.append('index:int', Number(itemIndex).toString(10));
-        d3.json(url, {body: params, method: 'POST'})
-            .then((res: { ack: boolean }) => {
-                if (res.ack) {
-                    itemSel.style('opacity', '1')
-                        .transition().duration(TR_DURATION)
-                        .style('opacity', '0')
-                        .remove()
-                        .on('end', () => this.updateLayout())
-                    ;
-                }
-            });
     }
 }
 
