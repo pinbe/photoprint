@@ -67,4 +67,11 @@
   fill: &dtml-highLightColor;;
   cursor: pointer;
 }
+
+#print_options_editor path.link {
+  fill: none;
+  stroke: &dtml-highLightColor;;
+  stroke-width: 2px;
+}
+
 /* </dtml-with> */

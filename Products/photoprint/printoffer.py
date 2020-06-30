@@ -68,20 +68,20 @@ class PrintOffer(SimpleItem) :
             'copies' : 0.,
             'price' : 0.,
             'prices_ranges' : [],
-            'finishes' : [],
         },
         'finishes' : {
             'reference' : '',
             'label' : {},
             'description' : {},
             'price' : 0.,
-            'frames' : [],
+            'formats' : [],
         },
         'frames' : {
             'reference' : '',
             'label' : {},
             'description' : {},
             'price' : 0.,
+            'finishes': [],
         }
     }
 

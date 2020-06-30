@@ -53,6 +53,27 @@ interface SectionInfo {
     html: (item: IPrintOfferItem) => string;
 }
 
+class Link {
+    private from: PrintOfferItem;
+    private to: PrintOfferItem;
+    private arc: d3.Selection<SVGPathElement, Link, any, any>;
+
+    constructor(from: PrintOfferItem,
+                to: PrintOfferItem,
+                arc: d3.Selection<SVGPathElement, Link, any, any>) {
+        this.from = from;
+        this.to = to;
+        this.arc = arc.datum(this);
+    }
+
+    updatePath() {
+        this.arc
+            .transition().duration(TR_DURATION)
+            .attr('d', Bézier(this.from.getOutletPosition(), this.to.getInletPosition()))
+        ;
+    }
+}
+
 class PrintOfferItem implements IPrintOfferItem {
     label: I18NString;
     price: number;
@@ -62,6 +83,8 @@ class PrintOfferItem implements IPrintOfferItem {
     private sel: d3.Selection<SVGForeignObjectElement, PrintOfferItem, any, any>;
     private outlet: d3.Selection<SVGPathElement, PrintOfferItem, any, any>;
     private inlet: d3.Selection<SVGPathElement, PrintOfferItem, any, any>;
+    private incomingLinks: {[reference: string]: Link};
+    private position: Coords2D;
 
     constructor(editor: PrintOptionsEditor,
                 sectionInfo: SectionInfo,
@@ -72,6 +95,8 @@ class PrintOfferItem implements IPrintOfferItem {
         this.sel = null;
         this.outlet = null;
         this.inlet = null;
+        this.incomingLinks = {};
+        this.position = {x:0, y:0};
     }
 
     private updateData(itemJsonData: IPrintOfferItem) {
@@ -100,37 +125,94 @@ class PrintOfferItem implements IPrintOfferItem {
             this.outlet = this.editor.arcsSel
                 .append<SVGPathElement>('path')
                 .datum(this)
-                .attr('class', 'outlet')
-                .attr('d', 'M0,0A8,8,0,0,1,0,16Z')
+                .attr('class', `plug outlet ${this.sectionInfo.section}`)
+                .attr('d', 'M0-8A8,8,0,0,1,8,0,8,8,0,0,1,0,8Z')
                 .attr('transform', `translate(${width}, ${height / 2})`)
             ;
+            const d = d3.drag();
+            d.on('start', () => this.onDragStart());
+            this.outlet.call(d);
         }
         if (this.sectionInfo.section !== 'formats' && this.inlet === null) {
             this.inlet = this.editor.arcsSel
                 .append<SVGPathElement>('path')
                 .datum(this)
-                .attr('class', 'inlet')
-                .attr('d', 'M0,0A8,8,0,0,1,0,16Z')
+                .attr('class', `plug inlet ${this.sectionInfo.section}`)
+                .attr('d', 'M0-8A8,8,0,0,1,8,0,8,8,0,0,1,0,8Z')
                 .attr('transform', `translate(0, ${height / 2}) rotate(180)`)
             ;
         }
     }
 
+    private onDragStart() {
+        const origin: d3.D3DragEvent<SVGPathElement, PrintOfferItem, any> = d3.event;
+        const arc = <d3.Selection<SVGPathElement, Link, any, any>>this.editor.arcsSel.append('path')
+            .attr('class', 'link new')
+        ;
+
+        let endTargetSelector: string;
+        switch (this.sectionInfo.section) {
+            case 'formats' :
+                endTargetSelector = '.plug.inlet.finishes';
+                break;
+
+            case 'finishes' :
+                endTargetSelector = '.plug.inlet.frames';
+
+        }
+        let targetItem: PrintOfferItem = null;
+        this.editor.arcsSel
+            .selectAll(endTargetSelector)
+            .on('mouseover', (d: PrintOfferItem) => targetItem = d)
+            .on('mouseout', () => targetItem = null)
+        ;
+
+        d3.event.on('drag', () => {
+            arc.attr('d', Bézier({x: origin.x, y: origin.y}, {x: d3.event.x, y: d3.event.y}))
+        });
+        d3.event.on('end', () => {
+            if(targetItem === null)
+                arc.remove();
+            else
+                // this.createLink(origin.subject, targetItem, arc);
+                targetItem.createIncomingLink(this, arc);
+        });
+    }
+
     moveTo(x: number, y: number) {
+        this.position.x = x;
+        this.position.y = y;
         this.sel.transition().duration(TR_DURATION)
             .attr('transform', `translate(${x}, ${y})`)
 
         const rect = (<HTMLDivElement>this.sel.select('div').node()).getBoundingClientRect();
-        if(this.outlet !== null)
+        if (this.outlet !== null)
             this.outlet.transition().duration(TR_DURATION)
                 .attr('transform', `translate(${x + rect.width}, ${y + rect.height / 2})`)
             ;
 
-        if(this.inlet !== null)
+        if (this.inlet !== null) {
             this.inlet.transition().duration(TR_DURATION)
                 .attr('transform', `translate(${x}, ${y + rect.height / 2}) rotate(180)`)
             ;
+            Object.values(this.incomingLinks).map(l=>l.updatePath());
+        }
 
+    }
+    getInletPosition(): Coords2D|null {
+        const rect = (<HTMLDivElement>this.sel.select('div').node()).getBoundingClientRect();
+        if(this.inlet !== null) {
+            return {x: this.position.x, y: this.position.y + rect.height/2}
+        }
+        return null;
+    }
+
+    getOutletPosition(): Coords2D|null {
+        const rect = (<HTMLDivElement>this.sel.select('div').node()).getBoundingClientRect();
+        if(this.outlet !== null) {
+            return {x: this.position.x + rect.width, y: this.position.y + rect.height/2}
+        }
+        return null;
     }
 
     private onClick() {
@@ -234,12 +316,18 @@ class PrintOfferItem implements IPrintOfferItem {
         d3.json(url, {body: params, method: 'POST'})
             .then((res: { ack: boolean }) => {
                 if (res.ack) {
-                    if(this.outlet)
+                    if (this.outlet)
                         this.outlet.style('opacity', '1')
-                        .transition().duration(TR_DURATION)
-                        .style('opacity', '0')
-                        .remove()
-                    ;
+                            .transition().duration(TR_DURATION)
+                            .style('opacity', '0')
+                            .remove()
+                        ;
+                    if (this.inlet)
+                        this.inlet.style('opacity', '1')
+                            .transition().duration(TR_DURATION)
+                            .style('opacity', '0')
+                            .remove()
+                        ;
                     itemSel.style('opacity', '1')
                         .transition().duration(TR_DURATION)
                         .style('opacity', '0')
@@ -281,7 +369,6 @@ class PrintOfferItem implements IPrintOfferItem {
                     const updated = JSON.parse(resp.responseText);
                     this.updateData(<IPrintOfferItem>updated);
                     this.draw(itemSel.node());
-                    // this.updateItemView(<SectionInfo>sectionSel.datum(), itemSel)
                     this.editor.updateLayout();
                 }
 
@@ -304,13 +391,35 @@ class PrintOfferItem implements IPrintOfferItem {
             req.send(formdata);
         }
     }
+
+    public createIncomingLink(from: PrintOfferItem,
+                              arc: d3.Selection<SVGPathElement, Link, any, any>) {
+        if(!this.incomingLinks[from.reference]) {
+            const link = new Link(from, this, arc);
+            this.incomingLinks[from.reference] = link;
+            link.updatePath();
+        }
+        else {
+            arc.remove();
+        }
+    }
+}
+
+interface Coords2D {
+    x: number;
+    y: number;
+}
+
+function Bézier(from: Coords2D, to: Coords2D, strength: number = 2): string {
+    const Δx = to.x - from.x;
+    return `M${from.x} ${from.y} C${from.x + Δx / strength} ${from.y}, ${to.x - Δx / strength} ${to.y}, ${to.x} ${to.y}`;
 }
 
 
 const FLOAT_PATTERN = '^\\s*\\d+[\\.,]?\\d*\\s*$'
 
 class PrintOptionsEditor {
-    private static COLS_MARGIN = 50;
+    private static COLS_MARGIN = 100;
     private static ROW_MARGIN = 5;
     private static FORMATS_SECTION = 0;
     private static FINISHES_SECTION = 1;
@@ -321,7 +430,7 @@ class PrintOptionsEditor {
     private readonly SECTIONS_INFOS: SectionInfo[];
     private htmlTmpShape: AnySel;
     colwidth: number;
-    private editorSelector: string;
+    readonly editorSelector: string;
     private headerHeight: number;
     public readonly arcsSel: d3.Selection<SVGGElement, unknown, HTMLElement, any>;
 
@@ -397,7 +506,6 @@ class PrintOptionsEditor {
 
         this.arcsSel = svg.append<SVGGElement>('g')
             .attr('class', 'links')
-        // .attr('transform', `translate(0, ${this.headerHeight})`)
         ;
 
         d3.json(`${this.absUrl}/printingOptions/printoffer/json`)
