@@ -117,7 +117,8 @@ class PrintOfferItem implements IPrintOfferItem {
                 this.onClick();
             })
         ;
-        this.sel // foreignObject need to be sized explicitly
+        this.sel
+            // foreignObject need to be sized explicitly
             .attr('width', `${width}px`)
             .attr('height', `${height}px`)
         ;
@@ -495,12 +496,10 @@ class PrintOptionsEditor {
 
         svg.append('g')
             .attr('class', 'printoffer-items')
-            // .attr('transform', `translate(0, ${this.headerHeight})`)
             .selectAll('g')
             .data<SectionInfo>(this.SECTIONS_INFOS)
             .enter()
             .append('g')
-            // .attr('transform', (d, i) => `translate(${i * (this.colwidth + PrintOptionsEditor.COLS_MARGIN)},0)`)
             .attr('class', (d) => `section ${d.section}`)
         ;
 
