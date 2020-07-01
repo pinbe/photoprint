@@ -8,6 +8,7 @@ const TR_DURATION = 500; // ms
 
 type AnySel = d3.Selection<HTMLElement, any, HTMLElement, any>;
 type I18NString = { [lang: string]: string };
+type RefPrice = { reference: string, price: number };
 
 interface PriceRange {
     start: number;
@@ -22,16 +23,15 @@ interface IPrintOfferItem {
 }
 
 interface Format extends IPrintOfferItem {
-    short_edge: number,
-    long_edge: number,
-    copies: number,
-    prices_ranges: PriceRange[],
-    finishes: string[],
+    short_edge: number;
+    long_edge: number;
+    copies: number;
+    prices_ranges: PriceRange[];
 }
 
 interface Finish extends IPrintOfferItem {
-    description: I18NString,
-    frames: string[]
+    description: I18NString;
+    formats_prices: RefPrice[];
 }
 
 
@@ -170,7 +170,7 @@ class PrintOfferItem implements IPrintOfferItem {
             ;
 
             if (this.sectionInfo.section === 'finishes') {
-                for (let ref of <string[]>(<any>this).formats) {
+                for (let ref of (<Finish><unknown>this).formats_prices) {
                     const format = this.editor.getFormatItemByRef(ref);
                     const arc = <d3.Selection<SVGPathElement, Link, any, any>>this.editor.arcsSel.append('path')
                         .attr('class', 'link')
@@ -282,17 +282,21 @@ class PrintOfferItem implements IPrintOfferItem {
                 const name = (elt.getAttribute('data-name'));
                 const parent = elt.parentElement;
                 let input: HTMLElement;
+                let value: any;
                 switch (elt.tagName) {
                     case 'SPAN' :
+                        value = (<any>this)[name];
+                        value = (value === undefined) ? elt.innerText : value;
                         input =
                             <HTMLElement>
                                 d3.select(parent)
                                     .append('input')
                                     .attr('type', 'text')
                                     .attr('name', name)
-                                    .attr('value', (<any>this)[name])
+                                    .attr('value', value)
                                     .attr('pattern', elt.getAttribute('data-pattern'))
                                     .attr('required', true)
+                                    .attr('data-rec', elt.getAttribute('data-rec'))
                                     .node()
                         ;
                         break;
@@ -411,7 +415,19 @@ class PrintOfferItem implements IPrintOfferItem {
             itemSel.selectAll('input, textarea')
                 .each((d, i, g) => {
                     const input = <HTMLInputElement | HTMLTextAreaElement>g[i];
-                    kv[input.name] = input.value;
+                    if (input.name.endsWith(':records')) {
+                        const m = /^([^\.]+)\.([^\.]+):records$/.exec(input.name);
+                        const base_name = m[1];
+                        const rec_name = m[2];
+                        if (kv[base_name] == undefined) {
+                            kv[base_name] = [];
+                        }
+                        const rec = JSON.parse(input.getAttribute('data-rec'))
+                        rec[rec_name] = input.value;
+                        kv[base_name].push(rec);
+                    } else {
+                        kv[input.name] = input.value;
+                    }
                 })
             ;
 
@@ -427,10 +443,6 @@ class PrintOfferItem implements IPrintOfferItem {
                 }
 
             })
-
-            if (this.sectionInfo.section === 'finishes') {
-                kv['formats'] = (<any>this).formats;
-            }
 
             const formdata = new FormData();
             formdata.append('section', this.sectionInfo.section);
@@ -458,14 +470,12 @@ class PrintOfferItem implements IPrintOfferItem {
                         method: 'POST'
                     }
                 ).then(
-                    (v: { ack: boolean }) => {
-                        if (v.ack) {
-                            const link = new Link(from, this, arc);
-                            this.incomingLinks[from.reference] = link;
-                            link.updatePath();
-                        } else {
-                            arc.remove();
-                        }
+                    (item: IPrintOfferItem) => {
+                        const link = new Link(from, this, arc);
+                        this.incomingLinks[from.reference] = link;
+                        this.updateData(item)
+                        this.editor.updateSection(this.sectionInfo);
+                        this.editor.updateLayout();
                     },
                     () => arc.remove());
             } else {
@@ -492,10 +502,12 @@ class PrintOfferItem implements IPrintOfferItem {
                     method: 'POST'
                 }
             ).then(
-                (v: { ack: boolean }) => {
-                    if (v.ack)
-                        delete this.incomingLinks[link.from.reference];
-                    resolve(v.ack);
+                (item: IPrintOfferItem) => {
+                    delete this.incomingLinks[link.from.reference];
+                    this.updateData(item);
+                    this.editor.updateSection(this.sectionInfo);
+                    this.editor.updateLayout();
+                    resolve(true);
                 },
                 () => reject()
             );
@@ -629,22 +641,24 @@ class PrintOptionsEditor {
         return height;
     }
 
-    getFormatItemByRef(reference: string): PrintOfferItem {
-        return this.formatsIndex[reference];
+    getFormatItemByRef(refPrice: RefPrice): PrintOfferItem {
+        return this.formatsIndex[refPrice.reference];
     }
 
-    private updateSection(sectionInfo: SectionInfo,
-                          items: PrintOfferItem[],
-                          editLast = false) {
+    public updateSection(sectionInfo: SectionInfo,
+                         items: PrintOfferItem[] = null,
+                         editLast = false) {
         if (sectionInfo.section === 'formats') {
             for (let item of items) {
                 this.formatsIndex[item.reference] = item;
             }
         }
         const sectionSel = d3.select(this.editorSelector).select(`.section.${sectionInfo.section}`);
-        const updateSel = sectionSel
+        let updateSel = sectionSel
             .selectAll('foreignObject.item')
-            .data(items);
+        ;
+        if (items !== null)
+            updateSel = updateSel.data(items);
         const enterSel = updateSel.enter()
             .append('foreignObject')
             .attr('class', 'item')
@@ -811,7 +825,7 @@ class PrintOptionsEditor {
             .map(([lang, value]) => `<li>${value}@${lang}</li>`)
             .reduce((a, b) => a + b, '');
 
-        const rows = `
+        let rows = `
           <tr>
             <th>${_("Reference")}</th>
             <td>
@@ -832,12 +846,22 @@ class PrintOptionsEditor {
           </tr>
           <tr>
             <th>${_("Price")}</th>
-            <td>
-              <span data-name="price" data-pattern="${FLOAT_PATTERN}">${finish.price}</span> ${_("€ ET")}
-            </td>
+            <td><br/></td>
           </tr>
           
         `;
+        for (let fmtPrice of finish.formats_prices) {
+            rows += `
+            <tr>
+              <th>${fmtPrice.reference}</th>
+              <td>
+                <span data-name="formats_prices.price:records"
+                      data-pattern="${FLOAT_PATTERN}"
+                      data-rec='${JSON.stringify(fmtPrice)}'>${fmtPrice.price}</span> €
+              </td>
+            </tr>
+            `;
+        }
         return PrintOptionsEditor.htmlViewLayout(rows);
     }
 

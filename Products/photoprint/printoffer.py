@@ -74,7 +74,7 @@ class PrintOffer(SimpleItem) :
             'label' : {},
             'description' : {},
             'price' : 0.,
-            'formats' : [],
+            'formats_prices' : [],
         },
         'frames' : {
             'reference' : '',
@@ -176,7 +176,11 @@ class PrintOffer(SimpleItem) :
         elif section in ('finishes', 'frames') :
             payload['label'] = PrintOffer.parseI18nString(payload['label'])
             payload['description'] = PrintOffer.parseI18nString(payload['description'])
-            payload['price'] = PrintOffer.parseFloat(payload['price'])
+            if not payload.has_key('formats_prices') :
+                payload['formats_prices'] = PersistentList()
+            for fp in payload['formats_prices'] :
+                fp['price'] = PrintOffer.parseFloat(fp['price'])
+            # payload['price'] = PrintOffer.parseFloat(payload['price'])
 
 
         if index < len(self.data[section]) :
@@ -193,20 +197,24 @@ class PrintOffer(SimpleItem) :
     @postonly
     def addInLink(self, section, index, reference, REQUEST=None) :
         if section == 'finishes' :
-            self.data[section][index]['formats'].append(reference)
+            self.data[section][index]['formats_prices']\
+                .append(PersistentMapping({'reference':reference, 'price':0.}))
 
-        return json.dumps({'ack':True},
-                          encoding='utf-8')
+        return json.dumps(self.data[section][index],
+                          encoding='utf-8',
+                          cls=_JSONPersistentEncoder)
 
 
     security.declareProtected(ManagePrintOffer, 'removeInLink')
     @postonly
     def removeInLink(self, section, index, reference, REQUEST=None) :
         if section == 'finishes' :
-            self.data[section][index]['formats'].remove(reference)
+            fpindex = [fpi['reference'] for fpi in self.data[section][index]['formats_prices']].index(reference)
+            del self.data[section][index]['formats_prices'][fpindex]
 
-        return json.dumps({'ack':True},
-                          encoding='utf-8')
+        return json.dumps(self.data[section][index],
+                          encoding='utf-8',
+                          cls=_JSONPersistentEncoder)
 
 
 
