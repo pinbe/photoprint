@@ -54,7 +54,7 @@
 }
 
 #print_options_editor svg {
-  border: 1px dashed #b4098c;
+  /*border: 1px dashed #b4098c;*/
 }
 
 #print_options_editor .bottom-buttons > div {

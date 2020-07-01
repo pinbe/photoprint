@@ -189,5 +189,15 @@ class PrintOffer(SimpleItem) :
                           encoding='utf-8',
                           cls=_JSONPersistentEncoder)
 
+    security.declareProtected(ManagePrintOffer, 'addInLink')
+    @postonly
+    def addInLink(self, section, index, reference, REQUEST=None) :
+        if section == 'finishes' :
+            self.data[section][index]['formats'].append(reference)
+
+        return json.dumps({'ack':True},
+                          encoding='utf-8')
+
+
 
 InitializeClass(PrintOffer)

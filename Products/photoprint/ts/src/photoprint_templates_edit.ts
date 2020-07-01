@@ -7,7 +7,6 @@ const _ = (s: string, options?: TOptions): string => i18next.t(s, options);
 const TR_DURATION = 500; // ms
 
 type AnySel = d3.Selection<HTMLElement, any, HTMLElement, any>;
-type PrintOfferItemSel = d3.Selection<SVGForeignObjectElement, IPrintOfferItem, undefined, unknown>;
 type I18NString = { [lang: string]: string };
 
 interface PriceRange {
@@ -83,7 +82,7 @@ class PrintOfferItem implements IPrintOfferItem {
     private sel: d3.Selection<SVGForeignObjectElement, PrintOfferItem, any, any>;
     private outlet: d3.Selection<SVGPathElement, PrintOfferItem, any, any>;
     private inlet: d3.Selection<SVGPathElement, PrintOfferItem, any, any>;
-    private incomingLinks: {[reference: string]: Link};
+    private readonly incomingLinks: { [reference: string]: Link };
     private position: Coords2D;
 
     constructor(editor: PrintOptionsEditor,
@@ -96,7 +95,7 @@ class PrintOfferItem implements IPrintOfferItem {
         this.outlet = null;
         this.inlet = null;
         this.incomingLinks = {};
-        this.position = {x:0, y:0};
+        this.position = {x: 0, y: 0};
     }
 
     private updateData(itemJsonData: IPrintOfferItem) {
@@ -123,7 +122,7 @@ class PrintOfferItem implements IPrintOfferItem {
             .attr('height', `${height}px`)
         ;
         if (this.sectionInfo.section !== 'frames' && this.outlet === null) {
-            this.outlet = this.editor.arcsSel
+            this.outlet = this.editor.dotsSel
                 .append<SVGPathElement>('path')
                 .datum(this)
                 .attr('class', `plug outlet ${this.sectionInfo.section}`)
@@ -135,13 +134,25 @@ class PrintOfferItem implements IPrintOfferItem {
             this.outlet.call(d);
         }
         if (this.sectionInfo.section !== 'formats' && this.inlet === null) {
-            this.inlet = this.editor.arcsSel
+            this.inlet = this.editor.dotsSel
                 .append<SVGPathElement>('path')
                 .datum(this)
                 .attr('class', `plug inlet ${this.sectionInfo.section}`)
                 .attr('d', 'M0-8A8,8,0,0,1,8,0,8,8,0,0,1,0,8Z')
                 .attr('transform', `translate(0, ${height / 2}) rotate(180)`)
             ;
+
+            if (this.sectionInfo.section === 'finishes') {
+                for (let ref of <string[]>(<any>this).formats) {
+                    const format = this.editor.getFormatItemByRef(ref);
+                    const arc = <d3.Selection<SVGPathElement, Link, any, any>>this.editor.arcsSel.append('path')
+                        .attr('class', 'link')
+                        .attr('d', Bézier({x: 0, y: 0}, {x: 0, y: 0}))
+                    ;
+                    this.createIncomingLink(format, arc, false);
+                }
+
+            }
         }
     }
 
@@ -162,7 +173,7 @@ class PrintOfferItem implements IPrintOfferItem {
 
         }
         let targetItem: PrintOfferItem = null;
-        this.editor.arcsSel
+        this.editor.dotsSel
             .selectAll(endTargetSelector)
             .on('mouseover', (d: PrintOfferItem) => targetItem = d)
             .on('mouseout', () => targetItem = null)
@@ -172,11 +183,10 @@ class PrintOfferItem implements IPrintOfferItem {
             arc.attr('d', Bézier({x: origin.x, y: origin.y}, {x: d3.event.x, y: d3.event.y}))
         });
         d3.event.on('end', () => {
-            if(targetItem === null)
+            if (targetItem === null)
                 arc.remove();
             else
-                // this.createLink(origin.subject, targetItem, arc);
-                targetItem.createIncomingLink(this, arc);
+                targetItem.createIncomingLink(this, arc, true);
         });
     }
 
@@ -196,22 +206,23 @@ class PrintOfferItem implements IPrintOfferItem {
             this.inlet.transition().duration(TR_DURATION)
                 .attr('transform', `translate(${x}, ${y + rect.height / 2}) rotate(180)`)
             ;
-            Object.values(this.incomingLinks).map(l=>l.updatePath());
+            Object.values(this.incomingLinks).map(l => l.updatePath());
         }
 
     }
-    getInletPosition(): Coords2D|null {
+
+    getInletPosition(): Coords2D | null {
         const rect = (<HTMLDivElement>this.sel.select('div').node()).getBoundingClientRect();
-        if(this.inlet !== null) {
-            return {x: this.position.x, y: this.position.y + rect.height/2}
+        if (this.inlet !== null) {
+            return {x: this.position.x, y: this.position.y + rect.height / 2}
         }
         return null;
     }
 
-    getOutletPosition(): Coords2D|null {
+    getOutletPosition(): Coords2D | null {
         const rect = (<HTMLDivElement>this.sel.select('div').node()).getBoundingClientRect();
-        if(this.outlet !== null) {
-            return {x: this.position.x + rect.width, y: this.position.y + rect.height/2}
+        if (this.outlet !== null) {
+            return {x: this.position.x + rect.width, y: this.position.y + rect.height / 2}
         }
         return null;
     }
@@ -339,6 +350,23 @@ class PrintOfferItem implements IPrintOfferItem {
             });
     }
 
+    // returns item position index in its section
+    private getItemIndex(): number {
+        const itemSel = this.sel;
+        const sectionSel = d3.select(itemSel.node().parentElement);
+        const sectionData = <IPrintOfferItem[]>sectionSel.selectAll('foreignObject.item').data();
+        let itemIndex: number;
+        for (itemIndex = 0; itemIndex <= sectionData.length; itemIndex++) {
+            if (itemSel.datum() === sectionData[itemIndex])
+                return itemIndex;
+        }
+
+        if (itemIndex === sectionData.length) {
+            console.error('item not found');
+        }
+        return -1;
+    }
+
     private save() {
         const itemSel = this.sel;
         const inpustok =
@@ -352,15 +380,13 @@ class PrintOfferItem implements IPrintOfferItem {
                 .reduce((a, b) => a && b, true);
 
         if (inpustok && textareasok) {
-            let kv: { [name: string]: string } = {};
+            let kv: { [name: string]: any } = {};
             itemSel.selectAll('input, textarea')
                 .each((d, i, g) => {
                     const input = <HTMLInputElement | HTMLTextAreaElement>g[i];
                     kv[input.name] = input.value;
                 })
             ;
-            const sectionSel = d3.select(itemSel.node().parentElement);
-            const sectionData = <IPrintOfferItem[]>sectionSel.selectAll('foreignObject.item').data();
 
             let req = new XMLHttpRequest();
             req.open('POST', `${this.editor.absUrl}/printingOptions/printoffer/saveOfferItem`)
@@ -374,33 +400,49 @@ class PrintOfferItem implements IPrintOfferItem {
                 }
 
             })
-            let itemIndex: number;
-            for (itemIndex = 0; itemIndex <= sectionData.length; itemIndex++) {
-                if (itemSel.datum() === sectionData[itemIndex])
-                    break;
-            }
 
-            if (itemIndex === sectionData.length) {
-                console.error('item to be saved not found');
-                return;
+            if (this.sectionInfo.section === 'finishes') {
+                kv['formats'] = (<any>this).formats;
             }
 
             const formdata = new FormData();
-            formdata.append('section', (<SectionInfo>sectionSel.datum()).section);
-            formdata.append('index:int', Number(itemIndex).toString(10));
+            formdata.append('section', this.sectionInfo.section);
+            formdata.append('index:int', Number(this.getItemIndex()).toString(10));
             formdata.append('jsondata', JSON.stringify(kv));
             req.send(formdata);
         }
     }
 
     public createIncomingLink(from: PrintOfferItem,
-                              arc: d3.Selection<SVGPathElement, Link, any, any>) {
-        if(!this.incomingLinks[from.reference]) {
-            const link = new Link(from, this, arc);
-            this.incomingLinks[from.reference] = link;
-            link.updatePath();
-        }
-        else {
+                              arc: d3.Selection<SVGPathElement, Link, any, any>,
+                              save: boolean) {
+        if (!this.incomingLinks[from.reference]) {
+
+            if (save) {
+                const formdata = new FormData();
+                formdata.append('section', this.sectionInfo.section);
+                formdata.append('index:int', Number(this.getItemIndex()).toString(10));
+                formdata.append('reference', from.reference);
+                let url = `${this.editor.absUrl}/printingOptions/printoffer/addInLink`;
+                d3.json(
+                    url,
+                    {
+                        body: formdata,
+                        method: 'POST'
+                    }
+                ).then(
+                    () => {
+                        const link = new Link(from, this, arc);
+                        this.incomingLinks[from.reference] = link;
+                        link.updatePath();
+                    },
+                    () => arc.remove());
+            } else {
+                const link = new Link(from, this, arc);
+                this.incomingLinks[from.reference] = link;
+                link.updatePath();
+            }
+        } else {
             arc.remove();
         }
     }
@@ -422,18 +464,16 @@ const FLOAT_PATTERN = '^\\s*\\d+[\\.,]?\\d*\\s*$'
 class PrintOptionsEditor {
     private static COLS_MARGIN = 100;
     private static ROW_MARGIN = 5;
-    private static FORMATS_SECTION = 0;
-    private static FINISHES_SECTION = 1;
-    private static FRAMES_SECTION = 2;
 
     absUrl: string;
-    private cells: NodeListOf<HTMLTableDataCellElement>;
     private readonly SECTIONS_INFOS: SectionInfo[];
     private htmlTmpShape: AnySel;
     colwidth: number;
     readonly editorSelector: string;
     private headerHeight: number;
+    public readonly dotsSel: d3.Selection<SVGGElement, unknown, HTMLElement, any>;
     public readonly arcsSel: d3.Selection<SVGGElement, unknown, HTMLElement, any>;
+    private readonly formatsIndex: { [reference: string]: PrintOfferItem };
 
     constructor(absUrl: string, editorSelector: string) {
         this.SECTIONS_INFOS = [
@@ -458,6 +498,7 @@ class PrintOptionsEditor {
         ]
         this.absUrl = absUrl;
         this.editorSelector = editorSelector;
+        this.formatsIndex = {};
 
         const wrapper = document.querySelector<HTMLDivElement>(this.editorSelector);
         const wrapperRect = wrapper.getBoundingClientRect();
@@ -506,6 +547,9 @@ class PrintOptionsEditor {
         this.arcsSel = svg.append<SVGGElement>('g')
             .attr('class', 'links')
         ;
+        this.dotsSel = svg.append<SVGGElement>('g')
+            .attr('class', 'dots')
+        ;
 
         d3.json(`${this.absUrl}/printingOptions/printoffer/json`)
             .then((infos: PrintInfos) => {
@@ -528,9 +572,18 @@ class PrintOptionsEditor {
         return height;
     }
 
+    getFormatItemByRef(reference: string): PrintOfferItem {
+        return this.formatsIndex[reference];
+    }
+
     private updateSection(sectionInfo: SectionInfo,
                           items: PrintOfferItem[],
                           editLast = false) {
+        if (sectionInfo.section === 'formats') {
+            for (let item of items) {
+                this.formatsIndex[item.reference] = item;
+            }
+        }
         const sectionSel = d3.select(this.editorSelector).select(`.section.${sectionInfo.section}`);
         const updateSel = sectionSel
             .selectAll('foreignObject.item')
