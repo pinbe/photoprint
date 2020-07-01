@@ -199,5 +199,15 @@ class PrintOffer(SimpleItem) :
                           encoding='utf-8')
 
 
+    security.declareProtected(ManagePrintOffer, 'removeInLink')
+    @postonly
+    def removeInLink(self, section, index, reference, REQUEST=None) :
+        if section == 'finishes' :
+            self.data[section][index]['formats'].remove(reference)
+
+        return json.dumps({'ack':True},
+                          encoding='utf-8')
+
+
 
 InitializeClass(PrintOffer)

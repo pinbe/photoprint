@@ -53,7 +53,7 @@ interface SectionInfo {
 }
 
 class Link {
-    private from: PrintOfferItem;
+    from: PrintOfferItem;
     private to: PrintOfferItem;
     private arc: d3.Selection<SVGPathElement, Link, any, any>;
 
@@ -62,7 +62,22 @@ class Link {
                 arc: d3.Selection<SVGPathElement, Link, any, any>) {
         this.from = from;
         this.to = to;
-        this.arc = arc.datum(this);
+        this.arc =
+            arc.datum(this)
+                .on('mouseover', function () {
+                    if ((<MouseEvent>d3.event).altKey) {
+                        this.classList.add('over')
+                    }
+                })
+                .on('mouseout', function () {
+                    this.classList.remove('over');
+                })
+                .on('click', () => {
+                    if ((<MouseEvent>d3.event).altKey)
+                        this.remove();
+
+                })
+        ;
     }
 
     updatePath() {
@@ -70,6 +85,18 @@ class Link {
             .transition().duration(TR_DURATION)
             .attr('d', Bézier(this.from.getOutletPosition(), this.to.getInletPosition()))
         ;
+    }
+
+    private remove() {
+        this.to.removeIncomingLink(this)
+            .then((ok: boolean) => {
+                if (ok)
+                    this.arc
+                        .style('opacity', '1')
+                        .transition().duration(TR_DURATION)
+                        .style('opacity', '0')
+                        .remove();
+            });
     }
 }
 
@@ -431,10 +458,14 @@ class PrintOfferItem implements IPrintOfferItem {
                         method: 'POST'
                     }
                 ).then(
-                    () => {
-                        const link = new Link(from, this, arc);
-                        this.incomingLinks[from.reference] = link;
-                        link.updatePath();
+                    (v: { ack: boolean }) => {
+                        if (v.ack) {
+                            const link = new Link(from, this, arc);
+                            this.incomingLinks[from.reference] = link;
+                            link.updatePath();
+                        } else {
+                            arc.remove();
+                        }
                     },
                     () => arc.remove());
             } else {
@@ -446,6 +477,32 @@ class PrintOfferItem implements IPrintOfferItem {
             arc.remove();
         }
     }
+
+    public removeIncomingLink(link: Link): Promise<boolean> {
+        return new Promise<boolean>((resolve, reject) => {
+            const formdata = new FormData();
+            formdata.append('section', this.sectionInfo.section);
+            formdata.append('index:int', Number(this.getItemIndex()).toString(10));
+            formdata.append('reference', link.from.reference);
+            let url = `${this.editor.absUrl}/printingOptions/printoffer/removeInLink`;
+            d3.json(
+                url,
+                {
+                    body: formdata,
+                    method: 'POST'
+                }
+            ).then(
+                (v: { ack: boolean }) => {
+                    if (v.ack)
+                        delete this.incomingLinks[link.from.reference];
+                    resolve(v.ack);
+                },
+                () => reject()
+            );
+
+        });
+    }
+
 }
 
 interface Coords2D {

@@ -74,4 +74,9 @@
   stroke-width: 2px;
 }
 
+#print_options_editor path.link.over {
+  stroke-width: 8px;
+  cursor: not-allowed;
+}
+
 /* </dtml-with> */
