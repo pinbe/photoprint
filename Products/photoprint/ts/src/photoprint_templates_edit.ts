@@ -112,7 +112,6 @@ class PrintOfferItem implements IPrintOfferItem {
     private outlet: d3.Selection<SVGPathElement, PrintOfferItem, any, any>;
     private inlet: d3.Selection<SVGPathElement, PrintOfferItem, any, any>;
     private readonly incomingLinks: { [reference: string]: Link };
-    // private readonly outboundLinks: { [reference: string]: Link };
     private position: Coords2D;
 
     constructor(editor: PrintOptionsEditor,
@@ -552,7 +551,7 @@ class PrintOfferItem implements IPrintOfferItem {
                 const finishes = Object.values(this.incomingLinks).map(l => l.from);
                 let formatsSet: Set<PrintOfferItem> = new Set<PrintOfferItem>();
                 for (let finish of finishes) {
-                    for (let format of Object.values(finish.incomingLinks).map(l=>l.from)) {
+                    for (let format of Object.values(finish.incomingLinks).map(l => l.from)) {
                         formatsSet.add(format);
                     }
                 }
@@ -874,8 +873,8 @@ class PrintOptionsEditor {
     }
 
 
-    private static finishViewHtml(item: IPrintOfferItem): string {
-        const finish = <Finish>item;
+    private static finishViewHtml(item: PrintOfferItem): string {
+        const finish = <Finish><unknown>item;
         const label = Object.entries(finish.label)
             .map(([lang, value]) => `<li>${value}@${lang}</li>`)
             .reduce((a, b) => a + b, '');
@@ -909,14 +908,21 @@ class PrintOptionsEditor {
           </tr>
           
         `;
+
+        const fmtPrices: { [ref: string]: number } = {};
         for (let fmtPrice of finish.formats_prices) {
+            fmtPrices[fmtPrice.reference] = fmtPrice.price; // eg. Object.fromEntries…
+        }
+
+        for (let format of item.getRelatedFormats()) {
+            const price: number = fmtPrices[format.reference] || 0;
             rows += `
             <tr>
-              <th>${fmtPrice.reference}</th>
+              <th>${(<Format><unknown>format).short_edge} × ${(<Format><unknown>format).long_edge}</th>
               <td>
                 <span data-name="formats_prices.price:records"
                       data-pattern="${FLOAT_PATTERN}"
-                      data-rec='${JSON.stringify(fmtPrice)}'>${fmtPrice.price}</span> €
+                      data-rec='${JSON.stringify({reference: format.reference, price: price})}'>${price}</span> €
               </td>
             </tr>
             `;
@@ -960,20 +966,20 @@ class PrintOptionsEditor {
         `;
 
 
-        const fmtPrices: {[ref:string]: number} = {};
+        const fmtPrices: { [ref: string]: number } = {};
         for (let fmtPrice of frame.formats_prices) {
             fmtPrices[fmtPrice.reference] = fmtPrice.price; // eg. Object.fromEntries…
         }
 
         for (let format of item.getRelatedFormats()) {
-            const price:number = fmtPrices[format.reference] || 0;
+            const price: number = fmtPrices[format.reference] || 0;
             rows += `
             <tr>
               <th>${(<Format><unknown>format).short_edge} × ${(<Format><unknown>format).long_edge}</th>
               <td>
                 <span data-name="formats_prices.price:records"
                       data-pattern="${FLOAT_PATTERN}"
-                      data-rec='${JSON.stringify({ reference: format.reference, price: price })}'>${price}</span> €
+                      data-rec='${JSON.stringify({reference: format.reference, price: price})}'>${price}</span> €
               </td>
             </tr>
             `;
