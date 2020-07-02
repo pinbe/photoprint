@@ -495,8 +495,7 @@ class PrintOfferItem implements IPrintOfferItem {
                         const link = new Link(from, this, arc);
                         this.incomingLinks[from.reference] = link;
                         this.updateData(item)
-                        this.editor.updateSection(this.sectionInfo);
-                        this.editor.updateLayout();
+                        this.editor.refreshAll();
                     },
                     () => arc.remove());
             } else {
@@ -526,8 +525,7 @@ class PrintOfferItem implements IPrintOfferItem {
                 (item: IPrintOfferItem) => {
                     delete this.incomingLinks[link.from.reference];
                     this.updateData(item);
-                    this.editor.updateSection(this.sectionInfo);
-                    this.editor.updateLayout();
+                    this.editor.refreshAll();
                     resolve(true);
                 },
                 () => reject()
@@ -702,14 +700,19 @@ class PrintOptionsEditor {
     public updateSection(sectionInfo: SectionInfo,
                          items: PrintOfferItem[] = null,
                          editLast = false) {
-        if (sectionInfo.section === 'formats') {
-            this.formatsIndex = {};
-            for (let item of items) {
-                this.formatsIndex[item.reference] = item;
+        if (items !== null) {
+            switch (sectionInfo.section) {
+                case 'formats':
+                    this.formatsIndex = {};
+                    for (let item of items) {
+                        this.formatsIndex[item.reference] = item;
+                    }
+                    break;
+                case 'finishes':
+                    for (let item of items)
+                        this.finishesIndex[item.reference] = item;
+                    break;
             }
-        } else if (sectionInfo.section === 'finishes') {
-            for (let item of items)
-                this.finishesIndex[item.reference] = item;
         }
         const sectionSel = d3.select(this.editorSelector).select(`.section.${sectionInfo.section}`);
         let updateSel = sectionSel
@@ -797,6 +800,11 @@ class PrintOptionsEditor {
         ;
     }
 
+    public refreshAll() {
+        this.SECTIONS_INFOS.map(si => this.updateSection(si));
+        this.updateLayout();
+    }
+
     private static htmlViewLayout(htmlrows: string): string {
         return `
             <table class="TwoColumnForm">
@@ -857,18 +865,19 @@ class PrintOptionsEditor {
             </td>
           </tr>
           <tr>
+            <th>${_("Copies")}</th>
+            <td>
+              <span data-name="copies" data-pattern="^\\d+$">${fmt.copies}</span>
+            </td>
+          </tr>
+          <tr>
             <th>${_("Scarcity")}</th>
             <td>
               <ul data-name="prices_ranges"
                   data-line_pattern="^\\s*$|^\\s*(\\[)\\s*(\\d+)\\s*(,\\s*)(\\d+)\\s*(\\])(\\s*)(\\d+[\\.,]?\\d*)\\s*$">${prices_ranges}</ul>
             </td>
           </tr>
-          <tr>
-            <th>${_("Copies")}</th>
-            <td>
-              <span data-name="copies" data-pattern="^\\d+$">${fmt.copies}</span>
-            </td>
-          </tr>`;
+        `;
         return PrintOptionsEditor.htmlViewLayout(rows);
     }
 
