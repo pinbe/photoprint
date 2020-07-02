@@ -112,6 +112,7 @@ class PrintOfferItem implements IPrintOfferItem {
     private outlet: d3.Selection<SVGPathElement, PrintOfferItem, any, any>;
     private inlet: d3.Selection<SVGPathElement, PrintOfferItem, any, any>;
     private readonly incomingLinks: { [reference: string]: Link };
+    // private readonly outboundLinks: { [reference: string]: Link };
     private position: Coords2D;
 
     constructor(editor: PrintOptionsEditor,
@@ -134,6 +135,42 @@ class PrintOfferItem implements IPrintOfferItem {
 
     draw(fo: SVGForeignObjectElement) {
         this.sel = d3.select(fo);
+
+        if (this.sectionInfo.section !== 'formats' && this.inlet === null) {
+            this.inlet = this.editor.dotsSel
+                .append<SVGPathElement>('path')
+                .datum(this)
+                .attr('class', `plug inlet ${this.sectionInfo.section}`)
+                .attr('d', 'M0-8A8,8,0,0,1,8,0,8,8,0,0,1,0,8Z')
+                .attr('transform', `rotate(180)`)
+            ;
+
+            switch (this.sectionInfo.section) {
+                case 'finishes' :
+                    for (let ref of (<Finish><unknown>this).formats_prices) {
+                        const format = this.editor.getFormatItemByRef(ref);
+                        const arc = <d3.Selection<SVGPathElement, Link, any, any>>this.editor.arcsSel.append('path')
+                            .attr('class', 'link')
+                            .attr('d', Bézier({x: 0, y: 0}, {x: 0, y: 0}))
+                        ;
+                        this.createIncomingLink(format, arc, false);
+                    }
+                    break;
+
+                case 'frames' :
+                    for (let ref of (<Frame><unknown>this).finishes) {
+                        const finish = this.editor.getFinishItemByRef(ref);
+                        const arc = <d3.Selection<SVGPathElement, Link, any, any>>this.editor.arcsSel.append('path')
+                            .attr('class', 'link')
+                            .attr('d', Bézier({x: 0, y: 0}, {x: 0, y: 0}))
+                        ;
+                        this.createIncomingLink(finish, arc, false);
+                    }
+
+            }
+        }
+
+
         const html = this.sectionInfo.html(this);
         const height = this.editor.getHtmlHeight(html);
         const width = this.editor.colwidth;
@@ -161,39 +198,6 @@ class PrintOfferItem implements IPrintOfferItem {
             const d = d3.drag();
             d.on('start', () => this.onDragStart());
             this.outlet.call(d);
-        }
-        if (this.sectionInfo.section !== 'formats' && this.inlet === null) {
-            this.inlet = this.editor.dotsSel
-                .append<SVGPathElement>('path')
-                .datum(this)
-                .attr('class', `plug inlet ${this.sectionInfo.section}`)
-                .attr('d', 'M0-8A8,8,0,0,1,8,0,8,8,0,0,1,0,8Z')
-                .attr('transform', `translate(0, ${height / 2}) rotate(180)`)
-            ;
-
-            switch (this.sectionInfo.section) {
-                case 'finishes' :
-                    for (let ref of (<Finish><unknown>this).formats_prices) {
-                        const format = this.editor.getFormatItemByRef(ref);
-                        const arc = <d3.Selection<SVGPathElement, Link, any, any>>this.editor.arcsSel.append('path')
-                            .attr('class', 'link')
-                            .attr('d', Bézier({x: 0, y: 0}, {x: 0, y: 0}))
-                        ;
-                        this.createIncomingLink(format, arc, false);
-                    }
-                    break;
-
-                case 'frames' :
-                    for (let ref of (<Frame><unknown>this).finishes) {
-                        const finish = this.editor.getFinishItemByRef(ref);
-                        const arc = <d3.Selection<SVGPathElement, Link, any, any>>this.editor.arcsSel.append('path')
-                            .attr('class', 'link')
-                            .attr('d', Bézier({x: 0, y: 0}, {x: 0, y: 0}))
-                        ;
-                        this.createIncomingLink(finish, arc, false);
-                    }
-
-            }
         }
     }
 
@@ -445,7 +449,7 @@ class PrintOfferItem implements IPrintOfferItem {
                 })
             ;
 
-            if(this.sectionInfo.section === 'frames') {
+            if (this.sectionInfo.section === 'frames') {
                 kv.finishes = (<Frame><unknown>this).finishes;
             }
 
@@ -531,6 +535,33 @@ class PrintOfferItem implements IPrintOfferItem {
             );
 
         });
+    }
+
+    public getRelatedFormats(): PrintOfferItem[] {
+        let formats: PrintOfferItem[];
+        switch (this.sectionInfo.section) {
+            case 'formats' :
+                formats = [];
+                break;
+
+            case 'finishes' :
+                formats = Object.values(this.incomingLinks).map(l => l.from);
+                break;
+
+            case 'frames' :
+                const finishes = Object.values(this.incomingLinks).map(l => l.from);
+                let formatsSet: Set<PrintOfferItem> = new Set<PrintOfferItem>();
+                for (let finish of finishes) {
+                    for (let format of Object.values(finish.incomingLinks).map(l=>l.from)) {
+                        formatsSet.add(format);
+                    }
+                }
+                formats = Array.from(formatsSet.values());
+
+        }
+        (<Format[]><unknown>formats).sort(
+            (a, b) => a.long_edge * a.short_edge - b.long_edge * b.short_edge);
+        return formats;
     }
 
 }
@@ -677,8 +708,7 @@ class PrintOptionsEditor {
             for (let item of items) {
                 this.formatsIndex[item.reference] = item;
             }
-        }
-        else if (sectionInfo.section === 'finishes') {
+        } else if (sectionInfo.section === 'finishes') {
             for (let item of items)
                 this.finishesIndex[item.reference] = item;
         }
@@ -894,8 +924,8 @@ class PrintOptionsEditor {
         return PrintOptionsEditor.htmlViewLayout(rows);
     }
 
-    private static frameViewHtml(item: IPrintOfferItem): string {
-        const frame = <Frame>item;
+    private static frameViewHtml(item: PrintOfferItem): string {
+        const frame = <Frame><unknown>item;
         const label = Object.entries(frame.label)
             .map(([lang, value]) => `<li>${value}@${lang}</li>`)
             .reduce((a, b) => a + b, '');
@@ -904,7 +934,7 @@ class PrintOptionsEditor {
             .map(([lang, value]) => `<li>${value}@${lang}</li>`)
             .reduce((a, b) => a + b, '');
 
-        const rows = `
+        let rows = `
           <tr>
             <th>${_("Reference")}</th>
             <td>
@@ -923,7 +953,32 @@ class PrintOptionsEditor {
               <ul data-name="description" data-line_pattern="(.*)(@)(\\w\\w)$">${description}</ul>
             </td>
           </tr>
+          <tr>
+            <th>${_("Price")}</th>
+            <td><br/></td>
+          </tr>
         `;
+
+
+        const fmtPrices: {[ref:string]: number} = {};
+        for (let fmtPrice of frame.formats_prices) {
+            fmtPrices[fmtPrice.reference] = fmtPrice.price; // eg. Object.fromEntries…
+        }
+
+        for (let format of item.getRelatedFormats()) {
+            const price:number = fmtPrices[format.reference] || 0;
+            rows += `
+            <tr>
+              <th>${(<Format><unknown>format).short_edge} × ${(<Format><unknown>format).long_edge}</th>
+              <td>
+                <span data-name="formats_prices.price:records"
+                      data-pattern="${FLOAT_PATTERN}"
+                      data-rec='${JSON.stringify({ reference: format.reference, price: price })}'>${price}</span> €
+              </td>
+            </tr>
+            `;
+        }
+
         return PrintOptionsEditor.htmlViewLayout(rows);
     }
 
