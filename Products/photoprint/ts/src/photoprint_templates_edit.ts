@@ -19,13 +19,13 @@ interface PriceRange {
 interface IPrintOfferItem {
     reference: string;
     label: I18NString;
-    price: number;
 }
 
 interface Format extends IPrintOfferItem {
     short_edge: number;
     long_edge: number;
     copies: number;
+    price: number;
     prices_ranges: PriceRange[];
 }
 
@@ -37,6 +37,8 @@ interface Finish extends IPrintOfferItem {
 
 interface Frame extends IPrintOfferItem {
     description: I18NString,
+    formats_prices: RefPrice[];
+    finishes: string[];
 }
 
 interface PrintInfos {
@@ -105,7 +107,7 @@ class PrintOfferItem implements IPrintOfferItem {
     price: number;
     reference: string;
     private editor: PrintOptionsEditor;
-    private sectionInfo: SectionInfo;
+    private readonly sectionInfo: SectionInfo;
     private sel: d3.Selection<SVGForeignObjectElement, PrintOfferItem, any, any>;
     private outlet: d3.Selection<SVGPathElement, PrintOfferItem, any, any>;
     private inlet: d3.Selection<SVGPathElement, PrintOfferItem, any, any>;
@@ -169,15 +171,27 @@ class PrintOfferItem implements IPrintOfferItem {
                 .attr('transform', `translate(0, ${height / 2}) rotate(180)`)
             ;
 
-            if (this.sectionInfo.section === 'finishes') {
-                for (let ref of (<Finish><unknown>this).formats_prices) {
-                    const format = this.editor.getFormatItemByRef(ref);
-                    const arc = <d3.Selection<SVGPathElement, Link, any, any>>this.editor.arcsSel.append('path')
-                        .attr('class', 'link')
-                        .attr('d', Bézier({x: 0, y: 0}, {x: 0, y: 0}))
-                    ;
-                    this.createIncomingLink(format, arc, false);
-                }
+            switch (this.sectionInfo.section) {
+                case 'finishes' :
+                    for (let ref of (<Finish><unknown>this).formats_prices) {
+                        const format = this.editor.getFormatItemByRef(ref);
+                        const arc = <d3.Selection<SVGPathElement, Link, any, any>>this.editor.arcsSel.append('path')
+                            .attr('class', 'link')
+                            .attr('d', Bézier({x: 0, y: 0}, {x: 0, y: 0}))
+                        ;
+                        this.createIncomingLink(format, arc, false);
+                    }
+                    break;
+
+                case 'frames' :
+                    for (let ref of (<Frame><unknown>this).finishes) {
+                        const finish = this.editor.getFinishItemByRef(ref);
+                        const arc = <d3.Selection<SVGPathElement, Link, any, any>>this.editor.arcsSel.append('path')
+                            .attr('class', 'link')
+                            .attr('d', Bézier({x: 0, y: 0}, {x: 0, y: 0}))
+                        ;
+                        this.createIncomingLink(finish, arc, false);
+                    }
 
             }
         }
@@ -431,6 +445,10 @@ class PrintOfferItem implements IPrintOfferItem {
                 })
             ;
 
+            if(this.sectionInfo.section === 'frames') {
+                kv.finishes = (<Frame><unknown>this).finishes;
+            }
+
             let req = new XMLHttpRequest();
             req.open('POST', `${this.editor.absUrl}/printingOptions/printoffer/saveOfferItem`)
             req.addEventListener('load', ev => {
@@ -442,7 +460,7 @@ class PrintOfferItem implements IPrintOfferItem {
                     this.editor.updateLayout();
                 }
 
-            })
+            });
 
             const formdata = new FormData();
             formdata.append('section', this.sectionInfo.section);
@@ -542,7 +560,8 @@ class PrintOptionsEditor {
     private headerHeight: number;
     public readonly dotsSel: d3.Selection<SVGGElement, unknown, HTMLElement, any>;
     public readonly arcsSel: d3.Selection<SVGGElement, unknown, HTMLElement, any>;
-    private readonly formatsIndex: { [reference: string]: PrintOfferItem };
+    private formatsIndex: { [reference: string]: PrintOfferItem };
+    private finishesIndex: { [reference: string]: PrintOfferItem };
 
     constructor(absUrl: string, editorSelector: string) {
         this.SECTIONS_INFOS = [
@@ -568,6 +587,7 @@ class PrintOptionsEditor {
         this.absUrl = absUrl;
         this.editorSelector = editorSelector;
         this.formatsIndex = {};
+        this.finishesIndex = {};
 
         const wrapper = document.querySelector<HTMLDivElement>(this.editorSelector);
         const wrapperRect = wrapper.getBoundingClientRect();
@@ -645,13 +665,22 @@ class PrintOptionsEditor {
         return this.formatsIndex[refPrice.reference];
     }
 
+    getFinishItemByRef(reference: string): PrintOfferItem {
+        return this.finishesIndex[reference];
+    }
+
     public updateSection(sectionInfo: SectionInfo,
                          items: PrintOfferItem[] = null,
                          editLast = false) {
         if (sectionInfo.section === 'formats') {
+            this.formatsIndex = {};
             for (let item of items) {
                 this.formatsIndex[item.reference] = item;
             }
+        }
+        else if (sectionInfo.section === 'finishes') {
+            for (let item of items)
+                this.finishesIndex[item.reference] = item;
         }
         const sectionSel = d3.select(this.editorSelector).select(`.section.${sectionInfo.section}`);
         let updateSel = sectionSel
@@ -894,13 +923,6 @@ class PrintOptionsEditor {
               <ul data-name="description" data-line_pattern="(.*)(@)(\\w\\w)$">${description}</ul>
             </td>
           </tr>
-          <tr>
-            <th>${_("Price")}</th>
-            <td>
-              <span data-name="price" data-pattern="${FLOAT_PATTERN}">${frame.price}</span> ${_("€ ET")}
-            </td>
-          </tr>
-          
         `;
         return PrintOptionsEditor.htmlViewLayout(rows);
     }

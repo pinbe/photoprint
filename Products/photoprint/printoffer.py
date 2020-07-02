@@ -73,14 +73,13 @@ class PrintOffer(SimpleItem) :
             'reference' : '',
             'label' : {},
             'description' : {},
-            'price' : 0.,
             'formats_prices' : [],
         },
         'frames' : {
             'reference' : '',
             'label' : {},
             'description' : {},
-            'price' : 0.,
+            'formats_prices' : [],
             'finishes': [],
         }
     }
@@ -108,7 +107,7 @@ class PrintOffer(SimpleItem) :
 
 
     security.declarePublic('json')
-    def json(self, indent=None, REQUEST=None) :
+    def json(self, indent=2, REQUEST=None) :
         """ json offer data """
         if REQUEST :
             REQUEST.RESPONSE.setHeader('Content-Type', 'text/json; charset=utf-8')
@@ -200,6 +199,10 @@ class PrintOffer(SimpleItem) :
             self.data[section][index]['formats_prices']\
                 .append(PersistentMapping({'reference':reference, 'price':0.}))
 
+        if section == 'frames' :
+            self.data[section][index]['finishes']\
+                .append(reference)
+
         return json.dumps(self.data[section][index],
                           encoding='utf-8',
                           cls=_JSONPersistentEncoder)
@@ -211,6 +214,9 @@ class PrintOffer(SimpleItem) :
         if section == 'finishes' :
             fpindex = [fpi['reference'] for fpi in self.data[section][index]['formats_prices']].index(reference)
             del self.data[section][index]['formats_prices'][fpindex]
+
+        if section == 'frames' :
+            self.data[section][index]['finishes'].remove(reference)
 
         return json.dumps(self.data[section][index],
                           encoding='utf-8',
