@@ -89,8 +89,8 @@ class Link {
         ;
     }
 
-    private remove() {
-        this.to.removeIncomingLink(this)
+    remove(): Promise<boolean> {
+        return this.to.removeIncomingLink(this)
             .then((ok: boolean) => {
                 if (ok)
                     this.arc
@@ -98,6 +98,7 @@ class Link {
                         .transition().duration(TR_DURATION)
                         .style('opacity', '0')
                         .remove();
+                return ok;
             });
     }
 }
@@ -112,6 +113,7 @@ class PrintOfferItem implements IPrintOfferItem {
     private outlet: d3.Selection<SVGPathElement, PrintOfferItem, any, any>;
     private inlet: d3.Selection<SVGPathElement, PrintOfferItem, any, any>;
     private readonly incomingLinks: { [reference: string]: Link };
+    private readonly outgoingLinks: { [reference: string]: Link };
     private position: Coords2D;
 
     constructor(editor: PrintOptionsEditor,
@@ -124,6 +126,7 @@ class PrintOfferItem implements IPrintOfferItem {
         this.outlet = null;
         this.inlet = null;
         this.incomingLinks = {};
+        this.outgoingLinks = {};
         this.position = {x: 0, y: 0};
     }
 
@@ -369,33 +372,40 @@ class PrintOfferItem implements IPrintOfferItem {
             return;
         }
 
-        const url = `${this.editor.absUrl}/printingOptions/printoffer/removeOfferItem`;
-        const params = new FormData();
-        params.append('section', (<SectionInfo>sectionSel.datum()).section);
-        params.append('index:int', Number(itemIndex).toString(10));
-        d3.json(url, {body: params, method: 'POST'})
-            .then((res: { ack: boolean }) => {
-                if (res.ack) {
-                    if (this.outlet)
-                        this.outlet.style('opacity', '1')
-                            .transition().duration(TR_DURATION)
-                            .style('opacity', '0')
-                            .remove()
-                        ;
-                    if (this.inlet)
-                        this.inlet.style('opacity', '1')
-                            .transition().duration(TR_DURATION)
-                            .style('opacity', '0')
-                            .remove()
-                        ;
-                    itemSel.style('opacity', '1')
-                        .transition().duration(TR_DURATION)
-                        .style('opacity', '0')
-                        .remove()
-                        .on('end', () => this.editor.updateLayout())
-                    ;
+        let promises: Promise<boolean>[] = Object.values(this.incomingLinks).map(link => link.remove());
+        promises.concat(Object.values(this.outgoingLinks).map(link => link.remove()))
+        Promise.all<boolean>(promises).then((res: boolean[]) => {
+                if (res.reduce((a, b) => a && b, true)) { // if all ok
+                    const url = `${this.editor.absUrl}/printingOptions/printoffer/removeOfferItem`;
+                    const params = new FormData();
+                    params.append('section', (<SectionInfo>sectionSel.datum()).section);
+                    params.append('index:int', Number(itemIndex).toString(10));
+                    d3.json(url, {body: params, method: 'POST'})
+                        .then((res: { ack: boolean }) => {
+                            if (res.ack) {
+                                if (this.outlet)
+                                    this.outlet.style('opacity', '1')
+                                        .transition().duration(TR_DURATION)
+                                        .style('opacity', '0')
+                                        .remove()
+                                    ;
+                                if (this.inlet)
+                                    this.inlet.style('opacity', '1')
+                                        .transition().duration(TR_DURATION)
+                                        .style('opacity', '0')
+                                        .remove()
+                                    ;
+                                itemSel.style('opacity', '1')
+                                    .transition().duration(TR_DURATION)
+                                    .style('opacity', '0')
+                                    .remove()
+                                    .on('end', () => this.editor.updateLayout())
+                                ;
+                            }
+                        });
                 }
-            });
+            }
+        );
     }
 
     // returns item position index in its section
@@ -494,6 +504,7 @@ class PrintOfferItem implements IPrintOfferItem {
                     (item: IPrintOfferItem) => {
                         const link = new Link(from, this, arc);
                         this.incomingLinks[from.reference] = link;
+                        from.outgoingLinks[this.reference] = link;
                         this.updateData(item)
                         this.editor.refreshAll();
                     },
@@ -501,6 +512,7 @@ class PrintOfferItem implements IPrintOfferItem {
             } else {
                 const link = new Link(from, this, arc);
                 this.incomingLinks[from.reference] = link;
+                from.outgoingLinks[this.reference] = link;
                 link.updatePath();
             }
         } else {
@@ -524,6 +536,7 @@ class PrintOfferItem implements IPrintOfferItem {
             ).then(
                 (item: IPrintOfferItem) => {
                     delete this.incomingLinks[link.from.reference];
+                    delete link.from.outgoingLinks[this.reference];
                     this.updateData(item);
                     this.editor.refreshAll();
                     resolve(true);
