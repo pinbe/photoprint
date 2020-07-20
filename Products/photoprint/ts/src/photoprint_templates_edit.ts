@@ -306,7 +306,7 @@ class PrintOfferItem implements IPrintOfferItem {
                 switch (elt.tagName) {
                     case 'SPAN' :
                         value = (<any>this)[name];
-                        value = (value === undefined) ? elt.innerText : value;
+                        value = (value === undefined) ? elt.textContent : value;
                         input =
                             <HTMLElement>
                                 d3.select(parent)
@@ -324,7 +324,7 @@ class PrintOfferItem implements IPrintOfferItem {
                         let txt: string = '';
                         const re = new RegExp(elt.getAttribute('data-line_pattern'));
                         elt.querySelectorAll('li').forEach((li: HTMLLIElement) => {
-                            const res = re.exec(li.innerText);
+                            const res = re.exec(li.textContent);
                             for (let j = 1; j < res.length; j++)
                                 txt += res[j];
                             txt += '\n';
