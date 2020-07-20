@@ -5,3 +5,4 @@ node_modules
 jsbuild
 *.po~
 .DS_Store
+graphics/
