@@ -874,7 +874,7 @@ class PrintOptionsEditor {
           <tr>
             <th>${_("Price")}</th>
             <td>
-              <span data-name="price" data-pattern="${FLOAT_PATTERN}">${fmt.price}</span> ${_("€ ET")}
+              <span data-name="price" data-pattern="${FLOAT_PATTERN}">${fmt.price}</span> ${_("€")}
             </td>
           </tr>
           <tr>
