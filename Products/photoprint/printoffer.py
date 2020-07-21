@@ -136,6 +136,7 @@ class PrintOffer(SimpleItem) :
         """ ready to edit new json item """
         if index < len(self.data[section]) :
             del self.data[section][index]
+            self._p_changed = 1
         return json.dumps({'ack':True},
                           encoding='utf-8')
 
@@ -193,6 +194,7 @@ class PrintOffer(SimpleItem) :
             assert len(self.data[section]) == index
             self.data[section].append(payload)
 
+        self._p_changed = 1
         return json.dumps(self.data[section][index],
                           encoding='utf-8',
                           cls=_JSONPersistentEncoder)
@@ -207,7 +209,7 @@ class PrintOffer(SimpleItem) :
         if section == 'frames' :
             self.data[section][index]['finishes']\
                 .append(reference)
-
+        self._p_changed = 1
         return json.dumps(self.data[section][index],
                           encoding='utf-8',
                           cls=_JSONPersistentEncoder)
@@ -223,6 +225,7 @@ class PrintOffer(SimpleItem) :
         if section == 'frames' :
             self.data[section][index]['finishes'].remove(reference)
 
+        self._p_changed = 1
         return json.dumps(self.data[section][index],
                           encoding='utf-8',
                           cls=_JSONPersistentEncoder)
