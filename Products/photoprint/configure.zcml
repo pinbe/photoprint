@@ -13,25 +13,31 @@
   <cmf:registerDirectory directory="skins" name="photoprint" recursive="True"/>
   <i18n:registerTranslations directory="locales"/>
 
-  <five:registerClass
-      class=".order.PrintOrderTemplate"
-      meta_type="Print order template"
-      permission="photoprint.AddPrintOrderTemplate"
-      />
-  <utility
-      component=".order.PrintOrderTemplateFactory"
-      name="photoprint.order_template"
-      />
+<!--  <five:registerClass-->
+<!--      class=".order.PrintOrderTemplate"-->
+<!--      meta_type="Print order template"-->
+<!--      permission="photoprint.AddPrintOrderTemplate"-->
+<!--      />-->
+<!--  <utility-->
+<!--      component=".order.PrintOrderTemplateFactory"-->
+<!--      name="photoprint.order_template"-->
+<!--      />-->
   
   <meta:redefinePermission from="zope2.Public" to="zope.Public" />
-  <five:registerClass
-      class=".printjob.PrintOrder"
-      meta_type="Print order"
-      permission="photoprint.AddPrintOrder"
-      />
+<!--  <five:registerClass-->
+<!--      class=".printjob.PrintOrder"-->
+<!--      meta_type="Print order"-->
+<!--      permission="photoprint.AddPrintOrder"-->
+<!--      />-->
 
-  <utility
-      component=".printjob.PrintOrderFactory"
-      name="photoprint.order"
-      />
+<!--  <utility-->
+<!--      component=".printjob.PrintOrderFactory"-->
+<!--      name="photoprint.order"-->
+<!--      />-->
+
+  <adapter
+    provides="Products.Plinn.interfaces.ContentHistory.IContentHistory"
+    for=".interfaces.IPrintOffer"
+    factory=".HistoryAdapters.PrintOfferHistory"/>
+
 </configure>

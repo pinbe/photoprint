@@ -10,6 +10,9 @@ from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from persistent.list import PersistentList
 from persistent.mapping import PersistentMapping
 from json.decoder import JSONArray, WHITESPACE, WHITESPACE_STR
+from zope.interface import implements
+
+from Products.photoprint.interfaces import IPrintOffer
 from Products.photoprint.permissions import ManagePrintOffer
 import json
 from json import scanner
@@ -46,6 +49,8 @@ class PrintOffer(SimpleItem) :
     """
     Print offer: format, finish, frame, etc.
     """
+
+    implements(IPrintOffer)
 
     security = ClassSecurityInfo()
     manage_options = (
