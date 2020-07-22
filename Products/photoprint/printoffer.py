@@ -7,43 +7,12 @@ from AccessControl.requestmethod import postonly
 from App.Dialogs import MessageDialog
 from OFS.SimpleItem import SimpleItem
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-from persistent.list import PersistentList
-from persistent.mapping import PersistentMapping
-from json.decoder import JSONArray, WHITESPACE, WHITESPACE_STR
 from zope.interface import implements
 
 from Products.photoprint.interfaces import IPrintOffer
 from Products.photoprint.permissions import ManagePrintOffer
 import json
-from json import scanner
 
-class _JSONPersistentEncoder(json.JSONEncoder) :
-    def default(self, o) :
-        if type(o) is PersistentMapping :
-            return dict(o)
-        elif type(o) is PersistentList :
-            return list(o)
-        else :
-            return json.JSONEncoder.default(self, o)
-
-class _JsonPersistentDecoder(json.JSONDecoder) :
-
-    @staticmethod
-    def JSONArray(s_and_end, scan_once, _w=WHITESPACE.match, _ws=WHITESPACE_STR):
-        values, end = JSONArray(s_and_end, scan_once, _w, _ws)
-        return PersistentList(values), end
-
-    def __init__(self, encoding=None, object_hook=None, parse_float=None,
-                 parse_int=None, parse_constant=None, strict=True,
-                 object_pairs_hook=None):
-        json.JSONDecoder.__init__(self,
-                                  encoding='utf-8',
-                                  object_hook=lambda d: PersistentMapping(d))
-        # Unlike 'object_hook', array decoding is not hookable from json.JSONDecoder constructor…
-        self.parse_array= _JsonPersistentDecoder.JSONArray
-        # It's necessary to use pyton implementation (py_make_scanner)
-        # because c implementation will not use our custom array decoder.
-        self.scan_once = scanner.py_make_scanner(self)
 
 class PrintOffer(SimpleItem) :
     """
@@ -54,10 +23,9 @@ class PrintOffer(SimpleItem) :
 
     security = ClassSecurityInfo()
     manage_options = (
-        {'label' : 'Data',
-         'action' : 'manage_data'},
-    ) + SimpleItem.manage_options
-
+                         {'label' : 'Data',
+                          'action' : 'manage_data'},
+                     ) + SimpleItem.manage_options
 
     security.declareProtected(ManagePrintOffer, 'manage_data')
     manage_data = PageTemplateFile('www/manage_data',
@@ -69,7 +37,7 @@ class PrintOffer(SimpleItem) :
             'reference' : '',
             'label' : {},
             'short_edge' : 0.,
-            'long_edge': 0.,
+            'long_edge' : 0.,
             'copies' : 0.,
             'price' : 0.,
             'prices_ranges' : [],
@@ -85,22 +53,36 @@ class PrintOffer(SimpleItem) :
             'label' : {},
             'description' : {},
             'formats_prices' : [],
-            'finishes': [],
+            'finishes' : [],
         }
     }
 
     def __init__(self) :
         self.id = 'printoffer'
-        self.data = PersistentMapping({'formats':PersistentList(),
-                                       'finishes': PersistentList(),
-                                       'frames': PersistentList()})
+        self._data = ''
+        emtydata = {'formats' : [],
+                    'finishes' : [],
+                    'frames' : []}
+        self.data = emtydata
 
+    @property
+    def data(self) :
+        return json.loads(self._data)
+
+    @data.setter
+    def data(self, value) :
+        self._data = json.dumps(value,
+                                encoding='utf-8',
+                                ensure_ascii=False,
+                                indent=2)
 
     security.declareProtected(ManagePrintOffer, 'edit')
+
     def edit(self, jsons) :
-        self.data = json.loads(jsons, cls=_JsonPersistentDecoder)
+        self.data = json.loads(jsons)
 
     security.declareProtected(ManagePrintOffer, 'manage_editJSON')
+
     @postonly
     def manage_editJSON(self, jsoncode, REQUEST=None) :
         self.edit(jsoncode)
@@ -110,34 +92,40 @@ class PrintOffer(SimpleItem) :
                 action='manage_data'
         )
 
-
     security.declarePublic('json')
-    def json(self, indent=2, REQUEST=None) :
+
+    def json(self, indent=None, REQUEST=None) :
         """ json offer data """
         if REQUEST :
             REQUEST.RESPONSE.setHeader('Content-Type', 'text/json; charset=utf-8')
-        return json.dumps(self.data,
-                          encoding='utf-8',
-                          ensure_ascii=False,
-                          cls=_JSONPersistentEncoder,
-                          indent=indent)
+
+        if indent is None :
+            return self._data
+        else :
+            return json.dumps(self.data,
+                              encoding='utf-8',
+                              ensure_ascii=False,
+                              indent=indent)
 
     security.declareProtected(ManagePrintOffer, 'getTemplate')
+
     def getTemplate(self, section, indent=None) :
         """ ready to edit new json item """
         return json.dumps(self.TEMPLATES[section],
                           encoding='utf-8',
-                          cls=_JSONPersistentEncoder,
+                          ensure_ascii=False,
                           indent=indent)
 
     security.declareProtected(ManagePrintOffer, 'removeOfferItem')
+
     @postonly
     def removeOfferItem(self, section, index, REQUEST=None) :
         """ ready to edit new json item """
         if index < len(self.data[section]) :
-            del self.data[section][index]
-            self._p_changed = 1
-        return json.dumps({'ack':True},
+            data = self.data
+            del data[section][index]
+            self.data = data
+        return json.dumps({'ack' : True},
                           encoding='utf-8')
 
     @staticmethod
@@ -145,7 +133,7 @@ class PrintOffer(SimpleItem) :
         s = s.strip().split('\n')
         s = filter(None, s)
         s = [line.rsplit('@', 1) for line in s]
-        s = PersistentMapping((lang.strip(), value.strip()) for value, lang in s)
+        s = dict((lang.strip(), value.strip()) for value, lang in s)
         return s
 
     @staticmethod
@@ -153,10 +141,11 @@ class PrintOffer(SimpleItem) :
         return float(s.replace(',', '.'))
 
     security.declareProtected(ManagePrintOffer, 'saveOfferItem')
+
     @postonly
     def saveOfferItem(self, section, index, jsondata, REQUEST=None) :
         try :
-            payload = json.loads(jsondata, cls=_JsonPersistentDecoder)
+            payload = json.loads(jsondata)
         except ValueError :
             return
 
@@ -167,69 +156,71 @@ class PrintOffer(SimpleItem) :
             payload['price'] = PrintOffer.parseFloat(payload['price'])
             payload['label'] = PrintOffer.parseI18nString(payload['label'])
 
-            prices_ranges = PersistentList()
+            prices_ranges = []
             for line in filter(None, payload.pop('prices_ranges').strip().split('\n')) :
                 start, stop, price = \
                     re.search('^\s*\[\s*(\d+)\s*,\s*(\d+)\s*\]\s*(\d+[\.,]?\d*)\s*$',
                               line.strip()).groups()
                 start, stop, price = int(start), int(stop), PrintOffer.parseFloat(price)
-                prices_ranges.append(PersistentMapping({'start':start,
-                                                        'stop': stop,
-                                                        'price' : price}))
+                prices_ranges.append({'start' : start,
+                                      'stop' : stop,
+                                      'price' : price})
             payload['prices_ranges'] = prices_ranges
 
         elif section in ('finishes', 'frames') :
             payload['label'] = PrintOffer.parseI18nString(payload['label'])
             payload['description'] = PrintOffer.parseI18nString(payload['description'])
             if not payload.has_key('formats_prices') :
-                payload['formats_prices'] = PersistentList()
+                payload['formats_prices'] = []
             for fp in payload['formats_prices'] :
                 fp['price'] = PrintOffer.parseFloat(fp['price'])
             # payload['price'] = PrintOffer.parseFloat(payload['price'])
 
-
-        if index < len(self.data[section]) :
-            self.data[section][index] = payload
+        data = self.data
+        if index < len(data[section]) :
+            data[section][index] = payload
         else :
-            assert len(self.data[section]) == index
-            self.data[section].append(payload)
+            assert len(data[section]) == index
+            data[section].append(payload)
 
-        self._p_changed = 1
+        self.data = data
         return json.dumps(self.data[section][index],
                           encoding='utf-8',
-                          cls=_JSONPersistentEncoder)
+                          ensure_ascii=False)
 
     security.declareProtected(ManagePrintOffer, 'addInLink')
+
     @postonly
     def addInLink(self, section, index, reference, REQUEST=None) :
+        data = self.data
         if section == 'finishes' :
-            self.data[section][index]['formats_prices']\
-                .append(PersistentMapping({'reference':reference, 'price':0.}))
+            data[section][index]['formats_prices'] \
+                .append({'reference' : reference, 'price' : 0.})
 
         if section == 'frames' :
-            self.data[section][index]['finishes']\
+            data[section][index]['finishes'] \
                 .append(reference)
-        self._p_changed = 1
+        self.data = data
         return json.dumps(self.data[section][index],
                           encoding='utf-8',
-                          cls=_JSONPersistentEncoder)
-
+                          ensure_ascii=False)
 
     security.declareProtected(ManagePrintOffer, 'removeInLink')
+
     @postonly
     def removeInLink(self, section, index, reference, REQUEST=None) :
+        data = self.data
         if section == 'finishes' :
-            fpindex = [fpi['reference'] for fpi in self.data[section][index]['formats_prices']].index(reference)
-            del self.data[section][index]['formats_prices'][fpindex]
+            fpindex = [fpi['reference'] for fpi in data[section][index]['formats_prices']].index(reference)
+            del data[section][index]['formats_prices'][fpindex]
 
         if section == 'frames' :
-            self.data[section][index]['finishes'].remove(reference)
+            data[section][index]['finishes'].remove(reference)
 
-        self._p_changed = 1
+        self.data = data
         return json.dumps(self.data[section][index],
                           encoding='utf-8',
-                          cls=_JSONPersistentEncoder)
-
+                          ensure_ascii=False)
 
 
 InitializeClass(PrintOffer)
