@@ -12,6 +12,7 @@ from zope.interface import implements
 from Products.photoprint.interfaces import IPrintOffer
 from Products.photoprint.permissions import ManagePrintOffer
 import json
+from Products.Plinn.utils import getAdapterByInterface
 
 
 class PrintOffer(SimpleItem) :
@@ -94,15 +95,22 @@ class PrintOffer(SimpleItem) :
 
     security.declarePublic('json')
 
-    def json(self, indent=None, REQUEST=None) :
+    def json(self, indent=None, revision=None, REQUEST=None) :
         """ json offer data """
         if REQUEST :
             REQUEST.RESPONSE.setHeader('Content-Type', 'text/json; charset=utf-8')
 
+        obj = self
+        if revision :
+            # revision = revision - 1
+            history = getAdapterByInterface(self, 'Products.Plinn.interfaces.IContentHistory', None)
+            entries = history.listEntries(first=-revision, last=-revision + 1)
+            obj, date = history.getHistoricalRevisionByKey(entries[0]['key'])
+
         if indent is None :
-            return self._data
+            return obj._data
         else :
-            return json.dumps(self.data,
+            return json.dumps(obj.data,
                               encoding='utf-8',
                               ensure_ascii=False,
                               indent=indent)

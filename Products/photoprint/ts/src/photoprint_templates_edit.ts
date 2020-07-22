@@ -82,9 +82,10 @@ class Link {
         ;
     }
 
-    updatePath() {
+    updatePath(notransition = false) {
+        const duration = (notransition) ? 0 : TR_DURATION;
         this.arc
-            .transition().duration(TR_DURATION)
+            .transition().duration(duration)
             .attr('d', Bézier(this.from.getOutletPosition(), this.to.getInletPosition()))
         ;
     }
@@ -135,7 +136,7 @@ class PrintOfferItem implements IPrintOfferItem {
             (<any>this)[name] = value;
     }
 
-    draw(fo: SVGForeignObjectElement) {
+    draw(fo: SVGForeignObjectElement, notransition = false) {
         this.sel = d3.select(fo);
 
         if (this.sectionInfo.section !== 'formats' && this.inlet === null) {
@@ -155,7 +156,7 @@ class PrintOfferItem implements IPrintOfferItem {
                             .attr('class', 'link')
                             .attr('d', Bézier({x: 0, y: 0}, {x: 0, y: 0}))
                         ;
-                        this.createIncomingLink(format, arc, false);
+                        this.createIncomingLink(format, arc, false, notransition);
                     }
                     break;
 
@@ -166,7 +167,7 @@ class PrintOfferItem implements IPrintOfferItem {
                             .attr('class', 'link')
                             .attr('d', Bézier({x: 0, y: 0}, {x: 0, y: 0}))
                         ;
-                        this.createIncomingLink(finish, arc, false);
+                        this.createIncomingLink(finish, arc, false, notransition);
                     }
 
             }
@@ -237,23 +238,24 @@ class PrintOfferItem implements IPrintOfferItem {
         });
     }
 
-    moveTo(x: number, y: number) {
+    moveTo(x: number, y: number, notransition = false) {
+        const duration = (notransition) ? 0 : TR_DURATION
         this.position.x = x;
         this.position.y = y;
-        this.sel.transition().duration(TR_DURATION)
+        this.sel.transition().duration(duration)
             .attr('transform', `translate(${x}, ${y})`)
 
         const rect = (<HTMLDivElement>this.sel.select('div').node()).getBoundingClientRect();
         if (this.outlet !== null)
-            this.outlet.transition().duration(TR_DURATION)
+            this.outlet.transition().duration(duration)
                 .attr('transform', `translate(${x + rect.width}, ${y + rect.height / 2})`)
             ;
 
         if (this.inlet !== null) {
-            this.inlet.transition().duration(TR_DURATION)
+            this.inlet.transition().duration(duration)
                 .attr('transform', `translate(${x}, ${y + rect.height / 2}) rotate(180)`)
             ;
-            Object.values(this.incomingLinks).map(l => l.updatePath());
+            Object.values(this.incomingLinks).map(l => l.updatePath(notransition));
         }
 
     }
@@ -485,7 +487,8 @@ class PrintOfferItem implements IPrintOfferItem {
 
     public createIncomingLink(from: PrintOfferItem,
                               arc: d3.Selection<SVGPathElement, Link, any, any>,
-                              save: boolean) {
+                              save: boolean,
+                              notransition = false) {
         if (!this.incomingLinks[from.reference]) {
 
             if (save) {
@@ -513,7 +516,7 @@ class PrintOfferItem implements IPrintOfferItem {
                 const link = new Link(from, this, arc);
                 this.incomingLinks[from.reference] = link;
                 from.outgoingLinks[this.reference] = link;
-                link.updatePath();
+                link.updatePath(notransition);
             }
         } else {
             arc.remove();
@@ -603,6 +606,7 @@ class PrintOptionsEditor {
     public readonly arcsSel: d3.Selection<SVGGElement, unknown, HTMLElement, any>;
     private formatsIndex: { [reference: string]: PrintOfferItem };
     private finishesIndex: { [reference: string]: PrintOfferItem };
+    private currentRevision: number;
 
     constructor(absUrl: string, editorSelector: string) {
         this.SECTIONS_INFOS = [
@@ -629,6 +633,7 @@ class PrintOptionsEditor {
         this.editorSelector = editorSelector;
         this.formatsIndex = {};
         this.finishesIndex = {};
+        this.currentRevision = 0;
 
         const wrapper = document.querySelector<HTMLDivElement>(this.editorSelector);
         const wrapperRect = wrapper.getBoundingClientRect();
@@ -637,6 +642,17 @@ class PrintOptionsEditor {
             .append('div')
             .style('position', 'absolute')
             .style('width', `${this.colwidth}px`)
+        ;
+        <AnySel>d3.select(editorSelector)
+            .append('div')
+            .attr('class', 'history-bar')
+            .on('click', () => this.onHistoryBarClick())
+            .html(`
+              <a href="#" title="${_("Undo")}"><i class="btn undo fas fa-undo"></i></a>
+              <span style="padding: 0 1em"> </span>
+              <a href="#" title="${_("Redo")}"><i class="btn redo fas fa-redo"></i></a>
+              
+        `);
 
 
         const svg = d3.select(editorSelector)
@@ -712,7 +728,8 @@ class PrintOptionsEditor {
 
     public updateSection(sectionInfo: SectionInfo,
                          items: PrintOfferItem[] = null,
-                         editLast = false) {
+                         editLast = false,
+                         notransition = false) {
         if (items !== null) {
             switch (sectionInfo.section) {
                 case 'formats':
@@ -743,7 +760,7 @@ class PrintOptionsEditor {
 
         enterSel.merge(updateSel)
             .each((item: PrintOfferItem, i, g) => {
-                item.draw(<SVGForeignObjectElement>g[i]);
+                item.draw(<SVGForeignObjectElement>g[i], notransition);
             })
         ;
         if (editLast) {
@@ -778,8 +795,9 @@ class PrintOptionsEditor {
         ;
     }
 
-    updateLayout() {
+    updateLayout(notransition = false) {
         let maxColHeight = 0;
+        const duration = (notransition) ? 0 : TR_DURATION;
         d3.select(this.editorSelector).select('g.printoffer-items')
             .selectAll('g') // sections
             .each((d, i, g) => {
@@ -791,7 +809,7 @@ class PrintOptionsEditor {
                 for (let j = 0; j < divs.length; j++) {
                     const fo = <SVGForeignObjectElement><unknown>divs[j].parentElement;
                     d3.select<SVGForeignObjectElement, PrintOfferItem>(fo)
-                        .datum().moveTo(i * (this.colwidth + PrintOptionsEditor.COLS_MARGIN), colHeight + this.headerHeight)
+                        .datum().moveTo(i * (this.colwidth + PrintOptionsEditor.COLS_MARGIN), colHeight + this.headerHeight, notransition)
                     ;
                     colHeight += parseFloat(divs[j].style.height) + PrintOptionsEditor.ROW_MARGIN;
                 }
@@ -800,7 +818,7 @@ class PrintOptionsEditor {
                 for (let j = 0; j < divs.length; j++) {
                     const fo = <SVGForeignObjectElement><unknown>divs[j].parentElement;
                     d3.select<SVGForeignObjectElement, PrintOfferItem>(fo)
-                        .transition().duration(TR_DURATION)
+                        .transition().duration(duration)
                         .attr('transform', `translate(${i * (this.colwidth + PrintOptionsEditor.COLS_MARGIN)},${colHeight + this.headerHeight})`);
                 }
                 colHeight += parseFloat(divs[0].style.height);
@@ -808,7 +826,7 @@ class PrintOptionsEditor {
             })
         ;
         d3.select(this.editorSelector).select('svg')
-            .transition().duration(TR_DURATION)
+            .transition().duration(duration)
             .attr('height', `${this.headerHeight + maxColHeight}px`)
         ;
     }
@@ -1058,6 +1076,61 @@ class PrintOptionsEditor {
             this.updateLayout();
         });
 
+    }
+
+    private onHistoryBarClick() {
+        const evt = d3.event;
+        const target = evt.target;
+        if (target.classList.contains('btn')) {
+            evt.stopPropagation();
+            evt.preventDefault();
+            if (target.classList.contains('undo')) {
+                this.loadPreviousRevision();
+            } else if (target.classList.contains('redo')) {
+                this.loadNextRevision();
+            }
+        }
+    }
+
+    private clearAll() {
+        d3.select(this.editorSelector)
+            .selectAll('.section, .links, .dots')
+            .html('')
+        ;
+    }
+
+    private loadPreviousRevision() {
+        this.currentRevision--;
+        this.loadRevision();
+    }
+
+    private loadNextRevision() {
+        this.currentRevision++;
+        if (this.currentRevision > 0) {
+            this.currentRevision = 0;
+        } else {
+            this.loadRevision();
+        }
+    }
+
+    private loadRevision() {
+        const formData = new FormData();
+        formData.append('revision:int', Number(this.currentRevision).toString(10));
+        d3.json(`${this.absUrl}/printingOptions/printoffer/json`, {method: 'POST', body: formData})
+            .then((infos: PrintInfos) => {
+                this.clearAll(); // TODO: improve
+                d3.select(this.editorSelector)
+                    .selectAll<SVGGElement, SectionInfo>('g.section')
+                    .each((d: SectionInfo, i) =>
+                        this.updateSection(d,
+                            (<IPrintOfferItem[]>(<any>infos)[this.SECTIONS_INFOS[i].section])
+                                .map<PrintOfferItem>(item => new PrintOfferItem(this, d, item)),
+                            false, true
+                        ))
+                ;
+                this.updateLayout(true);
+            })
+        ;
     }
 }
 

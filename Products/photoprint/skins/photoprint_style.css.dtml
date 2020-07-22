@@ -79,4 +79,13 @@
   cursor: not-allowed;
 }
 
+#print_options_editor div.history-bar {
+  display: flex;
+  justify-content: flex-end;
+}
+
+#print_options_editor div.history-bar i {
+  font-size: 200%;
+}
+
 /* </dtml-with> */
