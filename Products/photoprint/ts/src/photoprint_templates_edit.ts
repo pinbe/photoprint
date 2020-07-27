@@ -648,10 +648,15 @@ class PrintOptionsEditor {
             .attr('class', 'history-bar')
             .on('click', () => this.onHistoryBarClick())
             .html(`
-              <a href="#" title="${_("Undo")}"><i class="btn undo fas fa-undo"></i></a>
-              <span style="padding: 0 1em"> </span>
-              <a href="#" title="${_("Redo")}" class="hidden"><i class="btn redo fas fa-redo"></i></a>
-              
+              <a href="#" title="${_("Restore this version")}" class="hidden">
+                <i class="btn restore fas fa-trash-restore"></i>
+              </a>
+              <a href="#" title="${_("Undo")}">
+                <i class="btn undo fas fa-undo"></i>
+              </a>
+              <a href="#" title="${_("Redo")}" class="hidden">
+                <i class="btn redo fas fa-redo"></i>
+              </a>
         `);
 
 
@@ -1088,6 +1093,8 @@ class PrintOptionsEditor {
                 this.loadPreviousRevision();
             } else if (target.classList.contains('redo')) {
                 this.loadNextRevision();
+            } else if (target.classList.contains('restore')) {
+                console.info("Restauration !");
             }
         }
     }
@@ -1102,11 +1109,9 @@ class PrintOptionsEditor {
     private loadPreviousRevision() {
         this.currentRevision--;
         this.loadRevision();
-        (<HTMLElement>d3.select(this.editorSelector)
-            .select('i.btn.redo')
-            .node())
-            .parentElement
-            .classList.remove('hidden')
+        d3.select(this.editorSelector)
+            .selectAll('i.btn.redo, i.btn.restore')
+            .each((d,i,g)=>(<HTMLElement>g[i]).parentElement.classList.remove('hidden'))
         ;
     }
 
@@ -1114,11 +1119,9 @@ class PrintOptionsEditor {
         this.currentRevision++;
         if (this.currentRevision >= 0) {
             this.currentRevision = 0;
-            (<HTMLElement>d3.select(this.editorSelector)
-                .select('i.btn.redo ')
-                .node())
-                .parentElement
-                .classList.add('hidden')
+            d3.select(this.editorSelector)
+                .selectAll('i.btn.redo, i.btn.restore')
+                .each((d,i,g)=> (<HTMLElement>g[i]).parentElement.classList.add('hidden'))
             ;
         }
         if (this.currentRevision <= 0) {
@@ -1132,7 +1135,6 @@ class PrintOptionsEditor {
         d3.json(`${this.absUrl}/printingOptions/printoffer/json`, {method: 'POST', body: formData})
             .then((infos: PrintInfos | any) => {
                 if (infos.error === 'no earlier revision') {
-                    console.info(infos);
                     this.currentRevision++
                     return;
                 }
