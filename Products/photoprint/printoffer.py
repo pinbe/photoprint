@@ -105,6 +105,11 @@ class PrintOffer(SimpleItem) :
             # revision = revision - 1
             history = getAdapterByInterface(self, 'Products.Plinn.interfaces.IContentHistory', None)
             entries = history.listEntries(first=-revision, last=-revision + 1)
+            if not entries :
+                return json.dumps({'error': 'no earlier revision'},
+                                  encoding='utf-8',
+                                  ensure_ascii=False,
+                                  indent=indent)
             obj, date = history.getHistoricalRevisionByKey(entries[0]['key'])
 
         if indent is None :

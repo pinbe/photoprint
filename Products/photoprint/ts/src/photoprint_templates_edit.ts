@@ -650,7 +650,7 @@ class PrintOptionsEditor {
             .html(`
               <a href="#" title="${_("Undo")}"><i class="btn undo fas fa-undo"></i></a>
               <span style="padding: 0 1em"> </span>
-              <a href="#" title="${_("Redo")}"><i class="btn redo fas fa-redo"></i></a>
+              <a href="#" title="${_("Redo")}" class="hidden"><i class="btn redo fas fa-redo"></i></a>
               
         `);
 
@@ -1102,13 +1102,26 @@ class PrintOptionsEditor {
     private loadPreviousRevision() {
         this.currentRevision--;
         this.loadRevision();
+        (<HTMLElement>d3.select(this.editorSelector)
+            .select('i.btn.redo')
+            .node())
+            .parentElement
+            .classList.remove('hidden')
+        ;
     }
 
     private loadNextRevision() {
         this.currentRevision++;
-        if (this.currentRevision > 0) {
+        if (this.currentRevision >= 0) {
             this.currentRevision = 0;
-        } else {
+            (<HTMLElement>d3.select(this.editorSelector)
+                .select('i.btn.redo ')
+                .node())
+                .parentElement
+                .classList.add('hidden')
+            ;
+        }
+        if (this.currentRevision <= 0) {
             this.loadRevision();
         }
     }
@@ -1117,7 +1130,12 @@ class PrintOptionsEditor {
         const formData = new FormData();
         formData.append('revision:int', Number(this.currentRevision).toString(10));
         d3.json(`${this.absUrl}/printingOptions/printoffer/json`, {method: 'POST', body: formData})
-            .then((infos: PrintInfos) => {
+            .then((infos: PrintInfos | any) => {
+                if (infos.error === 'no earlier revision') {
+                    console.info(infos);
+                    this.currentRevision++
+                    return;
+                }
                 this.clearAll(); // TODO: improve
                 d3.select(this.editorSelector)
                     .selectAll<SVGGElement, SectionInfo>('g.section')
