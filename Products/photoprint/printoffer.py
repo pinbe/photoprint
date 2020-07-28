@@ -78,12 +78,10 @@ class PrintOffer(SimpleItem) :
                                 indent=2)
 
     security.declareProtected(ManagePrintOffer, 'edit')
-
     def edit(self, jsons) :
         self.data = json.loads(jsons)
 
     security.declareProtected(ManagePrintOffer, 'manage_editJSON')
-
     @postonly
     def manage_editJSON(self, jsoncode, REQUEST=None) :
         self.edit(jsoncode)
@@ -94,7 +92,6 @@ class PrintOffer(SimpleItem) :
         )
 
     security.declarePublic('json')
-
     def json(self, indent=None, revision=None, REQUEST=None) :
         """ json offer data """
         if REQUEST :
@@ -102,7 +99,6 @@ class PrintOffer(SimpleItem) :
 
         obj = self
         if revision :
-            # revision = revision - 1
             history = getAdapterByInterface(self, 'Products.Plinn.interfaces.IContentHistory', None)
             entries = history.listEntries(first=-revision, last=-revision + 1)
             if not entries :
@@ -121,7 +117,6 @@ class PrintOffer(SimpleItem) :
                               indent=indent)
 
     security.declareProtected(ManagePrintOffer, 'getTemplate')
-
     def getTemplate(self, section, indent=None) :
         """ ready to edit new json item """
         return json.dumps(self.TEMPLATES[section],
@@ -130,7 +125,6 @@ class PrintOffer(SimpleItem) :
                           indent=indent)
 
     security.declareProtected(ManagePrintOffer, 'removeOfferItem')
-
     @postonly
     def removeOfferItem(self, section, index, REQUEST=None) :
         """ ready to edit new json item """
@@ -154,7 +148,6 @@ class PrintOffer(SimpleItem) :
         return float(s.replace(',', '.'))
 
     security.declareProtected(ManagePrintOffer, 'saveOfferItem')
-
     @postonly
     def saveOfferItem(self, section, index, jsondata, REQUEST=None) :
         try :
@@ -202,7 +195,6 @@ class PrintOffer(SimpleItem) :
                           ensure_ascii=False)
 
     security.declareProtected(ManagePrintOffer, 'addInLink')
-
     @postonly
     def addInLink(self, section, index, reference, REQUEST=None) :
         data = self.data
@@ -219,7 +211,6 @@ class PrintOffer(SimpleItem) :
                           ensure_ascii=False)
 
     security.declareProtected(ManagePrintOffer, 'removeInLink')
-
     @postonly
     def removeInLink(self, section, index, reference, REQUEST=None) :
         data = self.data
@@ -234,6 +225,19 @@ class PrintOffer(SimpleItem) :
         return json.dumps(self.data[section][index],
                           encoding='utf-8',
                           ensure_ascii=False)
+
+    security.declareProtected(ManagePrintOffer, 'restoreRevision')
+    @postonly
+    def restoreRevision(self, revision, REQUEST=None) :
+        history = getAdapterByInterface(self, 'Products.Plinn.interfaces.IContentHistory', None)
+        entries = history.listEntries(first=-revision, last=-revision + 1)
+        if not entries :
+            return json.dumps({'error' : 'revision not found'},
+                              encoding='utf-8',
+                              ensure_ascii=False)
+        rev, date = history.getHistoricalRevisionByKey(entries[0]['key'])
+        self._data = rev._data
+        return json.dumps({'ok':True}, encoding='utf-8', ensure_ascii=False)
 
 
 InitializeClass(PrintOffer)

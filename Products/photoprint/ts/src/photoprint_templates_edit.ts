@@ -1094,7 +1094,7 @@ class PrintOptionsEditor {
             } else if (target.classList.contains('redo')) {
                 this.loadNextRevision();
             } else if (target.classList.contains('restore')) {
-                console.info("Restauration !");
+                this.restoreRevision();
             }
         }
     }
@@ -1111,7 +1111,7 @@ class PrintOptionsEditor {
         this.loadRevision();
         d3.select(this.editorSelector)
             .selectAll('i.btn.redo, i.btn.restore')
-            .each((d,i,g)=>(<HTMLElement>g[i]).parentElement.classList.remove('hidden'))
+            .each((d, i, g) => (<HTMLElement>g[i]).parentElement.classList.remove('hidden'))
         ;
     }
 
@@ -1121,7 +1121,7 @@ class PrintOptionsEditor {
             this.currentRevision = 0;
             d3.select(this.editorSelector)
                 .selectAll('i.btn.redo, i.btn.restore')
-                .each((d,i,g)=> (<HTMLElement>g[i]).parentElement.classList.add('hidden'))
+                .each((d, i, g) => (<HTMLElement>g[i]).parentElement.classList.add('hidden'))
             ;
         }
         if (this.currentRevision <= 0) {
@@ -1151,6 +1151,21 @@ class PrintOptionsEditor {
                 this.updateLayout(true);
             })
         ;
+    }
+
+    private restoreRevision() {
+        const formData = new FormData();
+        formData.append('revision:int', Number(this.currentRevision).toString(10));
+        d3.json(`${this.absUrl}/printingOptions/printoffer/restoreRevision`, {method: 'POST', body: formData})
+            .then((ret: { ok?: Boolean, error?: string }) => {
+                if (ret.ok) {
+                    this.currentRevision = 0;
+                    d3.select(this.editorSelector)
+                        .selectAll('i.btn.redo, i.btn.restore')
+                        .each((d, i, g) => (<HTMLElement>g[i]).parentElement.classList.add('hidden'))
+                    ;
+                }
+            });
     }
 }
 
