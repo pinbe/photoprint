@@ -39,7 +39,7 @@ class PrintOffer(SimpleItem) :
             'label' : {},
             'short_edge' : 0.,
             'long_edge' : 0.,
-            'copies' : 0.,
+            'copies' : 0,
             'price' : 0.,
             'prices_ranges' : [],
         },
