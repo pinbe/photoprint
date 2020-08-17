@@ -1,5 +1,6 @@
 const names = [
     'photoprint_templates_edit',
+    'photo_order',
 ];
 
 module.exports = {
