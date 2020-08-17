@@ -24,13 +24,14 @@ Photo print tool. Used to link photo to print orders.
 
 
 """
+import json
 
 from AccessControl import ClassSecurityInfo
 from AccessControl.requestmethod import postonly
 from Acquisition import aq_base, aq_inner
 from Globals import InitializeClass
 from OFS.OrderedFolder import OrderedFolder
-from Products.CMFCore.utils import UniqueObject, getToolByName
+from Products.CMFCore.utils import UniqueObject, getToolByName, getUtilityByInterfaceName
 
 from Products.photoprint.printoffer import PrintOffer
 from permissions import ManagePrintOrderTemplate
@@ -79,8 +80,6 @@ class PhotoPrintTool(UniqueObject, OrderedFolder) :
 	security.declarePublic('getPrintingOptionsFor')
 	def getPrintingOptionsFor(self, ob) :
 		"returns printing options for the given ob."
-		return None
-		#TODO: implement
 		optionsContainer = getattr(aq_inner(ob), PRINTING_OPTIONS_ID, None)
 		if optionsContainer is None :
 			return None
@@ -90,13 +89,25 @@ class PhotoPrintTool(UniqueObject, OrderedFolder) :
 			return None
 		
 		options = []
-		for o in optionsContainer.objectValues() :
-			if o.maxCopies == 0 or \
-				counters.get(o.productReference, 0) < o.maxCopies :
-				options.append(o)
-		
+		for fmt in optionsContainer.printoffer.data['formats'] :
+			if fmt['copies'] == 0 or \
+				counters.get(fmt['reference'], 0) < fmt['copies'] :
+				options.append(fmt)
+
 		return options
-	
+
+	security.declarePublic('getEffectivePrintingOptionsFor')
+	@postonly
+	def getEffectivePrintingOptionsFor(self, cmf_uid, REQUEST=None):
+		uidtool = getUtilityByInterfaceName('Products.CMFUid.interfaces.IUniqueIdHandler')
+		ob = uidtool.getObject(cmf_uid)
+		optionsContainer = getattr(aq_inner(ob), PRINTING_OPTIONS_ID, None)
+		ret = None
+		if optionsContainer is not None :
+			ret = optionsContainer.printoffer.data
+
+		return json.dumps(ret)
+
 	security.declarePublic('getPrintingOptionsContainerFor')
 	def getPrintingOptionsContainerFor(self, ob):
 		"""getPrintingOptionsContainerFor
