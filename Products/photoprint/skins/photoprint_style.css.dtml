@@ -92,4 +92,21 @@
   font-size: 200%;
 }
 
+#sale-options .section-option-label {
+  border: 1px solid #686868;
+  padding: 0.2em 1em;
+}
+
+#sale-options .choices {
+  padding: 0 0 0 1em;
+}
+
+#sale-options .choices .description {
+  padding: 0 0 0 16px;
+  font-style: italic;
+}
+
+#sale-options .total-price-wrapper {
+  margin-top: 1em;
+}
 /* </dtml-with> */

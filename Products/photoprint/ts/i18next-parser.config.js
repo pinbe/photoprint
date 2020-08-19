@@ -4,6 +4,8 @@ module.exports = {
     input: 'src/**/*.ts',
     output: '../skins/photoprint/jsbuild/locales/$LOCALE/$NAMESPACE.json',
     useKeysAsDefaultValue: true,
+    namespaceSeparator: false,
+    keySeparator: false,
     verbose: true,
 
     lexers:{

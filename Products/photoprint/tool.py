@@ -37,7 +37,7 @@ from Products.photoprint.printoffer import PrintOffer
 from permissions import ManagePrintOrderTemplate
 from price import Price
 from utils import Message as _
-from Products.Plinn.utils import makeValidId
+from Products.Plinn.utils import makeValidId, getBestTranslationLanguage
 from zope.component import getUtility
 from zope.component.interfaces import IFactory
 from DateTime import DateTime
@@ -100,11 +100,28 @@ class PhotoPrintTool(UniqueObject, OrderedFolder) :
 	@postonly
 	def getEffectivePrintingOptionsFor(self, cmf_uid, REQUEST=None):
 		uidtool = getUtilityByInterfaceName('Products.CMFUid.interfaces.IUniqueIdHandler')
+		proptool = getUtilityByInterfaceName('Products.CMFCore.interfaces.IPropertiesTool')
 		ob = uidtool.getObject(cmf_uid)
 		optionsContainer = getattr(aq_inner(ob), PRINTING_OPTIONS_ID, None)
+
 		ret = None
 		if optionsContainer is not None :
-			ret = optionsContainer.printoffer.data
+			ret = data = optionsContainer.printoffer.data
+			counters = self.getCountersFor(ob)
+			for fmt in data['formats'] :
+				if fmt['copies'] == 0 : # Édition illimitée du format
+					available_copies = True
+				else :
+					available_copies = fmt['copies'] - counters.get(fmt['reference'], 0)
+
+				fmt['available_copies'] = available_copies
+
+			for item in data['formats'] + data['finishes'] + data['frames'] :
+				for field in ('label', 'description') :
+					if not item.has_key(field) : continue
+					field_langs = item[field].keys()
+					lang = getBestTranslationLanguage(field_langs, self)
+					item[field] = item[field][lang]
 
 		return json.dumps(ret)
 

@@ -3,6 +3,7 @@
     <div id="pp-photo-infos"
          tal:condition="contextInfos/buyable"
          tal:attributes="data-cmf_uid contextInfos/cmf_uid">
+      <div id="sale-options"></div>
       <script type="text/javascript"
               tal:attributes="src here/photoprint/jsbuild/photo_order.js/absolute_url"></script>
     </div>
