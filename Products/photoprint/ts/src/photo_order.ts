@@ -23,7 +23,7 @@ interface Finish extends IPrintOfferItem {
     formats_prices: RefPrice[];
 }
 
-interface Frame extends IPrintOfferItem{
+interface Frame extends IPrintOfferItem {
     description: string;
     finishes: string[];
     formats_prices: RefPrice[];
@@ -150,13 +150,18 @@ class PhotoOrder {
             case 'format' :
                 this.selectedOptions.format = target.value;
                 this.updateFinishes();
+                this.updateFrames();
                 break;
 
             case 'finish' :
                 this.selectedOptions.finish = target.value;
                 this.updateFrames();
                 break;
+
+            case 'frame' :
+                this.selectedOptions.frame = target.value;
         }
+        this.updatePrice();
     }
 
     private updateFinishes() {
@@ -176,7 +181,8 @@ class PhotoOrder {
             .html((d: Finish) => `
                 <div>
                   <label>
-                    <input type="radio" name="finish" value="${d.reference}">
+                    <input type="radio" name="finish"
+                           value="${d.reference}"">
                     ${d.label}
                   </label>
                   <div class="description">
@@ -184,6 +190,18 @@ class PhotoOrder {
                   </div>
                 </div>
             `);
+
+        if (this.selectedOptions.finish) {
+            const selected =
+                <HTMLInputElement>
+                    d3.select(this.wrapper)
+                        .select(`input[type="radio"][name="finish"][value="${this.selectedOptions.finish}"]`)
+                        .node();
+            if (selected)
+                selected.checked = true;
+            else
+                this.selectedOptions.finish = undefined;
+        }
     }
 
     private updateFrames() {
@@ -191,8 +209,8 @@ class PhotoOrder {
         const form = <HTMLFormElement>d3.select(this.wrapper).select('form').node();
         const fmtRef = (<RadioNodeList>form.elements.namedItem('format')).value;
         for (let frame of this.printInfos.frames) {
-            if((new Set(frame.finishes)).has(this.selectedOptions.finish) &&
-                (new Set(frame.formats_prices.map((e)=>e.reference))).has(fmtRef))
+            if ((new Set(frame.finishes)).has(this.selectedOptions.finish) &&
+                (new Set(frame.formats_prices.map((e) => e.reference))).has(fmtRef))
                 frames.push(frame);
         }
         d3.select(this.wrapper).select(`.choices.${PhotoOrder.FRAMES_CHOICES_CLS}`)
@@ -213,6 +231,64 @@ class PhotoOrder {
                 </div>
             `);
 
+        if (this.selectedOptions.frame) {
+            const selected = <HTMLInputElement>d3.select(this.wrapper)
+                .select(`input[type="radio"][name="frame"][value="${this.selectedOptions.frame}"]`).node();
+            if (selected)
+                selected.checked = true;
+            else
+                this.selectedOptions.frame = (frames.length > 0) ? undefined : null;
+        }
+        else {
+            this.selectedOptions.frame = (frames.length > 0) ? undefined : null;
+        }
+    }
+
+    private updatePrice() {
+        let fmtPrice: number;
+        if (this.selectedOptions.format !== undefined) {
+            const formats = this.printInfos.formats.filter((v) => v.reference === this.selectedOptions.format);
+            if (formats.length === 1)
+                fmtPrice = formats[0].price;
+        }
+
+        let finishPrice: number;
+        if (this.selectedOptions.finish !== undefined) {
+            const finishes = this.printInfos.finishes
+                .filter((v) => v.reference === this.selectedOptions.finish);
+            if (finishes.length === 1) {
+                const formatsPrices = finishes[0].formats_prices
+                    .filter((v) => v.reference === this.selectedOptions.format);
+                if (formatsPrices.length === 1)
+                    finishPrice = formatsPrices[0].price;
+            }
+        }
+
+        let framePrice;
+        if (this.selectedOptions.frame === null) {
+            framePrice = 0;
+        }
+        else if (this.selectedOptions.frame !== undefined) {
+            const frames = this.printInfos.frames
+                .filter((v) => {
+                    return v.reference === this.selectedOptions.frame &&
+                        (new Set(v.finishes)).has(this.selectedOptions.finish)
+                });
+            if (frames.length === 1) {
+                const formatsPrices = frames[0].formats_prices
+                    .filter((v) => v.reference === this.selectedOptions.format);
+                if (formatsPrices.length === 1)
+                    framePrice = formatsPrices[0].price;
+            }
+        }
+
+        let txt = '';
+        if (fmtPrice === undefined || finishPrice === undefined || framePrice === undefined)
+            txt = _('[Please select options]');
+        else
+            txt = `${fmtPrice + finishPrice + framePrice} ${_('€')}`;
+        d3.select(this.wrapper).select('.total')
+            .text(txt);
     }
 }
 

@@ -95,10 +95,15 @@
 #sale-options .section-option-label {
   border: 1px solid #686868;
   padding: 0.2em 1em;
+  margin: 4px 0;
 }
 
 #sale-options .choices {
   padding: 0 0 0 1em;
+}
+
+#sale-options .choices > div {
+  margin: 2px 0;
 }
 
 #sale-options .choices .description {
@@ -108,5 +113,9 @@
 
 #sale-options .total-price-wrapper {
   margin-top: 1em;
+}
+
+#sale-options .total-price-wrapper .total {
+  padding-left: 0.5em;
 }
 /* </dtml-with> */
