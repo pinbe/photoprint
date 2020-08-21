@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from Acquisition import Implicit
 from persistent import Persistent
 from persistent.mapping import PersistentMapping

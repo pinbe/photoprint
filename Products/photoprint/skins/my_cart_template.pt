@@ -1,0 +1,123 @@
+<html metal:use-macro="here/main_template/macros/master"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+  <head>
+    <title>titre</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <metal:block metal:fill-slot="javascript_head_slot">
+      <script type="text/javascript" tal:attributes="src here/cart_listing.js/absolute_url"></script>
+    </metal:block>
+  </head>
+  <body i18n:domain="portfolio">
+    <div metal:fill-slot="main_no_tabs"
+         tal:omit-tag="">
+      <div tal:condition="not:options/empty">
+        <div metal:use-macro="here/sell_macros/macros/sell_steps"></div>
+        <form method="post" tal:condition="not:options/empty" tal:attributes="action string:$portal_url/my_cart">
+          <table class="listing" cellspacing="0">
+            <tr>
+              <td colspan="3"><br/></td>
+              <td colspan="3">
+                <input type="submit" tal:attributes="name options/nextStep/name; value options/nextStep/value"/>
+              </td>
+            </tr>
+            <tr>
+              <th i18n:translate="">Image</th>
+              <th i18n:translate="" style="width:30em">Printing format and type</th>
+              <th i18n:translate="">Quantity</th>
+              <th colspan="3" i18n:translate="">Amount (incl tax)</th>
+            </tr>
+            <tbody id="cart_content">
+              <tr tal:repeat="i options/infos" tal:attributes="class python:repeat['i'].odd() and 'odd' or 'even'">
+                <td>
+                  <img border="0"
+                    tal:attributes="src i/thumbUrl;
+                                    alt i/alt;
+                                    height i/thumbHeight;
+                                    width  i/thumbWidth"/>
+                </td>
+                <td>
+                  <div style="font-weight:bold" tal:content="i/title"></div>
+                  <dl class="FieldHelp">
+                   <dd tal:content="i/description"></dd>
+                  </dl>
+                </td>
+                <td>
+                  <input type="text" size="2"
+                         tal:attributes="value i/quantity;
+                                         name python:'%s_%s.quantity:record' % (i['cmf_uid'], i['templateId']);"/>
+                </td>
+                <td tal:content="i/amount"></td>
+                <td>
+                  <input type="image" alt="refresh amount" title="refresh amount" width="16" height="16"
+                         tal:attributes="src string:$portal_url/refresh.png;
+                                         name python:'%s_%s.refresh:record' % (i['cmf_uid'], i['templateId'])"
+                         i18n:attributes="alt;title"/>
+                </td>
+                <td>
+                  <input type="image" alt="delete" title="delete" width="16" height="16"
+                         tal:attributes="src string:$portal_url/trash.png;
+                                         name python:'%s_%s.delete:record' % (i['cmf_uid'], i['templateId'])"
+                         i18n:attributes="alt;title"/>
+                </td>
+              </tr>
+            </tbody>
+            <tbody class="total">
+              <tr>
+                <th colspan="2">
+                <th i18n:translate="">Prints</th>
+                <th i18n:translate="">Total</th>
+                <th colspan="2"><br/></th>
+              </tr>
+              <tr>
+                <td colspan="2"><br/></td>
+                <td tal:content="options/quantityTotal">quantity total</td>
+                <td tal:content="python:'%s €' % options['pricesTotal'].taxed">prices total</td>
+                <td colspan="2"><br/></td>
+              </tr>
+              <tr tal:define="discount options/discount" tal:condition="discount">
+                <th colspan="3" style="text-align:right;padding-right:1em" i18n:translate="">Discount</th>
+                <td><span tal:replace="discount"/> %</td>
+                <td colspan="2"><br/></td>
+              </tr>
+              <tr>
+                <th colspan="3" style="text-align:right;padding-right:1em" i18n:translate="">Shipping</th>
+                <td tal:content="python:'%s €' % options['shippingFees'].taxed">2</td>
+                <td colspan="2"><br/></td>
+              </tr>
+              <tr>
+                <th colspan="3" style="text-align:right; padding-right:1em" i18n:translate="">VAT</th>
+                <td tal:content="python:'%s €' % options['totalAmount'].tax">2</td>
+                <td colspan="2"><br/></td>
+              </tr>
+              <tr>
+                <th colspan="3" style="text-align:right;padding-right:1em" i18n:translate="">Total amount to pay</th>
+                <td tal:content="python:'%s €' % options['totalAmount'].taxed"
+                    style="color:#f28c18">2</td>
+                <td colspan="2"><br/></td>
+              </tr>
+            </tbody>
+            <tr>
+              <td colspan="3"><br/></td>
+              <td colspan="3">
+                <input type="submit" tal:attributes="name options/nextStep/name; value options/nextStep/value"/>
+              </td>
+            </tr>
+          </table>
+        </form>
+        <script type="text/javascript">
+        // <!--
+          (function(){
+            new CartListing(document.getElementById('cart_content'));
+          })();
+        // -->
+        </script>
+      </div>
+      <div tal:condition="options/empty" tal:omit-tag="">
+        <h2 i18n:translate="">My cart</h2>
+        <em i18n:translate="">Your cart is currently empty.</em>
+      </div>
+    </div>
+  </body>
+</html>
