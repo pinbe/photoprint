@@ -16,6 +16,7 @@ interface Format extends IPrintOfferItem {
     short_edge: number;
     long_edge: number;
     price: number;
+    available_copies: number | boolean;
 }
 
 interface Finish extends IPrintOfferItem {
@@ -86,11 +87,13 @@ class PhotoOrder {
             .attr('class', 'section-option-label')
             .text(_('Format'))
         ;
+        const formats = this.printInfos.formats
+            .filter((v) => v.available_copies === true || v.available_copies > 0)
         form
             .append('div')
             .attr('class', `choices ${PhotoOrder.FORMATS_CHOICES_CLS}`)
             .selectAll('div')
-            .data(this.printInfos.formats)
+            .data(formats)
             .enter()
             .append('div')
             .html(
@@ -142,6 +145,15 @@ class PhotoOrder {
             .text(_('[Please select options]'))
         ;
 
+        const orderBtnWrapper = d3.select(this.wrapper)
+            .append('div')
+            .attr('class', 'cart-bnt-wrapper')
+        ;
+        orderBtnWrapper
+            .append('button')
+            .text(_('Add to cart'))
+            .on('click', ()=> this.addToCart())
+        ;
     }
 
     private onFormChange(event: Event) {
@@ -238,8 +250,7 @@ class PhotoOrder {
                 selected.checked = true;
             else
                 this.selectedOptions.frame = (frames.length > 0) ? undefined : null;
-        }
-        else {
+        } else {
             this.selectedOptions.frame = (frames.length > 0) ? undefined : null;
         }
     }
@@ -267,8 +278,7 @@ class PhotoOrder {
         let framePrice;
         if (this.selectedOptions.frame === null) {
             framePrice = 0;
-        }
-        else if (this.selectedOptions.frame !== undefined) {
+        } else if (this.selectedOptions.frame !== undefined) {
             const frames = this.printInfos.frames
                 .filter((v) => {
                     return v.reference === this.selectedOptions.frame &&
@@ -289,6 +299,10 @@ class PhotoOrder {
             txt = `${fmtPrice + finishPrice + framePrice} ${_('€')}`;
         d3.select(this.wrapper).select('.total')
             .text(txt);
+    }
+
+    private addToCart() {
+        console.log('Ajouter au panier !');
     }
 }
 

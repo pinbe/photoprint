@@ -118,4 +118,10 @@
 #sale-options .total-price-wrapper .total {
   padding-left: 0.5em;
 }
+
+#sale-options .cart-bnt-wrapper {
+  margin-top: 10px;
+  text-align: center;
+}
+
 /* </dtml-with> */
