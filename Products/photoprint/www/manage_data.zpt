@@ -7,7 +7,13 @@
       <textarea name="jsoncode"
                 rows="30"
                 style="width: 100%"
-                tal:content="python:here.json(indent=2)"></textarea>
+                tal:define="cols python:request.get('dtpref_cols', '100%');
+                            rows python:request.get('dtpref_rows', '20')"
+                tal:attributes="style python:'width: %s' % cols if cols[-1] == '%' else None;
+                                cols python: cols if cols[-1] != '%' else None;
+                                rows rows"
+                tal:content="python:here.json(indent=2)"
+      ></textarea>
     </div>
     <input type="submit"
            name="manage_editJSON:method"
