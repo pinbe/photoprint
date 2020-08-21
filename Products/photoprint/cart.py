@@ -27,7 +27,7 @@ from AccessControl import ModuleSecurityInfo
 from Products.CMFCore.utils import getToolByName
 from exceptions import SoldOutError, CartLockedError
 from tool import COPIES_COUNTERS
-from order import CopiesCounters
+from counters import CopiesCounters
 
 from logging import getLogger
 console = getLogger('Products.photoprint.cart')
