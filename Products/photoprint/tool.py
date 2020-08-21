@@ -109,11 +109,21 @@ class PhotoPrintTool(UniqueObject, OrderedFolder) :
 			ret = data = optionsContainer.printoffer.data
 			counters = self.getCountersFor(ob)
 			for fmt in data['formats'] :
+				effective_price = fmt['price']
 				if fmt['copies'] == 0 : # Édition illimitée du format
 					available_copies = True
 				else :
-					available_copies = fmt['copies'] - counters.get(fmt['reference'], 0)
-
+					already_sold = counters.get(fmt['reference'], 0)
+					available_copies = fmt['copies'] - already_sold
+					if available_copies > 0 and \
+					   fmt['prices_ranges'] and \
+					   already_sold + 1 >= fmt['prices_ranges'][0]['start'] :
+						for price_range in fmt['prices_ranges'] :
+							if price_range['start'] <= available_copies+1 <= price_range['stop'] :
+								effective_price = price_range['price']
+								break
+				del fmt['prices_ranges']
+				fmt['price'] = effective_price
 				fmt['available_copies'] = available_copies
 
 			for item in data['formats'] + data['finishes'] + data['frames'] :
