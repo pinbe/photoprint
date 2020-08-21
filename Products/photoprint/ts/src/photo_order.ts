@@ -2,6 +2,7 @@ import * as d3 from "d3";
 import i18next, {TOptions} from "i18next";
 import HttpApi from "i18next-http-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
+import {JsonRpcRequest} from "./components/jsonrpc";
 
 const _ = (s: string, options?: TOptions): string => i18next.t(s, options);
 
@@ -302,6 +303,10 @@ class PhotoOrder {
     }
 
     private addToCart() {
+        const req = new JsonRpcRequest(`${this.portal_url}/cartrpc`)
+        const params = Object.assign({uid: this.uid}, this.selectedOptions)
+        req.send<any>('add_to_cart', params)
+            .then((v)=>console.log(v));
         console.log('Ajouter au panier !');
     }
 }
