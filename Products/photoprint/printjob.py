@@ -40,7 +40,7 @@ class PrintJob(SimpleItem) :
         self.copies = None
 
 InitializeClass(PrintJob)
-PrintOrderFactory = Factory(PrintJob)
+PrintJobFactory = Factory(PrintJob)
 
 
 class PrintOrder(PortalContent, DefaultDublinCoreImpl) :

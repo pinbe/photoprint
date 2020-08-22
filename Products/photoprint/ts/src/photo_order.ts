@@ -304,7 +304,7 @@ class PhotoOrder {
 
     private addToCart() {
         const req = new JsonRpcRequest(`${this.portal_url}/cartrpc`)
-        const params = Object.assign({uid: this.uid}, this.selectedOptions)
+        const params = Object.assign({cmf_uid: this.uid}, this.selectedOptions)
         req.send<any>('add_to_cart', params)
             .then((v)=>console.log(v));
         console.log('Ajouter au panier !');

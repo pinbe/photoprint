@@ -21,15 +21,17 @@
 """ Cart definition used to store buyable prints
 
 """
-from Globals import InitializeClass, Persistent, PersistentMapping
-from Acquisition import Implicit
+from logging import getLogger
+
 from AccessControl import ModuleSecurityInfo
+from Acquisition import Implicit
+from Globals import Persistent, PersistentMapping
 from Products.CMFCore.utils import getToolByName
+
+from counters import CopiesCounters
 from exceptions import SoldOutError, CartLockedError
 from tool import COPIES_COUNTERS
-from counters import CopiesCounters
 
-from logging import getLogger
 console = getLogger('Products.photoprint.cart')
 
 CART_ITEM_KEYS = ['cmf_uid', 'printing_template', 'quantity']
@@ -66,41 +68,43 @@ class PrintCart(Persistent, Implicit) :
 	def append(self, context, item) :
 		if self.locked :
 			raise CartLockedError
-		assert isinstance(item, dict)
-		keys = item.keys()
-		keys.sort()
-		assert keys == CART_ITEM_KEYS
 
 		pptool = getToolByName(context, 'portal_photo_print')
+		reified_order = pptool.reifyPrintOrder(item)
+		from pprint import pprint
+		pprint(item)
+		pprint(reified_order)
+		return
+
 		uidh   = getToolByName(context, 'portal_uidhandler')
-		
+
 		uid = item['cmf_uid']
 		template = item['printing_template']
 		quantity = item['quantity']
-		
+
 		photo = uidh.getObject(uid)
 		pOptions = pptool.getPrintingOptionsContainerFor(photo)
 		template = getattr(pOptions, template)
 		templateId = template.getId()
 
 		reference = template.productReference
-		
+
 		# check / update counters
 		if template.maxCopies :
 			if not hasattr(photo.aq_base, COPIES_COUNTERS) :
 				setattr(photo, COPIES_COUNTERS, CopiesCounters())
-			counters = getattr(photo, COPIES_COUNTERS)			
+			counters = getattr(photo, COPIES_COUNTERS)
 			alreadySold = counters.get(reference)
-			
+
 			if (alreadySold + quantity) > template.maxCopies :
 				raise SoldOutError(template.maxCopies - alreadySold)
 			else :
 				counters[reference] = alreadySold + quantity
-		
+
 		if not self._uids.has_key(uid) :
 			self._uids[uid] = PersistentMapping()
 			self._order = self._order + (uid,)
-		
+
 		if not self._uids[uid].has_key(templateId) :
 			self._uids[uid][templateId] = PersistentMapping()
 			self._uids[uid][templateId]['reference'] = reference
@@ -108,6 +112,48 @@ class PrintCart(Persistent, Implicit) :
 
 		self._uids[uid][templateId]['quantity'] += quantity
 	
+		# assert isinstance(item, dict)
+		# keys = item.keys()
+		# keys.sort()
+		# assert keys == CART_ITEM_KEYS
+		#
+		# pptool = getToolByName(context, 'portal_photo_print')
+		# uidh   = getToolByName(context, 'portal_uidhandler')
+		#
+		# uid = item['cmf_uid']
+		# template = item['printing_template']
+		# quantity = item['quantity']
+		#
+		# photo = uidh.getObject(uid)
+		# pOptions = pptool.getPrintingOptionsContainerFor(photo)
+		# template = getattr(pOptions, template)
+		# templateId = template.getId()
+		#
+		# reference = template.productReference
+		#
+		# # check / update counters
+		# if template.maxCopies :
+		# 	if not hasattr(photo.aq_base, COPIES_COUNTERS) :
+		# 		setattr(photo, COPIES_COUNTERS, CopiesCounters())
+		# 	counters = getattr(photo, COPIES_COUNTERS)
+		# 	alreadySold = counters.get(reference)
+		#
+		# 	if (alreadySold + quantity) > template.maxCopies :
+		# 		raise SoldOutError(template.maxCopies - alreadySold)
+		# 	else :
+		# 		counters[reference] = alreadySold + quantity
+		#
+		# if not self._uids.has_key(uid) :
+		# 	self._uids[uid] = PersistentMapping()
+		# 	self._order = self._order + (uid,)
+		#
+		# if not self._uids[uid].has_key(templateId) :
+		# 	self._uids[uid][templateId] = PersistentMapping()
+		# 	self._uids[uid][templateId]['reference'] = reference
+		# 	self._uids[uid][templateId]['quantity'] = 0
+		#
+		# self._uids[uid][templateId]['quantity'] += quantity
+
 	def update(self, context, item) :
 		if self.locked :
 			raise CartLockedError

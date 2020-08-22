@@ -31,18 +31,13 @@ from AccessControl.requestmethod import postonly
 from Acquisition import aq_base, aq_inner
 from Globals import InitializeClass
 from OFS.OrderedFolder import OrderedFolder
-from Products.CMFCore.utils import UniqueObject, getToolByName, getUtilityByInterfaceName
+from Products.CMFCore.utils import UniqueObject, getUtilityByInterfaceName
+from Products.Plinn.utils import getBestTranslationLanguage
 
 from Products.photoprint.printoffer import PrintOffer
 from permissions import ManagePrintOrderTemplate
 from price import Price
 from utils import Message as _
-from Products.Plinn.utils import makeValidId, getBestTranslationLanguage
-from zope.component import getUtility
-from zope.component.interfaces import IFactory
-from DateTime import DateTime
-from Products.Plinn.utils import _sudo
-
 
 PRINTING_OPTIONS_ID = 'printingOptions'
 COPIES_COUNTERS = '_copies_counters'
@@ -96,11 +91,26 @@ class PhotoPrintTool(UniqueObject, OrderedFolder) :
 
 		return options
 
+
+	security.declarePrivate('getEffectiveFormatPrice')
+	def getEffectiveFormatPrice(self, fmt, counters) :
+		effective_price = fmt['price']
+		if fmt['copies'] > 0 :  # n'est pas une édition illimitée du format
+			already_sold = counters.get(fmt['reference'], 0)
+			available_copies = fmt['copies'] - already_sold
+			if available_copies > 0 and \
+					fmt['prices_ranges'] and \
+					already_sold + 1 >= fmt['prices_ranges'][0]['start'] :
+				for price_range in fmt['prices_ranges'] :
+					if price_range['start'] <= available_copies + 1 <= price_range['stop'] :
+						effective_price = price_range['price']
+						break
+		return effective_price
+
 	security.declarePublic('getEffectivePrintingOptionsFor')
 	@postonly
 	def getEffectivePrintingOptionsFor(self, cmf_uid, REQUEST=None):
 		uidtool = getUtilityByInterfaceName('Products.CMFUid.interfaces.IUniqueIdHandler')
-		proptool = getUtilityByInterfaceName('Products.CMFCore.interfaces.IPropertiesTool')
 		ob = uidtool.getObject(cmf_uid)
 		optionsContainer = getattr(aq_inner(ob), PRINTING_OPTIONS_ID, None)
 
@@ -135,11 +145,58 @@ class PhotoPrintTool(UniqueObject, OrderedFolder) :
 
 		return json.dumps(ret)
 
-	security.declarePublic('getPrintingOptionsContainerFor')
+	def reifyPrintOrder(self, order_options) :
+		uidtool = getUtilityByInterfaceName('Products.CMFUid.interfaces.IUniqueIdHandler')
+		ob = uidtool.getObject(order_options['cmf_uid'])
+		optionsContainer = getattr(aq_inner(ob), PRINTING_OPTIONS_ID, None)
+		counters = self.getCountersFor(ob)
+
+		if optionsContainer is not None :
+			offer = optionsContainer.printoffer.data
+
+			# format
+			format = filter(lambda f: f['reference'] == order_options['format'], offer['formats'])[0]
+			format_price = format['price']
+
+			already_sold = counters.get(format['reference'], 0)
+			available_copies = format['copies'] - already_sold
+			if available_copies > 0 and \
+					format['prices_ranges'] and \
+					already_sold + 1 >= format['prices_ranges'][0]['start'] :
+				for price_range in format['prices_ranges'] :
+					if price_range['start'] <= available_copies + 1 <= price_range['stop'] :
+						format_price = price_range['price']
+						break
+			format['price'] = format_price
+			del format['prices_ranges']
+
+			# finish
+			finish = filter(lambda f: f['reference'] == order_options['finish'], offer['finishes'])[0]
+			finish_price = filter(lambda fp: fp['reference'] == order_options['format'], finish['formats_prices'])[0]['price']
+			finish['price'] = finish_price
+			del finish['formats_prices']
+
+			# frame (optional)
+			if order_options.get('frame') :
+				frame = filter(lambda f: f['reference'] == order_options['frame'], offer['frames'])[0]
+				frame_price = filter(lambda fp: fp['reference'] == order_options['format'], frame['formats_prices'])[0]['price']
+				frame['price'] = frame_price
+				del frame['formats_prices']
+				del frame['finishes']
+			else :
+				frame = None
+
+			return {'format' : format,
+					'finish' : finish,
+					'frame' : frame}
+		else :
+			RuntimeError('No offer available for this order: %r' % order_options)
+
+	security.declarePrivate('getPrintingOptionsContainerFor')
 	def getPrintingOptionsContainerFor(self, ob):
 		"""getPrintingOptionsContainerFor
 		"""
-		return getattr(ob, PRINTING_OPTIONS_ID, None)
+		return getattr(aq_inner(ob), PRINTING_OPTIONS_ID, None)
 	
 	security.declarePrivate('getCountersFor')
 	def getCountersFor(self, ob):
@@ -186,109 +243,109 @@ class PhotoPrintTool(UniqueObject, OrderedFolder) :
 		if hasattr(aq_base(ob), PRINTING_OPTIONS_ID) :
 			return getattr(ob, PRINTING_OPTIONS_ID)
 	
-	security.declareProtected(ManagePrintOrderTemplate, 'addPrintOrderTemplate')
-	@postonly
-	def addPrintOrderTemplate(self
-							, ob
-							, title=''
-							, description=''
-							, productReference=''
-							, maxCopies=0
-							, price=0
-							, VATRate=0
-							, REQUEST=None):
-		
-		title, maxCopies, price, VATRate = PhotoPrintTool._ckeckTemplateParams(title, maxCopies, price,  VATRate)
-		
-		container = getattr(ob, PRINTING_OPTIONS_ID)
-		
-		id = makeValidId(container, title)
-		
-		factory = getUtility(IFactory, 'photoprint.order_template')
-		orderTemplate = factory( id
-							   , title=title
-							   , description=description
-							   , productReference=productReference
-							   , maxCopies=maxCopies
-							   , price=price
-							   , VATRate=VATRate
-							   )
-		container._setObject(id, orderTemplate)
-		return orderTemplate.__of__(container)
-		
-	
-	security.declareProtected(ManagePrintOrderTemplate, 'editPrintOrderTemplate')
-	@postonly
-	def editPrintOrderTemplate(self, ob, id, REQUEST=None, **kw):
-		container = self.getPrintingOptionsContainerFor(ob)
-		orderTemplate = getattr(container, id)
-
-		g = kw.get
-		title, description, productReference, maxCopies, price, VATRate = \
-			g('title', ''), g('description', ''), g('productReference'), g('maxCopies',0), g('price',0), g('VATRate', 0)
-		title, maxCopies, price, VATRate = PhotoPrintTool._ckeckTemplateParams(title, maxCopies, price, VATRate)
-		
-		orderTemplate.edit( title=title
-						  , description=description
-						  , productReference=productReference
-						  , maxCopies = maxCopies
-						  , price=price
-						  , VATRate=VATRate)
-		
-		return orderTemplate
-	
-	@staticmethod
-	def _ckeckTemplateParams(title, maxCopies, price, VATRate) :
-		title = title.strip()
-		
-		if not title :
-			raise ValueError(_(u'You must enter a title.'))
-		try :
-			maxCopies = int(maxCopies)
-		except ValueError :
-			raise ValueError(_(u'You must enter an integer number\nfor the maximum number of copies.'))
-		if maxCopies < 0 :
-			raise ValueError(_(u'You must enter a positive value\nfor the maximum number of copies.'))
-		try :
-			price = float(price.replace(',', '.'))
-		except ValueError :
-			raise ValueError(_(u'You must enter a numeric value for the price.'))
-	
-		try :
-			VATRate = float(VATRate.replace(',', '.')) / 100
-		except ValueError :
-			raise ValueError(_(u'You must enter a numeric value for the VAT rate.'))
-		
-		return title, maxCopies, price, VATRate
-	
-	security.declarePublic('addPrintOrder')
-	def addPrintOrder(self, cart):
-		utool = getToolByName(self, 'portal_url')
-		portal = utool.getPortalObject()
-		ttool = getToolByName(portal, 'portal_types')
-
-		baseContainer = portal.unrestrictedTraverse(self.getProperty('incomingOrderPath'), None)
-		if baseContainer is None:
-			parts = self.getProperty('incomingOrderPath').split('/')
-			baseContainer = portal
-			for id in parts :
-				if not hasattr(baseContainer.aq_base, id) :
-					id = _sudo(lambda:ttool.constructContent('Order Folder', baseContainer, id))
-				baseContainer = getattr(baseContainer, id)
-
-		now = DateTime()
-		monthId = now.strftime('%Y-%m')
-		if not hasattr(baseContainer.aq_base, monthId) :
-			monthId = _sudo(lambda:ttool.constructContent('Order Folder', baseContainer, monthId))
-		
-		container = getattr(baseContainer, monthId)
-
-		self._order_counter += 1
-		id = '%s-%d' % (monthId, self._order_counter)
-		id = container.invokeFactory('Order', id)
-		ob = getattr(container,id)
-		ob.loadCart(cart)
-		return ob
+	# security.declareProtected(ManagePrintOrderTemplate, 'addPrintOrderTemplate')
+	# @postonly
+	# def addPrintOrderTemplate(self
+	# 						, ob
+	# 						, title=''
+	# 						, description=''
+	# 						, productReference=''
+	# 						, maxCopies=0
+	# 						, price=0
+	# 						, VATRate=0
+	# 						, REQUEST=None):
+	#
+	# 	title, maxCopies, price, VATRate = PhotoPrintTool._ckeckTemplateParams(title, maxCopies, price,  VATRate)
+	#
+	# 	container = getattr(ob, PRINTING_OPTIONS_ID)
+	#
+	# 	id = makeValidId(container, title)
+	#
+	# 	factory = getUtility(IFactory, 'photoprint.order_template')
+	# 	orderTemplate = factory( id
+	# 						   , title=title
+	# 						   , description=description
+	# 						   , productReference=productReference
+	# 						   , maxCopies=maxCopies
+	# 						   , price=price
+	# 						   , VATRate=VATRate
+	# 						   )
+	# 	container._setObject(id, orderTemplate)
+	# 	return orderTemplate.__of__(container)
+	#
+	#
+	# security.declareProtected(ManagePrintOrderTemplate, 'editPrintOrderTemplate')
+	# @postonly
+	# def editPrintOrderTemplate(self, ob, id, REQUEST=None, **kw):
+	# 	container = self.getPrintingOptionsContainerFor(ob)
+	# 	orderTemplate = getattr(container, id)
+	#
+	# 	g = kw.get
+	# 	title, description, productReference, maxCopies, price, VATRate = \
+	# 		g('title', ''), g('description', ''), g('productReference'), g('maxCopies',0), g('price',0), g('VATRate', 0)
+	# 	title, maxCopies, price, VATRate = PhotoPrintTool._ckeckTemplateParams(title, maxCopies, price, VATRate)
+	#
+	# 	orderTemplate.edit( title=title
+	# 					  , description=description
+	# 					  , productReference=productReference
+	# 					  , maxCopies = maxCopies
+	# 					  , price=price
+	# 					  , VATRate=VATRate)
+	#
+	# 	return orderTemplate
+	#
+	# @staticmethod
+	# def _ckeckTemplateParams(title, maxCopies, price, VATRate) :
+	# 	title = title.strip()
+	#
+	# 	if not title :
+	# 		raise ValueError(_(u'You must enter a title.'))
+	# 	try :
+	# 		maxCopies = int(maxCopies)
+	# 	except ValueError :
+	# 		raise ValueError(_(u'You must enter an integer number\nfor the maximum number of copies.'))
+	# 	if maxCopies < 0 :
+	# 		raise ValueError(_(u'You must enter a positive value\nfor the maximum number of copies.'))
+	# 	try :
+	# 		price = float(price.replace(',', '.'))
+	# 	except ValueError :
+	# 		raise ValueError(_(u'You must enter a numeric value for the price.'))
+	#
+	# 	try :
+	# 		VATRate = float(VATRate.replace(',', '.')) / 100
+	# 	except ValueError :
+	# 		raise ValueError(_(u'You must enter a numeric value for the VAT rate.'))
+	#
+	# 	return title, maxCopies, price, VATRate
+	#
+	# security.declarePublic('addPrintOrder')
+	# def addPrintOrder(self, cart):
+	# 	utool = getToolByName(self, 'portal_url')
+	# 	portal = utool.getPortalObject()
+	# 	ttool = getToolByName(portal, 'portal_types')
+	#
+	# 	baseContainer = portal.unrestrictedTraverse(self.getProperty('incomingOrderPath'), None)
+	# 	if baseContainer is None:
+	# 		parts = self.getProperty('incomingOrderPath').split('/')
+	# 		baseContainer = portal
+	# 		for id in parts :
+	# 			if not hasattr(baseContainer.aq_base, id) :
+	# 				id = _sudo(lambda:ttool.constructContent('Order Folder', baseContainer, id))
+	# 			baseContainer = getattr(baseContainer, id)
+	#
+	# 	now = DateTime()
+	# 	monthId = now.strftime('%Y-%m')
+	# 	if not hasattr(baseContainer.aq_base, monthId) :
+	# 		monthId = _sudo(lambda:ttool.constructContent('Order Folder', baseContainer, monthId))
+	#
+	# 	container = getattr(baseContainer, monthId)
+	#
+	# 	self._order_counter += 1
+	# 	id = '%s-%d' % (monthId, self._order_counter)
+	# 	id = container.invokeFactory('Order', id)
+	# 	ob = getattr(container,id)
+	# 	ob.loadCart(cart)
+	# 	return ob
 	
 	security.declarePublic('getShippingFeesFor')
 	def getShippingFeesFor(self, shippable=None, price=None):
