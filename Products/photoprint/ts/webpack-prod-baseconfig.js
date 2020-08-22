@@ -1,16 +1,12 @@
 const commonConfig = require('./webpack-common-baseconfig').baseConfig;
-const TerserPlugin = require('terser-webpack-plugin');
+const WebpackObfuscator = require('webpack-obfuscator');
+
 const baseConfig = {
     watch: false,
     mode: 'production',
-    optimization: {
-        minimize: true,
-        minimizer: [new TerserPlugin({
-            terserOptions: {
-                mangle: true
-            }
-        })]
-    }
+    plugins: [
+        new WebpackObfuscator({rotateStringArray: true})
+    ]
 };
 
 module.exports = {baseConfig: Object.assign({}, commonConfig, baseConfig)};
