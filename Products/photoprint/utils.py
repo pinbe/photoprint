@@ -15,15 +15,14 @@ Global utilities
 
 """
 
+import transaction
 from AccessControl import ModuleSecurityInfo
 from App.config import getConfiguration
-from zope.i18n import translate as i18ntranslate
-from zope.i18nmessageid import MessageFactory
-from zope.globalrequest import getRequest
 from Products.CMFCore.utils import getUtilityByInterfaceName
 from Products.Plinn.utils import _sudo
-import transaction
-
+from zope.globalrequest import getRequest
+from zope.i18n import translate as i18ntranslate
+from zope.i18nmessageid import MessageFactory
 
 security = ModuleSecurityInfo('Products.photoprint.utils')
 
@@ -34,6 +33,18 @@ def translate(msgid, mapping=None, default=None) :
 
 security.declarePublic('Message')
 Message = _ = MessageFactory('photoprint')
+
+security.declarePublic('translate')
+def translate(message, context) :
+    """ Translate i18n message.
+    """
+    if isinstance(message, Exception) :
+        try :
+            message = message[0]
+        except (TypeError, IndexError) :
+            pass
+    return i18ntranslate(message, domain='photoprint', context=context.REQUEST)
+
 
 security.declarePublic('grantAccess')
 def grantAccess(collectionId, password, confirm, memberId) :

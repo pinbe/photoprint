@@ -14,8 +14,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Meaningless\n"
-"POT-Creation-Date: Tue Jun 23 16:09:43 2020\n"
-"PO-Revision-Date: 2020-06-23 16:10+0200\n"
+"POT-Creation-Date: Mon Aug 24 15:28:36 2020\n"
+"PO-Revision-Date: 2020-08-24 15:30+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
 "Language: \n"
@@ -27,6 +27,40 @@ msgstr ""
 #: t/price.py:82
 msgid "${i}.${d}"
 msgstr "${i}.${d}"
+
+#: t/skins/add_to_cart.py:20 t/skins/my_cart.py:73
+msgid "You must enter an integer for quantity (found: %s)"
+msgstr ""
+
+#: t/skins/add_to_cart.py:23 t/skins/my_cart.py:75
+msgid "You must enter a positive value for quantity (found: %s)"
+msgstr ""
+
+#: t/skins/add_to_cart.py:49 t/skins/my_cart.py:85
+msgid "Only %d available copies of this photo in this size."
+msgstr ""
+
+#: t/skins/add_to_cart.py:51 t/skins/my_cart.py:87
+msgid "Only one last available copy of this photo in this size."
+msgstr ""
+
+#: t/skins/add_to_cart.py:53
+msgid "No more available copy of this photo in this size."
+msgstr ""
+
+#: t/skins/add_to_cart.py:62
+msgid ""
+"Your cart is locked:\n"
+"please complete your current order first."
+msgstr ""
+
+#: t/skins/add_to_cart.py:72 t/skins/add_to_cart.py:74
+msgid "Added to cart."
+msgstr ""
+
+#: t/skins/cartrpc.py:22
+msgid "This item is sold out."
+msgstr "This item is sold out."
 
 #: t/skins/confirm_join_template.pt:12
 msgid "You have been registered as a member."
@@ -231,6 +265,22 @@ msgstr ""
 "Setting the 'Remember my name' option will set a cookie with your username, "
 "so that when you next log in, your user name will already be filled in for "
 "you."
+
+#: t/skins/my_cart.py:58
+msgid "Order >>"
+msgstr ""
+
+#: t/skins/my_cart.py:60
+msgid "Shipping >>"
+msgstr ""
+
+#: t/skins/my_cart.py:89
+msgid "No more available copy of this photo and in this size."
+msgstr ""
+
+#: t/skins/my_cart.py:144
+msgid "My cart"
+msgstr ""
 
 #: t/skins/my_orders.py:17 t/skins/order_list.py:14
 #: t/skins/order_view_template.pt:185
@@ -552,49 +602,9 @@ msgstr "Define printing options"
 msgid "Delete options defined at this level"
 msgstr "Delete options defined at this level"
 
-#: t/skins/photoprint_templates_edit_template.pt:40
-msgid "Formats"
-msgstr "Formats"
-
-#: t/skins/photoprint_templates_edit_template.pt:41
-msgid "Finishes"
-msgstr "Finishes"
-
-#: t/skins/photoprint_templates_edit_template.pt:42
-msgid "Frames"
-msgstr "Frames"
-
-#: t/tool.py:123
+#: t/tool.py:218
 msgid "No printing options found at %r"
 msgstr "No printing options found at %r"
-
-#: t/tool.py:207
-msgid "You must enter a title."
-msgstr "You must enter a title."
-
-#: t/tool.py:211
-msgid ""
-"You must enter an integer number\n"
-"for the maximum number of copies."
-msgstr ""
-"You must enter an integer number\n"
-"for the maximum number of copies."
-
-#: t/tool.py:213
-msgid ""
-"You must enter a positive value\n"
-"for the maximum number of copies."
-msgstr ""
-"You must enter a positive value\n"
-"for the maximum number of copies."
-
-#: t/tool.py:217
-msgid "You must enter a numeric value for the price."
-msgstr "You must enter a numeric value for the price."
-
-#: t/tool.py:222
-msgid "You must enter a numeric value for the VAT rate."
-msgstr "You must enter a numeric value for the VAT rate."
 
 #: t/utils.py:54
 msgid "Wrong private collection identifier."
@@ -695,6 +705,38 @@ msgstr "[%s] order %s sending notification"
 
 msgid "paypal_pay"
 msgstr "paypal_pay"
+
+#~ msgid "Formats"
+#~ msgstr "Formats"
+
+#~ msgid "Finishes"
+#~ msgstr "Finishes"
+
+#~ msgid "Frames"
+#~ msgstr "Frames"
+
+#~ msgid "You must enter a title."
+#~ msgstr "You must enter a title."
+
+#~ msgid ""
+#~ "You must enter an integer number\n"
+#~ "for the maximum number of copies."
+#~ msgstr ""
+#~ "You must enter an integer number\n"
+#~ "for the maximum number of copies."
+
+#~ msgid ""
+#~ "You must enter a positive value\n"
+#~ "for the maximum number of copies."
+#~ msgstr ""
+#~ "You must enter a positive value\n"
+#~ "for the maximum number of copies."
+
+#~ msgid "You must enter a numeric value for the price."
+#~ msgstr "You must enter a numeric value for the price."
+
+#~ msgid "You must enter a numeric value for the VAT rate."
+#~ msgstr "You must enter a numeric value for the VAT rate."
 
 #~ msgid "Title"
 #~ msgstr "Title"

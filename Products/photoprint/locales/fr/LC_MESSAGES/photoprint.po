@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Plinn 2.0\n"
-"POT-Creation-Date: Tue Jun 23 16:09:43 2020\n"
-"PO-Revision-Date: 2020-06-23 16:09+0200\n"
+"POT-Creation-Date: Mon Aug 24 15:28:36 2020\n"
+"PO-Revision-Date: 2020-08-24 15:29+0200\n"
 "Last-Translator:  Benoît PIN\n"
 "Language-Team: CRI http://cri.ensmp.fr\n"
 "Language: \n"
@@ -19,6 +19,40 @@ msgstr ""
 #: t/price.py:82
 msgid "${i}.${d}"
 msgstr "${i},${d}"
+
+#: t/skins/add_to_cart.py:20 t/skins/my_cart.py:73
+msgid "You must enter an integer for quantity (found: %s)"
+msgstr ""
+
+#: t/skins/add_to_cart.py:23 t/skins/my_cart.py:75
+msgid "You must enter a positive value for quantity (found: %s)"
+msgstr ""
+
+#: t/skins/add_to_cart.py:49 t/skins/my_cart.py:85
+msgid "Only %d available copies of this photo in this size."
+msgstr ""
+
+#: t/skins/add_to_cart.py:51 t/skins/my_cart.py:87
+msgid "Only one last available copy of this photo in this size."
+msgstr ""
+
+#: t/skins/add_to_cart.py:53
+msgid "No more available copy of this photo in this size."
+msgstr ""
+
+#: t/skins/add_to_cart.py:62
+msgid ""
+"Your cart is locked:\n"
+"please complete your current order first."
+msgstr ""
+
+#: t/skins/add_to_cart.py:72 t/skins/add_to_cart.py:74
+msgid "Added to cart."
+msgstr ""
+
+#: t/skins/cartrpc.py:22
+msgid "This item is sold out."
+msgstr "Cet article est épuisé."
 
 #: t/skins/confirm_join_template.pt:12
 msgid "You have been registered as a member."
@@ -228,6 +262,22 @@ msgstr ""
 "L'option « Se souvenir de mon login » permet de le sauvegarder dans un "
 "cookie : vous n’aurez pas à le saisir de nouveau lors de votre prochaine "
 "visite."
+
+#: t/skins/my_cart.py:58
+msgid "Order >>"
+msgstr ""
+
+#: t/skins/my_cart.py:60
+msgid "Shipping >>"
+msgstr ""
+
+#: t/skins/my_cart.py:89
+msgid "No more available copy of this photo and in this size."
+msgstr ""
+
+#: t/skins/my_cart.py:144
+msgid "My cart"
+msgstr ""
 
 #: t/skins/my_orders.py:17 t/skins/order_list.py:14
 #: t/skins/order_view_template.pt:185
@@ -555,49 +605,9 @@ msgstr "Définir des options d'impression"
 msgid "Delete options defined at this level"
 msgstr "Supprimer les options définies à ce niveau"
 
-#: t/skins/photoprint_templates_edit_template.pt:40
-msgid "Formats"
-msgstr "Formats"
-
-#: t/skins/photoprint_templates_edit_template.pt:41
-msgid "Finishes"
-msgstr "Finitions"
-
-#: t/skins/photoprint_templates_edit_template.pt:42
-msgid "Frames"
-msgstr "Cadres"
-
-#: t/tool.py:123
+#: t/tool.py:218
 msgid "No printing options found at %r"
 msgstr "Aucune option d'impression trouvée sur %r"
-
-#: t/tool.py:207
-msgid "You must enter a title."
-msgstr "Vous devez saisir un titre."
-
-#: t/tool.py:211
-msgid ""
-"You must enter an integer number\n"
-"for the maximum number of copies."
-msgstr ""
-"Vous devez saisir un nombre entier\n"
-"pour le nombre maxi de copies."
-
-#: t/tool.py:213
-msgid ""
-"You must enter a positive value\n"
-"for the maximum number of copies."
-msgstr ""
-"Vous devez saisir une valeur positive\n"
-"pour le nombre maxi de copies."
-
-#: t/tool.py:217
-msgid "You must enter a numeric value for the price."
-msgstr "Vous devez saisir une valeur numérique pour le prix."
-
-#: t/tool.py:222
-msgid "You must enter a numeric value for the VAT rate."
-msgstr "Vous devez saisir une valeur numérique pour la TVA (pourcentage)."
 
 #: t/utils.py:54
 msgid "Wrong private collection identifier."
@@ -697,6 +707,38 @@ msgstr "[%s] expédition de la commande %s"
 
 msgid "paypal_pay"
 msgstr "Paiement PayPal"
+
+#~ msgid "Formats"
+#~ msgstr "Formats"
+
+#~ msgid "Finishes"
+#~ msgstr "Finitions"
+
+#~ msgid "Frames"
+#~ msgstr "Cadres"
+
+#~ msgid "You must enter a title."
+#~ msgstr "Vous devez saisir un titre."
+
+#~ msgid ""
+#~ "You must enter an integer number\n"
+#~ "for the maximum number of copies."
+#~ msgstr ""
+#~ "Vous devez saisir un nombre entier\n"
+#~ "pour le nombre maxi de copies."
+
+#~ msgid ""
+#~ "You must enter a positive value\n"
+#~ "for the maximum number of copies."
+#~ msgstr ""
+#~ "Vous devez saisir une valeur positive\n"
+#~ "pour le nombre maxi de copies."
+
+#~ msgid "You must enter a numeric value for the price."
+#~ msgstr "Vous devez saisir une valeur numérique pour le prix."
+
+#~ msgid "You must enter a numeric value for the VAT rate."
+#~ msgstr "Vous devez saisir une valeur numérique pour la TVA (pourcentage)."
 
 #~ msgid "Frame"
 #~ msgstr "Fram"

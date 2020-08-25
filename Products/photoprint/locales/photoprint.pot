@@ -14,7 +14,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Unknown\n"
-"POT-Creation-Date: Tue Jun 23 16:09:43 2020\n"
+"POT-Creation-Date: Mon Aug 24 15:28:36 2020\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
@@ -25,6 +25,45 @@ msgstr ""
 
 #: t/price.py:82
 msgid "${i}.${d}"
+msgstr ""
+
+#: t/skins/add_to_cart.py:20
+#: t/skins/my_cart.py:73
+msgid "You must enter an integer for quantity (found: %s)"
+msgstr ""
+
+#: t/skins/add_to_cart.py:23
+#: t/skins/my_cart.py:75
+msgid "You must enter a positive value for quantity (found: %s)"
+msgstr ""
+
+#: t/skins/add_to_cart.py:49
+#: t/skins/my_cart.py:85
+msgid "Only %d available copies of this photo in this size."
+msgstr ""
+
+#: t/skins/add_to_cart.py:51
+#: t/skins/my_cart.py:87
+msgid "Only one last available copy of this photo in this size."
+msgstr ""
+
+#: t/skins/add_to_cart.py:53
+msgid "No more available copy of this photo in this size."
+msgstr ""
+
+#: t/skins/add_to_cart.py:62
+msgid ""
+"Your cart is locked:\n"
+"please complete your current order first."
+msgstr ""
+
+#: t/skins/add_to_cart.py:72
+#: t/skins/add_to_cart.py:74
+msgid "Added to cart."
+msgstr ""
+
+#: t/skins/cartrpc.py:22
+msgid "This item is sold out."
 msgstr ""
 
 #: t/skins/confirm_join_template.pt:12
@@ -222,6 +261,22 @@ msgstr ""
 
 #: t/skins/customer_login_form.pt:94
 msgid "Setting the 'Remember my name' option will set a cookie with your username, so that when you next log in, your user name will already be filled in for you."
+msgstr ""
+
+#: t/skins/my_cart.py:58
+msgid "Order >>"
+msgstr ""
+
+#: t/skins/my_cart.py:60
+msgid "Shipping >>"
+msgstr ""
+
+#: t/skins/my_cart.py:89
+msgid "No more available copy of this photo and in this size."
+msgstr ""
+
+#: t/skins/my_cart.py:144
+msgid "My cart"
 msgstr ""
 
 #: t/skins/my_orders.py:17
@@ -536,44 +591,8 @@ msgstr ""
 msgid "Delete options defined at this level"
 msgstr ""
 
-#: t/skins/photoprint_templates_edit_template.pt:40
-msgid "Formats"
-msgstr ""
-
-#: t/skins/photoprint_templates_edit_template.pt:41
-msgid "Finishes"
-msgstr ""
-
-#: t/skins/photoprint_templates_edit_template.pt:42
-msgid "Frames"
-msgstr ""
-
-#: t/tool.py:123
+#: t/tool.py:218
 msgid "No printing options found at %r"
-msgstr ""
-
-#: t/tool.py:207
-msgid "You must enter a title."
-msgstr ""
-
-#: t/tool.py:211
-msgid ""
-"You must enter an integer number\n"
-"for the maximum number of copies."
-msgstr ""
-
-#: t/tool.py:213
-msgid ""
-"You must enter a positive value\n"
-"for the maximum number of copies."
-msgstr ""
-
-#: t/tool.py:217
-msgid "You must enter a numeric value for the price."
-msgstr ""
-
-#: t/tool.py:222
-msgid "You must enter a numeric value for the VAT rate."
 msgstr ""
 
 #: t/utils.py:54

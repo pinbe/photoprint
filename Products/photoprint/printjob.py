@@ -1,4 +1,6 @@
 # coding=utf-8
+import json
+
 from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
 from DateTime import DateTime
@@ -10,13 +12,13 @@ from Products.CMFDefault.DublinCore import DefaultDublinCoreImpl
 from persistent.list import PersistentList
 from persistent.mapping import PersistentMapping
 from zope.component.factory import Factory
-from zope.interface import implements
 
 from Products.photoprint.permissions import ManagePrintOrders
 from Products.photoprint.price import Price
 from Products.photoprint.tool import COPIES_COUNTERS
 from Products.photoprint.utils import getPayPalConfig
-from interfaces import IPrintOrder
+
+# from interfaces import IPrintOrder
 
 try :
     from paypal.interface import PayPalInterface
@@ -31,20 +33,28 @@ console = getLogger('Products.photoprint.order')
 class PrintJob(SimpleItem) :
     security = ClassSecurityInfo()
 
-    def __init__(self, id) :
+    def __init__(self, id, cmf_uid, data) :
         self.id = id
-        self.photo_uid = None
-        self.format = None
-        self.finish = None
-        self.frame = None
-        self.copies = None
+        self.cmf_uid = cmf_uid
+        self.copies = 1
+        self._data = ''
+        self.data = data
+
+
+    @property
+    def data(self) :
+        return json.loads(self._data)
+
+    @data.setter
+    def data(self, value) :
+        self._data = json.dumps(value, encoding='utf-8', ensure_ascii=False)
 
 InitializeClass(PrintJob)
 PrintJobFactory = Factory(PrintJob)
 
 
 class PrintOrder(PortalContent, DefaultDublinCoreImpl) :
-    implements(IPrintOrder)
+    # implements(IPrintOrder)
     security = ClassSecurityInfo()
 
     def __init__(self, id) :

@@ -148,12 +148,12 @@ class PhotoOrder {
 
         const orderBtnWrapper = d3.select(this.wrapper)
             .append('div')
-            .attr('class', 'cart-bnt-wrapper')
+            .attr('class', 'cart-btn-wrapper hidden')
         ;
         orderBtnWrapper
             .append('button')
             .text(_('Add to cart'))
-            .on('click', ()=> this.addToCart())
+            .on('click', () => this.addToCart())
         ;
     }
 
@@ -294,10 +294,17 @@ class PhotoOrder {
         }
 
         let txt = '';
-        if (fmtPrice === undefined || finishPrice === undefined || framePrice === undefined)
+        if (fmtPrice === undefined || finishPrice === undefined || framePrice === undefined) {
             txt = _('[Please select options]');
-        else
+            (<HTMLElement>d3.select(this.wrapper).select('.cart-btn-wrapper')
+                .node())
+                .classList.add('hidden');
+        } else {
             txt = `${fmtPrice + finishPrice + framePrice} ${_('€')}`;
+            (<HTMLElement>d3.select(this.wrapper).select('.cart-btn-wrapper')
+                .node())
+                .classList.remove('hidden');
+        }
         d3.select(this.wrapper).select('.total')
             .text(txt);
     }
@@ -305,8 +312,14 @@ class PhotoOrder {
     private addToCart() {
         const req = new JsonRpcRequest(`${this.portal_url}/cartrpc`)
         const params = Object.assign({cmf_uid: this.uid}, this.selectedOptions)
-        req.send<any>('add_to_cart', params)
-            .then((v)=>console.log(v));
+        req.send<{ ok: boolean }>('add_to_cart', params)
+            .then(
+                (resp) => {
+                    console.log(resp.result.ok);
+                },
+                (resp) => {
+                    console.error(resp.error.message);
+                });
         console.log('Ajouter au panier !');
     }
 }
