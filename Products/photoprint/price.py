@@ -34,6 +34,16 @@ from zope.globalrequest import getRequest
 msecurity = ModuleSecurityInfo('Products.photoprint.price')
 msecurity.declarePublic('Price')
 
+def spaceNumbers(num) :
+    packets = []
+    last3digits = True
+    while num :
+        num, last3digits = num[:-3], num[-3:]
+        packets.append(last3digits)
+    packets.reverse()
+    return ' '.join(packets)
+
+
 class Price(object, Persistent) :
     """
     Price of an object which have VAT tax.
@@ -75,10 +85,10 @@ class Price(object, Persistent) :
     def _localeStrNum(self, n) :
         i = int(n)
         if i == n :
-            return str(i)
+            return spaceNumbers(str(i))
         else :
             n = str(round(n, 2))
-            i, d = n.split('.')
+            i, d = map(spaceNumbers, n.split('.'))
             ds = _(u'${i}.${d}', mapping={'i':i, 'd':d}, default=n)
             return  translate(ds).encode('utf-8')
 
