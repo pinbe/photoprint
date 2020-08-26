@@ -41,7 +41,7 @@ elif method == 'update_quantity' :
             'lines' : lines,
             'totals' : {
                 'lines_total' : _('price_and_currency', mapping={'price' : (cart_infos['lines_total']).taxed}),
-                'vat' : _('price_and_currency', mapping={'price' : (cart_infos['lines_total']).vat}),
+                'tax' : _('price_and_currency', mapping={'price' : (cart_infos['lines_total']).tax}),
             }
         }
 
@@ -56,12 +56,14 @@ elif method == 'update_quantity' :
 
         resp['error'] = {
             'code' : -32603, # Internal error
-            'message' : msg
+            'message' : msg,
+            'data' : {'quantity' : cart[params['jobid']].copies}
         }
     except ValueError :
         resp['error'] = {
             'code' : -32603,  # Internal error
-            'message' : _('Wrong value for quantity.')
+            'message' : _('Wrong value for quantity.'),
+            'data' : {'quantity' : cart[params['jobid']].copies}
         }
 
 else :

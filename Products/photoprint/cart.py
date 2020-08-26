@@ -188,3 +188,9 @@ class PrintCart(Persistent, Implicit) :
 
     def __nonzero__(self) :
         return len(self._sequence_order) > 0
+
+    def __getitem__(self, item) :
+        if hasattr(self, item) :
+            return getattr(self, item)
+        else :
+            return self._orders[item]
