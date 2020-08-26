@@ -1,8 +1,9 @@
-##parameters=order='', shipping='', set_shipping=''
+##parameters=order='', shipping='', set_shipping='', infos_only=False
 from Products.CMFCore.utils import getToolByName
 from Products.Portfolio.utils import translate
 
 from Products.photoprint.cart import PrintCart
+from Products.photoprint.price import Price
 
 
 def _(message) : return translate(message, context).encode('utf-8')
@@ -20,6 +21,7 @@ mtool = portal.portal_membership
 isAnon = mtool.isAnonymousUser()
 form = context.REQUEST.form
 nextStep = None
+VAT = pptool.getProperty('vat_rate', 0.2)
 
 if cart.locked :
     pendingOrder = context.restrictedTraverse(cart.pendingOrderPath)
@@ -94,31 +96,24 @@ msg = ''
 
 options['empty'] = not cart
 infos = []
-# prices = []
-# quantityTotal = 0
-for item in cart :
-    item_data = item.data
-    b = uidh.getBrain(item.cmf_uid)
-#     poptions = pptool.getPrintingOptionsContainerFor(b.getObject())
-#     pt = getattr(poptions, item['printing_template'])
+
+for pjob in cart :
+    item_data = pjob.data
+    b = uidh.getBrain(pjob.cmf_uid)
     size = b.getThumbnailSize
+    unit_price_ttc = reduce(lambda a,b:a+b, [fff['price'] for fff in [item_data[k] for k in ('format', 'finish', 'frame')] if fff], 0)
     d = {'thumbUrl' : '%s/getThumbnail' % b.getURL(),
          'thumbHeight' : size['height'] / 2,
          'thumbWidth' : size['width'] / 2,
          'alt' : ('%s - %s' % (b.Title, b.Description)).strip(' -'),
-         'data' : item_data,
-#         ,'cmf_uid':b.cmf_uid
-#         ,'title': pt.title
-#         ,'description': pt.description
-#         ,'quantity':item['quantity']
-#         ,'amount': '%s €' % (pt.price * item['quantity']).taxed
-#         ,'templateId': pt.getId()
+         'pjob' : pjob,
+         'unit_price' : Price(unit_price_ttc, VAT),
         }
-#     quantityTotal += item['quantity']
-#     prices.append(pt.price * item['quantity'])
     infos.append(d)
-#
+
 options['infos'] = infos
+
+options['lines_total'] = reduce(lambda a, b: a+b, [i['unit_price'] * i['pjob'].copies for i in infos], Price(0))
 # if len(prices) == 1:
 #     pricesTotal = prices[0]
 # elif len(prices) > 1 :
@@ -153,4 +148,8 @@ if msg :
     context.REQUEST.other['portal_status_message'] = msg
 options['cartIsOrder'] = False
 options['nextStep'] = nextStep
-return context.my_cart_template(**options)
+
+if infos_only :
+    return options
+else :
+    return context.my_cart_template(**options)

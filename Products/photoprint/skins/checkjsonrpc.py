@@ -1,5 +1,5 @@
 ##parameters=req
-from Products.Plinn.utils import json_loads, json_dumps
+from Products.Plinn.utils import json_loads
 resp = {'jsonrpc': '2.0'}
 try :
     req = json_loads(req)

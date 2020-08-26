@@ -320,7 +320,6 @@ class PhotoOrder {
                 (resp) => {
                     console.error(resp.error.message);
                 });
-        console.log('Ajouter au panier !');
     }
 }
 

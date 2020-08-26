@@ -7,3 +7,9 @@ class IPrintOffer(Interface):
     """
 
     data = Attribute(""" JSON data""")
+
+
+class IPhotoPrintTool(Interface) :
+    """
+    PhotoPrintTool interface
+    """

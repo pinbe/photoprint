@@ -35,7 +35,9 @@
 }
 
 #print_options_editor *:invalid,
-#print_options_editor *.invalid {
+#print_options_editor *.invalid,
+#cart-form *:invalid
+{
   border-color: #d20000;
 }
 
@@ -122,6 +124,74 @@
 #sale-options .cart-btn-wrapper {
   margin-top: 10px;
   text-align: center;
+}
+
+/* cart */
+
+tbody.total th {
+}
+
+tbody.total td {
+  font-weight:bold;
+  font-size:110%;
+}
+
+td.num,
+th.num {
+  text-align:right;
+  padding-right:0.5em ;
+}
+
+td.num input[type="text"] {
+  text-align: right;
+}
+
+.sell_steps_bar {
+  /*border: 2px dashed red;*/
+  height: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.sell_steps_bar ul {
+	padding-left:&dtml-borderRadius;px;
+	margin-left:0;
+}
+
+.sell_steps_bar ul li {
+	margin-right:18px;
+	padding: 10px;
+	display:inline;
+	position: relative;
+	font-weight:bold;
+	color:&dtml-fontColor;;
+	background: &dtml-tabsBorderColor;;
+}
+
+.sell_steps_bar ul li.active {
+	color:#fff;
+	background:&dtml-tabsBorderColor;;
+}
+
+.sell_steps_bar ul li:after {
+	left: 100%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.sell_steps_bar ul li:after {
+	border-left-color:&dtml-tabsBorderColor;;
+	top: 50%;
+	border-width: 17px;
+	margin-top: -16px;
+}
+
+.sell_steps_bar ul li.active:after {
+	border-left-color:&dtml-tabsBorderColor;;
 }
 
 /* </dtml-with> */

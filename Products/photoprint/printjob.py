@@ -17,6 +17,7 @@ from Products.photoprint.permissions import ManagePrintOrders
 from Products.photoprint.price import Price
 from Products.photoprint.tool import COPIES_COUNTERS
 from Products.photoprint.utils import getPayPalConfig
+from Products.Plinn.utils import getBestTranslationLanguage
 
 # from interfaces import IPrintOrder
 
@@ -43,7 +44,15 @@ class PrintJob(SimpleItem) :
 
     @property
     def data(self) :
-        return json.loads(self._data)
+        d = json.loads(self._data)
+        for fff in [d[k] for k in ('format', 'finish', 'frame')] :
+            if not fff : continue
+            for field in ('label', 'description') :
+                if not fff.has_key(field) : continue
+                field_langs = fff[field].keys()
+                lang = getBestTranslationLanguage(field_langs)
+                fff[field] = fff[field][lang]
+        return d
 
     @data.setter
     def data(self, value) :

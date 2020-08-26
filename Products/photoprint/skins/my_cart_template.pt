@@ -1,28 +1,108 @@
-<html metal:use-macro="here/main_template/macros/master"
->
+<html metal:use-macro="here/main_template/macros/master">
   <head>
     <title>titre</title>
-    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
   </head>
-  <body i18n:domain="portfolio">
+  <body i18n:domain="photoprint">
     <div metal:fill-slot="main_no_tabs"
-         tal:omit-tag="">
+             tal:omit-tag="">
       <div tal:condition="not:options/empty">
         <div metal:use-macro="here/sell_macros/macros/sell_steps"></div>
-        <table class="listing">
-          <tbody id="cart_content">
-            <tr tal:repeat="info options/infos">
-              <td>
-                <img tal:attributes="src info/thumbUrl;
-                                     alt info/alt;
-                                     height info/thumbHeight;
-                                     width info/thumbWidth"/>
-
-              </td>
-              <td tal:content="info"></td>
+        <form action="#" id="cart-form">
+          <table class="listing">
+            <tr>
+              <th i18n:translate="">Image</th>
+              <th i18n:translate="">Format</th>
+              <th i18n:translate="">Finish</th>
+              <th i18n:translate="">Frame</th>
+              <th i18n:translate="">Unit price</th>
+              <th i18n:translate="copies_number">Copies</th>
+              <th i18n:translate="">Total</th>
             </tr>
-          </tbody>
-        </table>
+            <tbody id="cart_content">
+              <tal:block tal:repeat="info options/infos">
+                <tr tal:define="pjob info/pjob;
+                                data pjob/data"
+                    tal:on-error="nothing">
+                  <td>
+                    <img tal:attributes="src info/thumbUrl;
+                            alt info/alt;
+                            height info/thumbHeight;
+                            width info/thumbWidth"/>
+
+                  </td>
+                  <td tal:define="format data/format">
+                    <span tal:replace="format/short_edge"/> × <span tal:replace="format/long_edge"/> cm
+                  </td>
+                  <td>
+                    <span tal:replace="data/finish/label"></span>
+                  </td>
+                  <td tal:define="frame data/frame">
+                    <span tal:condition="frame"
+                          tal:replace="frame/label"/>
+                    <span tal:condition="not: frame"
+                          tal:omit-tag=""
+                          i18n:translate="">without framing</span>
+                  </td>
+                  <td class="num">
+                    <span i18n:translate="price_and_currency"
+                          tal:omit-tag="">
+                      <span i18n:name="price"
+                            tal:content="python:info['unit_price'].taxed"
+                            tal:omit-tag=""/> €
+                    </span>
+
+                  </td>
+                  <td class="num">
+                    <input type="text"
+                           pattern="[1-9]\d*"
+                           required
+                           size="2"
+                           name="quantity"
+                           tal:attributes="data-jobid pjob/id;
+                                           value pjob/copies"/>
+                  </td>
+                  <td class="num">
+                    <span i18n:translate="price_and_currency"
+                          tal:omit-tag="">
+                      <span i18n:name="price"
+                            tal:content="python:(info['unit_price'] * pjob.copies).taxed"
+                            tal:omit-tag=""/> €
+                    </span>
+                  </td>
+                </tr>
+              </tal:block>
+            </tbody>
+            <tbody class="total">
+              <tr>
+                <td colspan="5"><br/></td>
+                <th i18n:translate="">Total</th>
+                <td class="num">
+                    <span i18n:translate="price_and_currency"
+                          tal:omit-tag="">
+                      <span i18n:name="price"
+                            tal:content="python:options['lines_total'].taxed"
+                            tal:omit-tag=""/> €
+                    </span>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="5"><br/></td>
+                <th i18n:translate="">VAT</th>
+                <td class="num">
+                    <span i18n:translate="price_and_currency"
+                          tal:omit-tag="">
+                      <span i18n:name="price"
+                            tal:content="python:options['lines_total'].tax"
+                            tal:omit-tag=""/> €
+                    </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
+        <script type="text/javascript"
+                tal:attributes="src here/photoprint/jsbuild/cart_editform.js/absolute_url"></script>
       </div>
       <div tal:condition="options/empty" tal:omit-tag="">
         <h2 i18n:translate="">My cart</h2>

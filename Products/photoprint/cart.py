@@ -26,7 +26,7 @@ from logging import getLogger
 from AccessControl import ModuleSecurityInfo
 from Acquisition import Implicit
 from Globals import Persistent, PersistentMapping
-from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.utils import getUtilityByInterfaceName
 
 from Products.photoprint.printjob import PrintJob
 from counters import CopiesCounters
@@ -67,22 +67,22 @@ class PrintCart(Persistent, Implicit) :
     def locked(self) :
         return self._confirmed
 
-    def append(self, context, item) :
+    def append(self, item) :
         if self.locked :
             raise CartLockedError
 
-        pptool = getToolByName(context, 'portal_photo_print')
+        pptool = getUtilityByInterfaceName('Products.photoprint.interfaces.IPhotoPrintTool')
         reified_order = pptool.reifyPrintOrder(item)
 
-        order_id = (item['cmf_uid'],
+        order_id = '_'.join((item['cmf_uid'],
                     reified_order['format']['reference'],
                     reified_order['finish']['reference'],
                     reified_order['frame']['reference'] if reified_order['frame'] else '',
-                    )
+                    ))
 
         if reified_order['format']['copies'] > 0 :  # Édition limitée
             format_reference = reified_order['format']['reference']
-            uidh = getToolByName(context, 'portal_uidhandler')
+            uidh = getUtilityByInterfaceName('Products.CMFUid.interfaces.IUniqueIdHandler')
             photo = uidh.getObject(item['cmf_uid'])
             if not hasattr(photo.aq_base, COPIES_COUNTERS) :
                 setattr(photo, COPIES_COUNTERS, CopiesCounters())
@@ -95,118 +95,96 @@ class PrintCart(Persistent, Implicit) :
                 counters[format_reference] = alreadySold + 1
 
         if not self._orders.has_key(order_id) :
-            self._orders[order_id] = PrintJob('_'.join(order_id), item['cmf_uid'], reified_order)
+            self._orders[order_id] = PrintJob(order_id, item['cmf_uid'], reified_order)
             self._sequence_order = self._sequence_order + (order_id,)
         else :
             self._orders[order_id].copies += 1
 
-        return
 
-    # assert isinstance(item, dict)
-    # keys = item.keys()
-    # keys.sort()
-    # assert keys == CART_ITEM_KEYS
-    #
-    # pptool = getToolByName(context, 'portal_photo_print')
-    # uidh   = getToolByName(context, 'portal_uidhandler')
-    #
-    # uid = item['cmf_uid']
-    # template = item['printing_template']
-    # quantity = item['quantity']
-    #
-    # photo = uidh.getObject(uid)
-    # pOptions = pptool.getPrintingOptionsContainerFor(photo)
-    # template = getattr(pOptions, template)
-    # templateId = template.getId()
-    #
-    # reference = template.productReference
-    #
-    # # check / update counters
-    # if template.maxCopies :
-    # 	if not hasattr(photo.aq_base, COPIES_COUNTERS) :
-    # 		setattr(photo, COPIES_COUNTERS, CopiesCounters())
-    # 	counters = getattr(photo, COPIES_COUNTERS)
-    # 	alreadySold = counters.get(reference)
-    #
-    # 	if (alreadySold + quantity) > template.maxCopies :
-    # 		raise SoldOutError(template.maxCopies - alreadySold)
-    # 	else :
-    # 		counters[reference] = alreadySold + quantity
-    #
-    # if not self._uids.has_key(uid) :
-    # 	self._uids[uid] = PersistentMapping()
-    # 	self._order = self._order + (uid,)
-    #
-    # if not self._uids[uid].has_key(templateId) :
-    # 	self._uids[uid][templateId] = PersistentMapping()
-    # 	self._uids[uid][templateId]['reference'] = reference
-    # 	self._uids[uid][templateId]['quantity'] = 0
-    #
-    # self._uids[uid][templateId]['quantity'] += quantity
-
-    def update(self, context, item) :
+    def update_quantity(self, jobid, quantity) :
         if self.locked :
             raise CartLockedError
-        assert isinstance(item, dict)
-        keys = item.keys()
-        keys.sort()
-        assert keys == CART_ITEM_KEYS
 
-        pptool = getToolByName(context, 'portal_photo_print')
-        uidh = getToolByName(context, 'portal_uidhandler')
+        if type(quantity) != int or \
+            quantity <= 0 :
+            raise ValueError()
 
-        uid = item['cmf_uid']
-        template = item['printing_template']
-        quantity = item['quantity']
+        job = self._orders[jobid]
+        reified_order = job.data
 
-        photo = uidh.getObject(uid)
-        pOptions = pptool.getPrintingOptionsContainerFor(photo)
-        template = getattr(pOptions, template)
-        templateId = template.getId()
-        reference = template.productReference
-
-        currentQuantity = self._orders[uid][templateId]['quantity']
-        delta = quantity - currentQuantity
-        if template.maxCopies :
+        if reified_order['format']['copies'] > 0 : # Édition limitée
+            currentQuantity = job.copies
+            delta = quantity - currentQuantity
+            uidh = getUtilityByInterfaceName('Products.CMFUid.interfaces.IUniqueIdHandler')
+            photo = uidh.getObject(job.cmf_uid)
             counters = getattr(photo, COPIES_COUNTERS)
+            format_reference = reified_order['format']['reference']
             if delta > 0 :
-                already = counters[reference]
-                if (already + delta) > template.maxCopies :
-                    raise SoldOutError(template.maxCopies - already)
-            counters[reference] += delta
+                alreadySold = counters[format_reference]
+                if (alreadySold + delta) > reified_order['format']['copies'] :
+                    raise SoldOutError(reified_order['format']['copies'] - alreadySold)
+            counters[format_reference] += delta
 
-        self._orders[uid][templateId]['quantity'] += delta
+        job.copies = quantity
 
-    def remove(self, context, uid, templateId) :
-        if self.locked :
-            raise CartLockedError
-        pptool = getToolByName(context, 'portal_photo_print')
-        uidh = getToolByName(context, 'portal_uidhandler')
 
-        photo = uidh.getObject(uid)
-        pOptions = pptool.getPrintingOptionsContainerFor(photo)
-        template = getattr(pOptions, templateId)
-        reference = template.productReference
-
-        quantity = self._orders[uid][templateId]['quantity']
-        if template.maxCopies :
-            counters = getattr(photo, COPIES_COUNTERS)
-            counters[reference] -= quantity
-
-        del self._orders[uid][templateId]
-        if not self._orders[uid] :
-            del self._orders[uid]
-            self._sequence_order = tuple([u for u in self._sequence_order if u != uid])
+    # def update(self, context, item) :
+    #     if self.locked :
+    #         raise CartLockedError
+    #     assert isinstance(item, dict)
+    #     keys = item.keys()
+    #     keys.sort()
+    #     assert keys == CART_ITEM_KEYS
+    #
+    #     pptool = getToolByName(context, 'portal_photo_print')
+    #     uidh = getToolByName(context, 'portal_uidhandler')
+    #
+    #     uid = item['cmf_uid']
+    #     template = item['printing_template']
+    #     quantity = item['quantity']
+    #
+    #     photo = uidh.getObject(uid)
+    #     pOptions = pptool.getPrintingOptionsContainerFor(photo)
+    #     template = getattr(pOptions, template)
+    #     templateId = template.getId()
+    #     reference = template.productReference
+    #
+    #     currentQuantity = self._orders[uid][templateId]['quantity']
+    #     delta = quantity - currentQuantity
+    #     if template.maxCopies :
+    #         counters = getattr(photo, COPIES_COUNTERS)
+    #         if delta > 0 :
+    #             already = counters[reference]
+    #             if (already + delta) > template.maxCopies :
+    #                 raise SoldOutError(template.maxCopies - already)
+    #         counters[reference] += delta
+    #
+    #     self._orders[uid][templateId]['quantity'] += delta
+    #
+    # def remove(self, context, uid, templateId) :
+    #     if self.locked :
+    #         raise CartLockedError
+    #     pptool = getToolByName(context, 'portal_photo_print')
+    #     uidh = getToolByName(context, 'portal_uidhandler')
+    #
+    #     photo = uidh.getObject(uid)
+    #     pOptions = pptool.getPrintingOptionsContainerFor(photo)
+    #     template = getattr(pOptions, templateId)
+    #     reference = template.productReference
+    #
+    #     quantity = self._orders[uid][templateId]['quantity']
+    #     if template.maxCopies :
+    #         counters = getattr(photo, COPIES_COUNTERS)
+    #         counters[reference] -= quantity
+    #
+    #     del self._orders[uid][templateId]
+    #     if not self._orders[uid] :
+    #         del self._orders[uid]
+    #         self._sequence_order = tuple([u for u in self._sequence_order if u != uid])
 
     def __iter__(self) :
         for order_id in self._sequence_order :
             yield self._orders[order_id]
-        # item = {}
-        # item['cmf_uid'] = uid
-        # for templateId, rq in self._orders[uid].items() :
-        # 	item['printing_template'] = templateId
-        # 	item['quantity'] = rq['quantity']
-        # 	yield item
 
     def __nonzero__(self) :
         return len(self._sequence_order) > 0

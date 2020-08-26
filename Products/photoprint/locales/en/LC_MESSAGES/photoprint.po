@@ -14,8 +14,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Meaningless\n"
-"POT-Creation-Date: Mon Aug 24 15:28:36 2020\n"
-"PO-Revision-Date: 2020-08-24 15:30+0200\n"
+"POT-Creation-Date: Wed Aug 26 17:04:28 2020\n"
+"PO-Revision-Date: 2020-08-26 18:01+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
 "Language: \n"
@@ -28,39 +28,55 @@ msgstr ""
 msgid "${i}.${d}"
 msgstr "${i}.${d}"
 
-#: t/skins/add_to_cart.py:20 t/skins/my_cart.py:73
+#: t/skins/add_to_cart.py:20
 msgid "You must enter an integer for quantity (found: %s)"
-msgstr ""
+msgstr "You must enter an integer for quantity (found: %s)"
 
-#: t/skins/add_to_cart.py:23 t/skins/my_cart.py:75
+#: t/skins/add_to_cart.py:23
 msgid "You must enter a positive value for quantity (found: %s)"
-msgstr ""
+msgstr "You must enter a positive value for quantity (found: %s)"
 
-#: t/skins/add_to_cart.py:49 t/skins/my_cart.py:85
+#: t/skins/add_to_cart.py:49 t/skins/cartrpc.py:43
 msgid "Only %d available copies of this photo in this size."
-msgstr ""
+msgstr "Only %d available copies of this photo in this size."
 
-#: t/skins/add_to_cart.py:51 t/skins/my_cart.py:87
+#: t/skins/add_to_cart.py:51 t/skins/cartrpc.py:45
 msgid "Only one last available copy of this photo in this size."
-msgstr ""
+msgstr "Only one last available copy of this photo in this size."
 
 #: t/skins/add_to_cart.py:53
 msgid "No more available copy of this photo in this size."
-msgstr ""
+msgstr "No more available copy of this photo in this size."
 
 #: t/skins/add_to_cart.py:62
 msgid ""
 "Your cart is locked:\n"
 "please complete your current order first."
 msgstr ""
+"Your cart is locked:\n"
+"please complete your current order first."
 
 #: t/skins/add_to_cart.py:72 t/skins/add_to_cart.py:74
 msgid "Added to cart."
-msgstr ""
+msgstr "Added to cart."
 
-#: t/skins/cartrpc.py:22
+#: t/skins/cartrpc.py:25
 msgid "This item is sold out."
 msgstr "This item is sold out."
+
+#: t/skins/cartrpc.py:35 t/skins/my_cart_template.pt:50
+#: t/skins/my_cart_template.pt:68 t/skins/my_cart_template.pt:83
+#: t/skins/my_cart_template.pt:95
+msgid "price_and_currency"
+msgstr "${price}€"
+
+#: t/skins/cartrpc.py:47
+msgid "No more available copy of this photo and in this size."
+msgstr ""
+
+#: t/skins/cartrpc.py:56
+msgid "Wrong value for quantity."
+msgstr ""
 
 #: t/skins/confirm_join_template.pt:12
 msgid "You have been registered as a member."
@@ -266,21 +282,59 @@ msgstr ""
 "so that when you next log in, your user name will already be filled in for "
 "you."
 
-#: t/skins/my_cart.py:58
-msgid "Order >>"
-msgstr ""
-
 #: t/skins/my_cart.py:60
+msgid "Order >>"
+msgstr "Order >>"
+
+#: t/skins/my_cart.py:62
 msgid "Shipping >>"
-msgstr ""
+msgstr "Shipping >>"
 
-#: t/skins/my_cart.py:89
-msgid "No more available copy of this photo and in this size."
-msgstr ""
-
-#: t/skins/my_cart.py:144
+#: t/skins/my_cart.py:141 t/skins/my_cart_template.pt:108
 msgid "My cart"
+msgstr "My cart"
+
+#: t/skins/my_cart_template.pt:14 t/skins/order_printing_list_template.pt:22
+#: t/skins/order_view_template.pt:96
+msgid "Image"
+msgstr "Image"
+
+#: t/skins/my_cart_template.pt:15
+msgid "Format"
+msgstr "Format"
+
+#: t/skins/my_cart_template.pt:16
+msgid "Finish"
+msgstr "Finish"
+
+#: t/skins/my_cart_template.pt:17
+msgid "Frame"
+msgstr "Frame"
+
+#: t/skins/my_cart_template.pt:18 t/skins/order_view_template.pt:99
+msgid "Unit price"
+msgstr "Unit price"
+
+#. Default: "Copies"
+#: t/skins/my_cart_template.pt:19
+msgid "copies_number"
+msgstr "Copies"
+
+#: t/skins/my_cart_template.pt:20 t/skins/my_cart_template.pt:79
+msgid "Total"
 msgstr ""
+
+#: t/skins/my_cart_template.pt:43
+msgid "without framing"
+msgstr "without framing"
+
+#: t/skins/my_cart_template.pt:91 t/skins/order_view_template.pt:141
+msgid "VAT"
+msgstr "VAT"
+
+#: t/skins/my_cart_template.pt:109
+msgid "Your cart is currently empty."
+msgstr "Your cart is currently empty."
 
 #: t/skins/my_orders.py:17 t/skins/order_list.py:14
 #: t/skins/order_view_template.pt:185
@@ -434,10 +488,6 @@ msgstr "Tracking number"
 msgid "Tracking url"
 msgstr "Tracking url"
 
-#: t/skins/order_printing_list_template.pt:22 t/skins/order_view_template.pt:96
-msgid "Image"
-msgstr "Image"
-
 #: t/skins/order_printing_list_template.pt:23
 msgid "File"
 msgstr "File"
@@ -470,10 +520,6 @@ msgstr "Processing"
 msgid "Printing format and type"
 msgstr "Printing format and type"
 
-#: t/skins/order_view_template.pt:99
-msgid "Unit price"
-msgstr "Unit price"
-
 #: t/skins/order_view_template.pt:100
 msgid "VAT (%)"
 msgstr "VAT (%)"
@@ -489,10 +535,6 @@ msgstr "image removed"
 #: t/skins/order_view_template.pt:133
 msgid "Discount"
 msgstr "Discount"
-
-#: t/skins/order_view_template.pt:141
-msgid "VAT"
-msgstr "VAT"
 
 #: t/skins/order_view_template.pt:145
 msgid "Total amount to pay"
@@ -602,19 +644,19 @@ msgstr "Define printing options"
 msgid "Delete options defined at this level"
 msgstr "Delete options defined at this level"
 
-#: t/tool.py:218
+#: t/tool.py:223
 msgid "No printing options found at %r"
 msgstr "No printing options found at %r"
 
-#: t/utils.py:54
+#: t/utils.py:66
 msgid "Wrong private collection identifier."
 msgstr "Wrong private collection identifier."
 
-#: t/utils.py:57
+#: t/utils.py:69
 msgid "Collection's password does not match confirmation."
 msgstr "Collection's password does not match confirmation."
 
-#: t/utils.py:61
+#: t/utils.py:73
 msgid "Wrong collection's password."
 msgstr "Wrong collection's password."
 
@@ -705,6 +747,9 @@ msgstr "[%s] order %s sending notification"
 
 msgid "paypal_pay"
 msgstr "paypal_pay"
+
+#~ msgid "${price} €"
+#~ msgstr "${price} €"
 
 #~ msgid "Formats"
 #~ msgstr "Formats"

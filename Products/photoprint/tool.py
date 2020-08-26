@@ -33,7 +33,9 @@ from Globals import InitializeClass
 from OFS.OrderedFolder import OrderedFolder
 from Products.CMFCore.utils import UniqueObject, getUtilityByInterfaceName
 from Products.Plinn.utils import getBestTranslationLanguage
+from zope.interface import implements
 
+from Products.photoprint.interfaces import IPhotoPrintTool
 from Products.photoprint.printoffer import PrintOffer
 from permissions import ManagePrintOrderTemplate
 from price import Price
@@ -49,7 +51,8 @@ class PhotoPrintTool(UniqueObject, OrderedFolder) :
     Provide utilities to configure possible printing works
     over photo of the portal.
     """
-    
+
+    implements(IPhotoPrintTool)
     id = 'portal_photo_print'
     meta_type = 'Photo print tool'
     
@@ -58,7 +61,8 @@ class PhotoPrintTool(UniqueObject, OrderedFolder) :
     incomingOrderPath = 'commandes'
     no_shipping_threshold = 150
     shipping = 6.0
-    shipping_vat = 0.196
+    vat_rate = 0.2
+    shipping_vat = 0.2
     store_name = ''
     _order_counter = 0
     _transaction_id_counter = 0
@@ -66,6 +70,7 @@ class PhotoPrintTool(UniqueObject, OrderedFolder) :
     _properties = OrderedFolder._properties + (
         {'id' : 'incomingOrderPath',         'type' : 'string',    'mode' : 'w'},
         {'id' : 'no_shipping_threshold',    'type' : 'int',        'mode' : 'w'},
+        {'id' : 'vat_rate',             'type' : 'float',     'mode' : 'w'},
         {'id' : 'shipping',                    'type' : 'float',    'mode' : 'w'},
         {'id' : 'shipping_vat',             'type' : 'float',     'mode' : 'w'},
         {'id' : 'store_name',                 'type' : 'string',     'mode' : 'w'}

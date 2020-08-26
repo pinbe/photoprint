@@ -35,7 +35,7 @@ security.declarePublic('Message')
 Message = _ = MessageFactory('photoprint')
 
 security.declarePublic('translate')
-def translate(message, context) :
+def translate(message, context=None, mapping=None) :
     """ Translate i18n message.
     """
     if isinstance(message, Exception) :
@@ -43,7 +43,8 @@ def translate(message, context) :
             message = message[0]
         except (TypeError, IndexError) :
             pass
-    return i18ntranslate(message, domain='photoprint', context=context.REQUEST)
+    request = getattr(context, 'REQUEST', getRequest())
+    return i18ntranslate(message, domain='photoprint', context=request, mapping=mapping)
 
 
 security.declarePublic('grantAccess')
