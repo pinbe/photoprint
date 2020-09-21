@@ -4,9 +4,9 @@ const WebpackObfuscator = require('webpack-obfuscator');
 const baseConfig = {
     watch: false,
     mode: 'production',
-    plugins: [
-        new WebpackObfuscator({rotateStringArray: true})
-    ]
+    // plugins: [
+    //     new WebpackObfuscator({rotateStringArray: true})
+    // ]
 };
 
 module.exports = {baseConfig: Object.assign({}, commonConfig, baseConfig)};
