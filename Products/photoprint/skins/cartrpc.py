@@ -3,22 +3,44 @@ from Products.Plinn.utils import json_dumps
 
 from Products.photoprint.exceptions import SoldOutError
 from Products.photoprint.utils import translate
+from Products.photoprint.cart import PrintCart
+from Products.photoprint.price import Price
+from Products.CMFCore.utils import getUtilityByInterfaceName
 
 def _(message, mapping=None) : return translate(message, mapping=mapping).encode('utf-8')
+pptool = getUtilityByInterfaceName('Products.CMFCore.interfaces.IPropertiesTool')
+VAT = pptool.getProperty('vat_rate', 0.2)
 
 resp, req = context.checkjsonrpc(req)
 if resp.has_key('error') :
     return resp
 
 sd = context.session_data_manager.getSessionData(create = 1)
-from Products.photoprint.cart import PrintCart
 cart = sd.get('cart', PrintCart())
+uidh = getUtilityByInterfaceName('Products.CMFUid.interfaces.IUniqueIdHandler')
 
 method = req['method']
 if method == 'add_to_cart' :
     try :
-        cart.append(req['params'])
-        resp['result'] = {'ok':True}
+        pjob = cart.append(req['params'])
+        item_data = pjob.data
+        b = uidh.getBrain(pjob.cmf_uid)
+        size = b.getThumbnailSize
+        unit_price_ttc = reduce(lambda a, b : a + b,
+                                [fff['price'] for fff in [item_data[k] for k in ('format', 'finish', 'frame')] if fff],
+                                0)
+        d = {'thumbUrl' : '%s/getThumbnail' % b.getURL(),
+             'thumbHeight' : size['height'] / 2,
+             'thumbWidth' : size['width'] / 2,
+             'alt' : ('%s - %s' % (b.Title, b.Description)).strip(' -'),
+             'pjob' : pjob,
+             'unit_price' : Price(unit_price_ttc, VAT),
+             }
+
+        resp['result'] = {
+            'ok':True,
+            'html' : context.my_cart_added_template(infos=[d])
+        }
     except SoldOutError:
         resp['error'] = {
             'code' : -32603, # Internal error

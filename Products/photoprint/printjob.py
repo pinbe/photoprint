@@ -58,6 +58,14 @@ class PrintJob(SimpleItem) :
     def data(self, value) :
         self._data = json.dumps(value, encoding='utf-8', ensure_ascii=False)
 
+    @property
+    def json(self) :
+        return {'id': self.id,
+                'cmf_uid': self.cmf_uid,
+                'copies': self.copies,
+                'data': self.data
+                }
+
 InitializeClass(PrintJob)
 PrintJobFactory = Factory(PrintJob)
 

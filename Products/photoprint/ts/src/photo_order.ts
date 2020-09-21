@@ -3,6 +3,9 @@ import i18next, {TOptions} from "i18next";
 import HttpApi from "i18next-http-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
 import {JsonRpcRequest} from "./components/jsonrpc";
+import "./custom.scss";
+import * as $ from "jquery";
+import "bootstrap";
 
 const _ = (s: string, options?: TOptions): string => i18next.t(s, options);
 
@@ -48,9 +51,9 @@ class PhotoOrder {
     private readonly portal_url: string;
     private readonly wrapper: HTMLElement;
     private printInfos: PrintInfos;
-    private static FORMATS_CHOICES_CLS = 'formats'
-    private static FINISHES_CHOICES_CLS = 'finishes'
-    private static FRAMES_CHOICES_CLS = 'frames'
+    private static FORMATS_CHOICES_CLS = 'formats';
+    private static FINISHES_CHOICES_CLS = 'finishes';
+    private static FRAMES_CHOICES_CLS = 'frames';
     private selectedOptions: SelectedOptions;
 
     constructor(portal_url: string,
@@ -152,6 +155,7 @@ class PhotoOrder {
         ;
         orderBtnWrapper
             .append('button')
+            .attr('class', 'btn btn-primary')
             .text(_('Add to cart'))
             .on('click', () => this.addToCart())
         ;
@@ -312,10 +316,26 @@ class PhotoOrder {
     private addToCart() {
         const req = new JsonRpcRequest(`${this.portal_url}/cartrpc`)
         const params = Object.assign({cmf_uid: this.uid}, this.selectedOptions)
-        req.send<{ ok: boolean }>('add_to_cart', params)
+        req.send<{ ok: boolean, html: string }>('add_to_cart', params)
             .then(
                 (resp) => {
-                    console.log(resp.result.ok);
+                    if (resp.result.ok) {
+                        let modal = d3.select(document.body)
+                            .append('div')
+                            .attr('class', 'modal fade')
+                            .attr('tabindex', '-1')
+                        ;
+                        modal.html(resp.result.html)
+                        $(modal.node())
+                            .modal('show')
+                            .on('hidden.bs.modal', () => modal.remove())
+                        ;
+                        modal.select('button[name="see_cart"]')
+                            .on('click', () => {
+                                window.location.href = this.portal_url + '/my_cart';
+                            })
+                        ;
+                    }
                 },
                 (resp) => {
                     console.error(resp.error.message);
@@ -360,4 +380,4 @@ function main() {
 
 }
 
-window.addEventListener('load', () => main());
+$(() => main());

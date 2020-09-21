@@ -100,6 +100,8 @@ class PrintCart(Persistent, Implicit) :
         else :
             self._orders[order_id].copies += 1
 
+        return self._orders[order_id]
+
 
     def update_quantity(self, jobid, quantity) :
         if self.locked :

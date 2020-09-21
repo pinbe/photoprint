@@ -9,7 +9,7 @@
       <div tal:condition="not:options/empty">
         <div metal:use-macro="here/sell_macros/macros/sell_steps"></div>
         <form action="#" id="cart-form">
-          <table class="listing">
+          <table class="listing" metal:define-macro="cart_listing">
             <tr>
               <th i18n:translate="">Image</th>
               <th i18n:translate="">Format</th>
@@ -54,14 +54,17 @@
 
                   </td>
                   <td class="num">
-                    <input type="text"
-                           pattern="[1-9]\d*"
-                           required
-                           size="2"
-                           name="quantity"
-                           tal:attributes="data-jobid pjob/id;
-                                           value pjob/copies;
-                                           size python:max(len(str(pjob.copies)), 2)"/>
+                    <span metal:define-slot="copies"
+                          tal:omit-tag="">
+                      <input type="text"
+                             pattern="[1-9]\d*"
+                             required
+                             size="2"
+                             name="quantity"
+                             tal:attributes="data-jobid pjob/id;
+                                             value pjob/copies;
+                                             size python:max(len(str(pjob.copies)), 2)"/>
+                    </span>
                   </td>
                   <td class="num">
                     <span i18n:translate="price_and_currency"
@@ -74,7 +77,7 @@
                 </tr>
               </tal:block>
             </tbody>
-            <tbody class="total">
+            <tbody class="total" metal:define-slot="total">
               <tr>
                 <td colspan="5"><br/></td>
                 <th i18n:translate="">Total</th>

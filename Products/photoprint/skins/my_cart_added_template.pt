@@ -1,0 +1,35 @@
+<div class="modal-dialog modal-dialog-centered"
+     role="document"
+         i18n:domain="photoprint">
+  <div class="modal-content" style="width: unset">
+    <div class="modal-header">
+      <h5 class="modal-title"
+               i18n:translate="">Added to cart</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div metal:use-macro="here/my_cart_template/macros/cart_listing">
+        <metal:block metal:fill-slot="total"/>
+        <span metal:fill-slot="copies"
+              tal:replace="pjob/copies"/>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div style="display: flex;
+                  justify-content: space-between;
+                  width: 100%">
+        <button type="button"
+                class="btn btn-link"
+                data-dismiss="modal"
+                i18n:translate="">Continue shopping</button>
+        <button type="button"
+                class="btn btn-primary"
+                name="see_cart"
+                i18n:translate="">See cart
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

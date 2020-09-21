@@ -14,8 +14,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Meaningless\n"
-"POT-Creation-Date: Wed Aug 26 17:04:28 2020\n"
-"PO-Revision-Date: 2020-08-26 18:01+0200\n"
+"POT-Creation-Date: Mon Sep 21 23:43:30 2020\n"
+"PO-Revision-Date: 2020-09-21 23:43+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
 "Language: \n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: zope/app/locales/extract.py\n"
 
-#: t/price.py:82
+#: t/price.py:92
 msgid "${i}.${d}"
 msgstr "${i}.${d}"
 
@@ -36,11 +36,11 @@ msgstr "You must enter an integer for quantity (found: %s)"
 msgid "You must enter a positive value for quantity (found: %s)"
 msgstr "You must enter a positive value for quantity (found: %s)"
 
-#: t/skins/add_to_cart.py:49 t/skins/cartrpc.py:43
+#: t/skins/add_to_cart.py:49 t/skins/cartrpc.py:73
 msgid "Only %d available copies of this photo in this size."
 msgstr "Only %d available copies of this photo in this size."
 
-#: t/skins/add_to_cart.py:51 t/skins/cartrpc.py:45
+#: t/skins/add_to_cart.py:51 t/skins/cartrpc.py:75
 msgid "Only one last available copy of this photo in this size."
 msgstr "Only one last available copy of this photo in this size."
 
@@ -60,21 +60,22 @@ msgstr ""
 msgid "Added to cart."
 msgstr "Added to cart."
 
-#: t/skins/cartrpc.py:25
+#: t/skins/cartrpc.py:47
 msgid "This item is sold out."
 msgstr "This item is sold out."
 
-#: t/skins/cartrpc.py:35 t/skins/my_cart_template.pt:50
-#: t/skins/my_cart_template.pt:68 t/skins/my_cart_template.pt:83
-#: t/skins/my_cart_template.pt:95
+#: t/skins/cartrpc.py:58 t/skins/cartrpc.py:60 t/skins/cartrpc.py:65
+#: t/skins/cartrpc.py:66 t/skins/my_cart_template.pt:50
+#: t/skins/my_cart_template.pt:72 t/skins/my_cart_template.pt:87
+#: t/skins/my_cart_template.pt:99
 msgid "price_and_currency"
 msgstr "${price}€"
 
-#: t/skins/cartrpc.py:47
+#: t/skins/cartrpc.py:77
 msgid "No more available copy of this photo and in this size."
 msgstr ""
 
-#: t/skins/cartrpc.py:56
+#: t/skins/cartrpc.py:87
 msgid "Wrong value for quantity."
 msgstr ""
 
@@ -290,9 +291,21 @@ msgstr "Order >>"
 msgid "Shipping >>"
 msgstr "Shipping >>"
 
-#: t/skins/my_cart.py:141 t/skins/my_cart_template.pt:108
+#: t/skins/my_cart.py:141 t/skins/my_cart_template.pt:112
 msgid "My cart"
 msgstr "My cart"
+
+#: t/skins/my_cart_added_template.pt:6
+msgid "Added to cart"
+msgstr "Added to cart"
+
+#: t/skins/my_cart_added_template.pt:23
+msgid "Continue shopping"
+msgstr "Continue shopping"
+
+#: t/skins/my_cart_added_template.pt:27
+msgid "See cart"
+msgstr "See cart"
 
 #: t/skins/my_cart_template.pt:14 t/skins/order_printing_list_template.pt:22
 #: t/skins/order_view_template.pt:96
@@ -320,7 +333,7 @@ msgstr "Unit price"
 msgid "copies_number"
 msgstr "Copies"
 
-#: t/skins/my_cart_template.pt:20 t/skins/my_cart_template.pt:79
+#: t/skins/my_cart_template.pt:20 t/skins/my_cart_template.pt:83
 msgid "Total"
 msgstr ""
 
@@ -328,11 +341,11 @@ msgstr ""
 msgid "without framing"
 msgstr "without framing"
 
-#: t/skins/my_cart_template.pt:91 t/skins/order_view_template.pt:141
+#: t/skins/my_cart_template.pt:95 t/skins/order_view_template.pt:141
 msgid "VAT"
 msgstr "VAT"
 
-#: t/skins/my_cart_template.pt:109
+#: t/skins/my_cart_template.pt:113
 msgid "Your cart is currently empty."
 msgstr "Your cart is currently empty."
 
