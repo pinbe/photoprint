@@ -1,0 +1,22 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+  <head>
+    <title>titre</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+  </head>
+  <body i18n:domain="portfolio">
+    <div metal:define-macro="sell_steps" class="sell_steps_bar">
+      <ul tal:define="step_authentication exists:step_authentication;
+                      step_shipping exists:step_shipping;
+                      step_payment exists:step_payment;
+                      step_confirmation step_confirmation|nothing">
+        <li class="done" i18n:translate="">Cart</li>
+        <li tal:attributes="class python:(not isAnon or step_authentication) and 'done' or None" i18n:translate="">Authentication</li>
+        <li tal:attributes="class python:not isAnon and (step_shipping and 'done' or None)" i18n:translate="">Shipping</li>
+        <li tal:attributes="class python:not isAnon and (step_payment and 'done' or None)" i18n:translate="">Payment</li>
+        <li tal:attributes="class python:not isAnon and (step_confirmation and 'done' or None)" i18n:translate="">Confirmation</li>
+      </ul>
+    </div>
+  </body>
+</html>

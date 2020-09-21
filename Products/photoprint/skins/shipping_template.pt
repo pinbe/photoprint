@@ -1,0 +1,67 @@
+<html metal:use-macro="here/main_template/macros/master"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+  <head>
+    <title>Shipping template</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    
+  </head>
+  <body i18n:domain="portfolio">
+    <div metal:fill-slot="main_no_tabs" tal:omit-tag=""
+         tal:define="step_shipping python:True">
+      <div metal:use-macro="here/sell_macros/macros/sell_steps"></div>
+      <h2 i18n:translate="">Please set shipping informations</h2>
+      <form method="post" tal:attributes="action string:$portal_url/my_cart">
+        <table class="TwoColumnForm">
+          <tr>
+            <th colspan="2">
+              <input type="submit" name="set_shipping" value="Validate &gt;&gt;" i18n:attributes="value" />
+            </th>
+          </tr>
+          <tr>
+            <th i18n:translate="">Fullname</th>
+            <td>
+              <input name="shipping_fullname" tal:attributes="value options/shipping_fullname"/>
+            </td>
+          </tr>
+          <tr>
+            <th i18n:translate="">Address</th>
+            <td>
+              <textarea name="shipping_address" tal:content="options/shipping_address"
+                        cols="30" rows="1" style="width:auto"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <th i18n:translate="">City</th>
+            <td>
+              <input type="text" name="shipping_city" size="35" tal:attributes="value options/shipping_city"/>
+            </td>
+          </tr>
+          <tr>
+            <th i18n:translate="">Zip code</th>
+            <td>
+              <input type="text" name="shipping_zipcode" size="5" tal:attributes="value options/shipping_zipcode"/>
+            </td>
+          </tr>
+          <tr>
+            <th i18n:translate="">Country</th>
+            <td>
+              <select name="shipping_country"
+                      tal:define="countries python:modules['Products.iso_3166_1'].fr.countries"
+                      i18n:domain="iso_3166_1">
+                <option tal:repeat="c countries" tal:attributes="value python:c[0]; selected python:c[0]==options['shipping_country']" tal:content="python:c[0]" i18n:translate=""></option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <th colspan="2">
+              <br/>
+              <input type="submit" name="set_shipping" value="Validate &gt;&gt;" i18n:attributes="value" />
+            </th>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </body>
+</html>
