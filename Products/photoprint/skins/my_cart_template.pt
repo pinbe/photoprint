@@ -8,8 +8,17 @@
              tal:omit-tag="">
       <div tal:condition="not:options/empty">
         <div metal:use-macro="here/sell_macros/macros/sell_steps"></div>
-        <form action="#" id="cart-form">
+        <form id="cart-form"
+              method="post"
+              tal:attributes="action string:$portal_url/my_cart">
           <table class="listing" metal:define-macro="cart_listing">
+            <thead metal:define-slot="thead">
+              <tr>
+                <td colspan="7" class="num">
+                  <input type="submit" tal:attributes="name options/nextStep/name; value options/nextStep/value"/>
+                </td>
+              </tr>
+            </thead>
             <tr>
               <th i18n:translate="">Image</th>
               <th i18n:translate="">Format</th>
@@ -103,6 +112,13 @@
                 </td>
               </tr>
             </tbody>
+            <tfoot metal:define-slot="tfoot">
+              <tr>
+                <td colspan="7" class="num">
+                  <input type="submit" tal:attributes="name options/nextStep/name; value options/nextStep/value"/>
+                </td>
+              </tr>
+            </tfoot>
           </table>
         </form>
         <script type="text/javascript"

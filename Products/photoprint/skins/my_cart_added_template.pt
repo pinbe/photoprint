@@ -12,6 +12,8 @@
     <div class="modal-body">
       <div metal:use-macro="here/my_cart_template/macros/cart_listing">
         <metal:block metal:fill-slot="total"/>
+        <metal:block metal:fill-slot="thead"/>
+        <metal:block metal:fill-slot="tfoot"/>
         <span metal:fill-slot="copies"
               tal:replace="pjob/copies"/>
       </div>
