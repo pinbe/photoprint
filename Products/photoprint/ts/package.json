@@ -21,13 +21,13 @@
     "postcss-loader": "^4.0.2",
     "sass": "^1.26.11",
     "sass-loader": "^10.0.2",
-    "source-map-loader": "^1.0.2",
+    "source-map-loader": "^1.1.0",
     "style-loader": "^1.2.1",
     "ts-loader": "^7.0.5",
     "typescript": "^3.9.7",
-    "webpack": "^4.44.1",
+    "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12",
-    "webpack-obfuscator": "^1.11.0"
+    "webpack-obfuscator": "^1.12.1"
   },
   "dependencies": {
     "bootstrap": "^4.5.2",
