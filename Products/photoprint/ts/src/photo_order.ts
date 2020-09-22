@@ -7,6 +7,8 @@ import "./custom.scss";
 import * as $ from "jquery";
 import "bootstrap";
 
+const PHOTO_LOADED_EVENT = 'PHOTO_LOADED_EVENT';
+
 const _ = (s: string, options?: TOptions): string => i18next.t(s, options);
 
 type RefPrice = { reference: string, price: number };
@@ -376,6 +378,12 @@ function main() {
             const uid = document.getElementById('pp-photo-infos')?.getAttribute('data-cmf_uid');
             const wrapper = document.getElementById('sale-options');
             new PhotoOrder(portal_url, uid, wrapper);
+            document.addEventListener(PHOTO_LOADED_EVENT,
+                (evt: CustomEvent) => {
+                    new PhotoOrder(portal_url,
+                        evt.detail.cmf_uid,
+                        document.getElementById('sale-options'));
+                });
         });
 
 }
