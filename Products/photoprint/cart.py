@@ -129,61 +129,6 @@ class PrintCart(Persistent, Implicit) :
 
         job.copies = quantity
 
-
-    # def update(self, context, item) :
-    #     if self.locked :
-    #         raise CartLockedError
-    #     assert isinstance(item, dict)
-    #     keys = item.keys()
-    #     keys.sort()
-    #     assert keys == CART_ITEM_KEYS
-    #
-    #     pptool = getToolByName(context, 'portal_photo_print')
-    #     uidh = getToolByName(context, 'portal_uidhandler')
-    #
-    #     uid = item['cmf_uid']
-    #     template = item['printing_template']
-    #     quantity = item['quantity']
-    #
-    #     photo = uidh.getObject(uid)
-    #     pOptions = pptool.getPrintingOptionsContainerFor(photo)
-    #     template = getattr(pOptions, template)
-    #     templateId = template.getId()
-    #     reference = template.productReference
-    #
-    #     currentQuantity = self._orders[uid][templateId]['quantity']
-    #     delta = quantity - currentQuantity
-    #     if template.maxCopies :
-    #         counters = getattr(photo, COPIES_COUNTERS)
-    #         if delta > 0 :
-    #             already = counters[reference]
-    #             if (already + delta) > template.maxCopies :
-    #                 raise SoldOutError(template.maxCopies - already)
-    #         counters[reference] += delta
-    #
-    #     self._orders[uid][templateId]['quantity'] += delta
-    #
-    # def remove(self, context, uid, templateId) :
-    #     if self.locked :
-    #         raise CartLockedError
-    #     pptool = getToolByName(context, 'portal_photo_print')
-    #     uidh = getToolByName(context, 'portal_uidhandler')
-    #
-    #     photo = uidh.getObject(uid)
-    #     pOptions = pptool.getPrintingOptionsContainerFor(photo)
-    #     template = getattr(pOptions, templateId)
-    #     reference = template.productReference
-    #
-    #     quantity = self._orders[uid][templateId]['quantity']
-    #     if template.maxCopies :
-    #         counters = getattr(photo, COPIES_COUNTERS)
-    #         counters[reference] -= quantity
-    #
-    #     del self._orders[uid][templateId]
-    #     if not self._orders[uid] :
-    #         del self._orders[uid]
-    #         self._sequence_order = tuple([u for u in self._sequence_order if u != uid])
-
     def __iter__(self) :
         for order_id in self._sequence_order :
             yield self._orders[order_id]
