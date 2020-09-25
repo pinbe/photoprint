@@ -34,6 +34,8 @@ from OFS.OrderedFolder import OrderedFolder
 from Products.CMFCore.utils import UniqueObject, getUtilityByInterfaceName
 from Products.Plinn.utils import getBestTranslationLanguage
 from zope.interface import implements
+from Products.Plinn.utils import _sudo
+from DateTime import DateTime
 
 from Products.photoprint.interfaces import IPhotoPrintTool
 from Products.photoprint.printoffer import PrintOffer
@@ -248,7 +250,35 @@ class PhotoPrintTool(UniqueObject, OrderedFolder) :
         if hasattr(aq_base(ob), PRINTING_OPTIONS_ID) :
             return getattr(ob, PRINTING_OPTIONS_ID)
 
+    security.declarePublic('addPrintOrder')
 
+    def addPrintOrder(self, cart) :
+        utool = getUtilityByInterfaceName('Products.CMFCore.interfaces.IURLTool')
+        portal = utool.getPortalObject()
+        ttool = getUtilityByInterfaceName('Products.CMFCore.interfaces.ITypesTool')
+
+        baseContainer = portal.unrestrictedTraverse(self.getProperty('incomingOrderPath'), None)
+        if baseContainer is None :
+            parts = self.getProperty('incomingOrderPath').split('/')
+            baseContainer = portal
+            for id in parts :
+                if not hasattr(baseContainer.aq_base, id) :
+                    id = _sudo(lambda : ttool.constructContent('Order Folder', baseContainer, id))
+                baseContainer = getattr(baseContainer, id)
+
+        now = DateTime()
+        monthId = now.strftime('%Y-%m')
+        if not hasattr(baseContainer.aq_base, monthId) :
+            monthId = _sudo(lambda : ttool.constructContent('Order Folder', baseContainer, monthId))
+
+        container = getattr(baseContainer, monthId)
+
+        self._order_counter += 1
+        id = '%s-%d' % (monthId, self._order_counter)
+        id = container.invokeFactory('Order', id)
+        ob = getattr(container, id)
+        ob.loadCart(cart)
+        return ob
 
     security.declarePublic('getShippingFeesFor')
     def getShippingFeesFor(self, shippable=None, price=None):

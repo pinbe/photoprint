@@ -24,16 +24,16 @@
 <!--      />-->
   
   <meta:redefinePermission from="zope2.Public" to="zope.Public" />
-<!--  <five:registerClass-->
-<!--      class=".printjob.PrintOrder"-->
-<!--      meta_type="Print order"-->
-<!--      permission="photoprint.AddPrintOrder"-->
-<!--      />-->
+  <five:registerClass
+      class=".printjob.PrintOrder"
+      meta_type="Print order"
+      permission="photoprint.AddPrintOrder"
+      />
 
-<!--  <utility-->
-<!--      component=".printjob.PrintOrderFactory"-->
-<!--      name="photoprint.order"-->
-<!--      />-->
+  <utility
+      component=".printjob.PrintOrderFactory"
+      name="photoprint.order"
+      />
 
   <adapter
     provides="Products.Plinn.interfaces.ContentHistory.IContentHistory"
