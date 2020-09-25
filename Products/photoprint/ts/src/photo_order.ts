@@ -380,9 +380,10 @@ function main() {
             new PhotoOrder(portal_url, uid, wrapper);
             document.addEventListener(PHOTO_LOADED_EVENT,
                 (evt: CustomEvent) => {
-                    new PhotoOrder(portal_url,
-                        evt.detail.cmf_uid,
-                        document.getElementById('sale-options'));
+                    if (evt.detail.buyable)
+                        new PhotoOrder(portal_url,
+                            evt.detail.cmf_uid,
+                            document.getElementById('sale-options'));
                 });
         });
 
