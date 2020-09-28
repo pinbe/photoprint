@@ -7,7 +7,7 @@ from DateTime import DateTime
 from OFS.SimpleItem import SimpleItem
 from Products.CMFCore.PortalContent import PortalContent
 from Products.CMFCore.permissions import ModifyPortalContent, ManagePortal
-from Products.CMFCore.utils import getToolByName, getUtilityByInterfaceName
+from Products.CMFCore.utils import getUtilityByInterfaceName
 from Products.CMFDefault.DublinCore import DefaultDublinCoreImpl
 from persistent.list import PersistentList
 from persistent.mapping import PersistentMapping
@@ -54,6 +54,17 @@ class PrintJob(SimpleItem) :
                 fff[field] = fff[field][lang]
         return d
 
+    @property
+    def price(self) :
+        d = self.data
+        price = 0.
+        for name in ('format', 'finish', 'frame') :
+            opt = d.get(name)
+            if not opt:
+                continue
+            price += opt['price']
+        return price * self.copies
+
     @data.setter
     def data(self, value) :
         self._data = json.dumps(value, encoding='utf-8', ensure_ascii=False)
@@ -77,20 +88,23 @@ class PrintOrder(PortalContent, DefaultDublinCoreImpl) :
     def __init__(self, id) :
         DefaultDublinCoreImpl.__init__(self)
         self.id = id
-        self.items = []
-        self.quantity = 0
-        self.discount = 0  # discount ratio in percent
-        self.price = Price(0, 0)
+        self.pjobs = tuple()
         # billing and shipping addresses
         self.billing = PersistentMapping()
         self.shipping = PersistentMapping()
         self.shippingFees = Price(0, 0)
         self._paypalLog = PersistentList()
 
+
+    @property
+    def price(self) :
+        pptool = getUtilityByInterfaceName('Products.photoprint.interfaces.IPhotoPrintTool')
+        VAT = pptool.getProperty('vat_rate', 0.2)
+        return reduce(lambda a, b: a+b, [Price(pjob.price, VAT) for pjob in self.pjobs], Price(0, VAT))
+
     @property
     def amountWithFees(self) :
-        coeff = (100 - self.discount) / 100.
-        return self.price * coeff + self.shippingFees
+        return self.price + self.shippingFees
 
     security.declareProtected(ModifyPortalContent, 'editBilling')
     def editBilling(self
@@ -117,38 +131,22 @@ class PrintOrder(PortalContent, DefaultDublinCoreImpl) :
 
     security.declarePrivate('loadCart')
     def loadCart(self, cart) :
-        pptool = getToolByName(self, 'portal_photo_print')
-        uidh = getToolByName(self, 'portal_uidhandler')
-        mtool = getToolByName(self, 'portal_membership')
-        utool = getToolByName(self, 'portal_url')
+        pptool = getUtilityByInterfaceName('Products.photoprint.interfaces.IPhotoPrintTool')
+        uidh = getUtilityByInterfaceName('Products.CMFUid.interfaces.IUniqueIdHandler')
+        mtool = getUtilityByInterfaceName('Products.CMFCore.interfaces.IMembershipTool')
+        utool = getUtilityByInterfaceName('Products.CMFCore.interfaces.IURLTool')
 
-        items = []
-        for item in cart :
-            photo = uidh.getObject(item['cmf_uid'])
-            pOptions = pptool.getPrintingOptionsContainerFor(photo)
-            template = getattr(pOptions, item['printing_template'])
-
-            reference = template.productReference
-            quantity = item['quantity']
-            uPrice = template.price
-            self.quantity += quantity
-
-            d = {'cmf_uid' : item['cmf_uid']
-                , 'url' : photo.absolute_url()
-                , 'title' : template.title
-                , 'description' : template.description
-                , 'unit_price' : Price(uPrice._taxed, uPrice._rate)
-                , 'quantity' : quantity
-                , 'productReference' : reference
-                 }
-            items.append(d)
-            self.price += uPrice * quantity
+        pjobs = []
+        for pjob in cart :
+            pjobs.append(pjob._getCopy(self))
+            photo = uidh.getObject(pjob.cmf_uid)
             # confirm counters
-            if template.maxCopies :
-                counters = getattr(photo, COPIES_COUNTERS)
-                counters.confirm(reference, quantity)
+            fmt = pjob.data['format']
+            if fmt['copies'] :
+                counters = pptool.getCountersFor(photo)
+                counters.confirm(fmt['reference'], pjob.copies)
 
-        self.items = tuple(items)
+        self.pjobs = tuple(pjobs)
         discount_script = getattr(utool.getPortalObject(), 'photoprint_discount', None)
         if discount_script :
             self.discount = discount_script(self.price, self.quantity)
@@ -236,10 +234,13 @@ class PrintOrder(PortalContent, DefaultDublinCoreImpl) :
                    'PAYMENTREQUEST_0_SHIPTOPHONENUM' : self.billing['phone'],
                    }
 
-        if len(self.items) > 1 :
-            quantitySum = reduce(lambda a, b : a + b, [item['quantity'] for item in self.items])
-        else :
-            quantitySum = self.items[0]['quantity']
+        # if len(self.pjobs) > 1 :
+        #     quantitySum = reduce(lambda a, b : a + b, [item['quantity'] for item in self.items])
+        # else :
+        #     quantitySum = self.pjobs[0]['quantity']
+
+        quantitySum = reduce(lambda a, b : a + b, [pjob.copies for pjob in self.pjobs], 0)
+
         total = round(self.amountWithFees.getValues()['taxed'], 2)
 
         options['L_PAYMENTREQUEST_0_NAME0'] = 'Commande photo ref. %s' % self.getId()

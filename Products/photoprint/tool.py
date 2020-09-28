@@ -281,27 +281,28 @@ class PhotoPrintTool(UniqueObject, OrderedFolder) :
         return ob
 
     security.declarePublic('getShippingFeesFor')
-    def getShippingFeesFor(self, shippable=None, price=None):
+    def getShippingFeesFor(self, shippable=None):
         # returns Fees
         # TODO: use adapters
         # for the moment, shippable objet must provide a 'price' attribute
 
-        if shippable and price :
-            raise AttributeError("'shippable' and 'price' are mutually exclusive.")
-        
-        if shippable :
-            amount = shippable.price.getValues()['taxed']
-        else :
-            amount = price.getValues()['taxed']
-        
-        threshold = self.getProperty('no_shipping_threshold')
-
-        if amount < threshold :
-            fees = Price(self.getProperty('shipping')
-                        , self.getProperty('shipping_vat'))
-        else :
-            fees = Price(0,0)
-        return fees
+        # if shippable and price :
+        #     raise AttributeError("'shippable' and 'price' are mutually exclusive.")
+        #
+        # if shippable :
+        #     amount = shippable.price.getValues()['taxed']
+        # else :
+        #     amount = price.getValues()['taxed']
+        #
+        # threshold = self.getProperty('no_shipping_threshold')
+        #
+        # if amount < threshold :
+        #     fees = Price(self.getProperty('shipping')
+        #                 , self.getProperty('shipping_vat'))
+        # else :
+        #     fees = Price(0,0)
+        # return fees
+        return Price(0,0)
     
     security.declarePrivate('getNextTransactionId')
     def getNextTransactionId(self):
