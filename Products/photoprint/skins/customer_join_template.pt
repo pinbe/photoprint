@@ -65,37 +65,39 @@
             </td>
           </tr>
         </tal:case>
-        <tr>
-          <td colspan="2"><hr/></td>
-        </tr>
-        <tr>
-          <td colspan="2" style="text-align:center">
-            <h3 i18n:translate="">Access to private Images</h3>
-            <dl class="FieldHelp">
-              <dd i18n:translate="">
-                Please enter the access code to view / purchase private images.
-              </dd>
-            </dl>
-          </td>
-        </tr>
-        <tr>
-          <th>Identifiant collection privée</th>
-          <td>
-            <input type="text" name="collection_id" tal:attributes="value options/collection_id"/>
-          </td>
-        </tr>
-        <tr>
-          <th>Mot de passe associé</th>
-          <td>
-            <input type="password" name="collection_password" tal:attributes="value options/collection_password" />
-          </td>
-        </tr>
-        <tr>
-          <th>Confirmation du mot de passe</th>
-          <td>
-            <input type="password" name="collection_password_confirm" tal:attributes="value options/collection_password_confirm" />
-          </td>
-        </tr>
+        <tbody tal:replace="nothing">
+          <tr>
+            <td colspan="2"><hr/></td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:center">
+              <h3 i18n:translate="">Access to private Images</h3>
+              <dl class="FieldHelp">
+                <dd i18n:translate="">
+                  Please enter the access code to view / purchase private images.
+                </dd>
+              </dl>
+            </td>
+          </tr>
+          <tr>
+            <th>Identifiant collection privée</th>
+            <td>
+              <input type="text" name="collection_id" tal:attributes="value options/collection_id"/>
+            </td>
+          </tr>
+          <tr>
+            <th>Mot de passe associé</th>
+            <td>
+              <input type="password" name="collection_password" tal:attributes="value options/collection_password" />
+            </td>
+          </tr>
+          <tr>
+            <th>Confirmation du mot de passe</th>
+            <td>
+              <input type="password" name="collection_password_confirm" tal:attributes="value options/collection_password_confirm" />
+            </td>
+          </tr>
+        </tbody>
         <tr>
           <td colspan="2"><hr/></td>
         </tr>
