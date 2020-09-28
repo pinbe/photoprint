@@ -34,9 +34,6 @@ from exceptions import SoldOutError, CartLockedError
 from tool import COPIES_COUNTERS
 
 console = getLogger('Products.photoprint.cart')
-
-CART_ITEM_KEYS = ['cmf_uid', 'printing_template', 'quantity']
-
 msecurity = ModuleSecurityInfo('Products.photoprint.cart')
 msecurity.declarePublic('PrintCart')
 
