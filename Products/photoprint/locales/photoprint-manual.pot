@@ -9,24 +9,6 @@ msgstr ""
 msgid "Your payment has been refused."
 msgstr ""
 
-msgid "recorded-en.gif"
-msgstr ""
-
-msgid "done-en.gif"
-msgstr ""
-
-msgid "paid-en.gif"
-msgstr ""
-
-msgid "refused-en.gif"
-msgstr ""
-
-msgid "sent-en.gif"
-msgstr ""
-
-msgid "canceled-en.gif"
-msgstr ""
-
 msgid "auto_accept_payment"
 msgstr ""
 

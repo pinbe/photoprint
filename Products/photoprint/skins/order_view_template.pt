@@ -22,7 +22,14 @@
         </div>
       </div>
       <h1 i18n:translate="">
-        Order Nb. <span tal:content="here/getId" tal:omit-tag="" i18n:name="order_number"/>
+        Order Nb. <span class="order-num"
+                        tal:content="here/getId"
+                        i18n:name="order_number"/>
+        <span class="rel-anchor" i18n:name="wfstate">
+          <span class="order-wf-state"
+                tal:content="options/wfstate"
+                i18n:translate=""></span>
+        </span>
       </h1>
 
       <!-- billing, shipping, status, workflow -->
@@ -79,13 +86,6 @@
             </tr>
           </table>
         </div>
-        <!-- status -->
-        <div>
-          <img tal:define="tr nocall:modules/Products/photoprint/utils/translate"
-                   tal:attributes="src python:'%s/order_states/%s' % (portal_url, tr('%s-en.gif' % options['wfstate']))"
-          />
-
-        </div>
         <!-- workflow -->
         <div>
           <h3 i18n:translate="">Processing</h3>
@@ -100,6 +100,8 @@
       <!-- order details-->
       <div metal:use-macro="here/my_cart_template/macros/cart_listing">
         <metal:block metal:fill-slot="stepsBar"/>
+        <span metal:fill-slot="copies"
+                 tal:replace="pjob/copies"/>
         <tbody metal:fill-slot="total">
           <tr>
             <td colspan="5"><br/></td>
@@ -150,10 +152,36 @@
             </td>
           </tr>
         </tbody>
-        <!--?        <metal:block metal:fill-slot="total"/>-->
-        <metal:block metal:fill-slot="tfoot"/>
-        <span metal:fill-slot="copies"
-                 tal:replace="pjob/copies"/>
+        <metal:block metal:fill-slot="tfoot">
+          <tfoot tal:define="checkout options/checkout|nothing" tal:condition="checkout">
+            <tr>
+              <td><br/></td>
+              <td colspan="6">
+                <div style="text-align: right">
+                  <span i18n:translate="" tal:omit-tag="">Pay with PayPal:</span>
+                  <a href="#" tal:attributes="href checkout/url"
+                     title="Pay with PayPal" i18n:attributes="title">
+                    <img tal:attributes="src string:$portal_url/paypal-button.png"
+                            width="72" height="45"
+                            alt="Pay with PayPal" i18n:attributes="alt"/>
+                  </a>
+                </div>
+                <p i18n:translate="">
+                  Please check the preceding table and proceed to payment. By
+                  clicking on the PayPal button, you will temporarily leave the
+                  site: you will be redirected to the payment provider PayPal.
+                  Please follow given instructions. The transaction will be final
+                  as soon as you are back on the <em i18n:name="site_name"
+                         tal:content="portal_object/Title">portal title</em> site. For
+                  your information, there is no need to create a PayPal account,
+                  even if you will be prompted: you can simply use your credit
+                  card. If you already have a PayPal account, you can, at your
+                  convenience, pay by PayPal transfer or by credit card.
+                </p>
+              </td>
+            </tr>
+          </tfoot>
+        </metal:block>
       </div>
 
 

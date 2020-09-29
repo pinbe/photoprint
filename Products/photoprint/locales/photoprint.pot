@@ -14,7 +14,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Unknown\n"
-"POT-Creation-Date: Tue Sep 29 11:12:50 2020\n"
+"POT-Creation-Date: Tue Sep 29 12:34:48 2020\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
@@ -72,10 +72,10 @@ msgstr ""
 #: t/skins/my_cart_template.pt:81
 #: t/skins/my_cart_template.pt:96
 #: t/skins/my_cart_template.pt:108
-#: t/skins/order_view_template.pt:110
-#: t/skins/order_view_template.pt:122
-#: t/skins/order_view_template.pt:134
-#: t/skins/order_view_template.pt:146
+#: t/skins/order_view_template.pt:112
+#: t/skins/order_view_template.pt:124
+#: t/skins/order_view_template.pt:136
+#: t/skins/order_view_template.pt:148
 msgid "price_and_currency"
 msgstr ""
 
@@ -186,29 +186,29 @@ msgid "Billing informations"
 msgstr ""
 
 #: t/skins/customer_join_template.pt:110
-#: t/skins/order_view_template.pt:39
-#: t/skins/order_view_template.pt:65
+#: t/skins/order_view_template.pt:46
+#: t/skins/order_view_template.pt:72
 #: t/skins/personalize_form.pt:50
 msgid "Address"
 msgstr ""
 
 #: t/skins/customer_join_template.pt:117
-#: t/skins/order_view_template.pt:43
-#: t/skins/order_view_template.pt:69
+#: t/skins/order_view_template.pt:50
+#: t/skins/order_view_template.pt:76
 #: t/skins/personalize_form.pt:57
 msgid "City"
 msgstr ""
 
 #: t/skins/customer_join_template.pt:123
-#: t/skins/order_view_template.pt:47
-#: t/skins/order_view_template.pt:73
+#: t/skins/order_view_template.pt:54
+#: t/skins/order_view_template.pt:80
 #: t/skins/personalize_form.pt:63
 msgid "Zip code"
 msgstr ""
 
 #: t/skins/customer_join_template.pt:129
-#: t/skins/order_view_template.pt:51
-#: t/skins/order_view_template.pt:77
+#: t/skins/order_view_template.pt:58
+#: t/skins/order_view_template.pt:84
 #: t/skins/personalize_form.pt:69
 msgid "Country"
 msgstr ""
@@ -337,7 +337,7 @@ msgid "without framing"
 msgstr ""
 
 #: t/skins/my_cart_template.pt:104
-#: t/skins/order_view_template.pt:130
+#: t/skins/order_view_template.pt:132
 msgid "VAT"
 msgstr ""
 
@@ -347,7 +347,7 @@ msgstr ""
 
 #: t/skins/my_orders.py:17
 #: t/skins/order_list.py:14
-#: t/skins/order_view_template.pt:256
+#: t/skins/order_view_template.pt:284
 msgid "Date"
 msgstr ""
 
@@ -384,8 +384,9 @@ msgstr ""
 #: t/skins/order_manual_payment_form.pt:19
 #: t/skins/order_notify_done_form.pt:19
 #: t/skins/order_notify_sent_form.pt:19
+#: t/skins/order_view_template.pt:29
 #: t/skins/order_view_template.pt:94
-#: t/skins/order_view_template.pt:267
+#: t/skins/order_view_template.pt:295
 msgid "${DYNAMIC_CONTENT}"
 msgstr ""
 
@@ -442,8 +443,8 @@ msgid "ascending sort"
 msgstr ""
 
 #: t/skins/order_list_template.pt:17
-#: t/skins/order_view_template.pt:35
-#: t/skins/order_view_template.pt:61
+#: t/skins/order_view_template.pt:42
+#: t/skins/order_view_template.pt:68
 #: t/skins/personalize_form.pt:33
 msgid "Name"
 msgstr ""
@@ -517,15 +518,15 @@ msgstr ""
 msgid "Quantity"
 msgstr ""
 
-#: t/skins/order_view_template.pt:25
-msgid "Order Nb. ${order_number}"
+#: t/skins/order_view_template.pt:28
+msgid "Order Nb. ${order_number} ${wfstate}"
 msgstr ""
 
-#: t/skins/order_view_template.pt:32
+#: t/skins/order_view_template.pt:39
 msgid "Billing"
 msgstr ""
 
-#: t/skins/order_view_template.pt:58
+#: t/skins/order_view_template.pt:65
 msgid "Shipping"
 msgstr ""
 
@@ -533,27 +534,40 @@ msgstr ""
 msgid "Processing"
 msgstr ""
 
-#: t/skins/order_view_template.pt:106
+#: t/skins/order_view_template.pt:108
 msgid "Total items"
 msgstr ""
 
-#: t/skins/order_view_template.pt:118
+#: t/skins/order_view_template.pt:120
 msgid "Shipping fees"
 msgstr ""
 
-#: t/skins/order_view_template.pt:142
+#: t/skins/order_view_template.pt:144
 msgid "Total amount to pay"
 msgstr ""
 
-#: t/skins/order_view_template.pt:251
+#: t/skins/order_view_template.pt:161
+msgid "Pay with PayPal:"
+msgstr ""
+
+#: t/skins/order_view_template.pt:162
+#: t/skins/order_view_template.pt:164
+msgid "Pay with PayPal"
+msgstr ""
+
+#: t/skins/order_view_template.pt:174
+msgid "Please check the preceding table and proceed to payment. By clicking on the PayPal button, you will temporarily leave the site: you will be redirected to the payment provider PayPal. Please follow given instructions. The transaction will be final as soon as you are back on the ${site_name} site. For your information, there is no need to create a PayPal account, even if you will be prompted: you can simply use your credit card. If you already have a PayPal account, you can, at your convenience, pay by PayPal transfer or by credit card."
+msgstr ""
+
+#: t/skins/order_view_template.pt:279
 msgid "Order processing history"
 msgstr ""
 
-#: t/skins/order_view_template.pt:257
+#: t/skins/order_view_template.pt:285
 msgid "Actor"
 msgstr ""
 
-#: t/skins/order_view_template.pt:258
+#: t/skins/order_view_template.pt:286
 msgid "Action"
 msgstr ""
 
@@ -642,24 +656,6 @@ msgid "Your payment has been canceled. You will be able to pay later."
 msgstr ""
 
 msgid "Your payment has been refused."
-msgstr ""
-
-msgid "recorded-en.gif"
-msgstr ""
-
-msgid "done-en.gif"
-msgstr ""
-
-msgid "paid-en.gif"
-msgstr ""
-
-msgid "refused-en.gif"
-msgstr ""
-
-msgid "sent-en.gif"
-msgstr ""
-
-msgid "canceled-en.gif"
 msgstr ""
 
 msgid "auto_accept_payment"

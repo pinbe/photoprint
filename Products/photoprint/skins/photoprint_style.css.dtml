@@ -1,5 +1,10 @@
 /* photoprint <dtml-with base_properties> */
 
+@font-face {
+  font-family: sriracha-regular;
+  src: url("&dtml-portal_url;/Sriracha-Regular.ttf");
+}
+
 #print_options_editor > tr > td {
   vertical-align: top;
 }
@@ -193,6 +198,22 @@ td.num input[type="text"] {
 
 .sell_steps_bar ul li.active:after {
 	border-left-color:&dtml-tabsBorderColor;;
+}
+
+.order-wf-state {
+  font-family: sriracha-regular;
+  text-transform: uppercase;
+  font-size: 30px;
+  display: inline-block;
+  transform: rotate(-7deg);
+  /*border: 1px dotted gray;*/
+  top: -15px;
+  left: 20px;
+  color: #e63600;
+}
+
+.order-num {
+  font-weight: bold;
 }
 
 /* </dtml-with> */
