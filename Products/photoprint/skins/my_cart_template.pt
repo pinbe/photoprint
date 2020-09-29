@@ -12,7 +12,7 @@
               method="post"
               tal:attributes="action string:$portal_url/my_cart">
           <table class="listing" metal:define-macro="cart_listing">
-            <thead metal:define-slot="thead">
+            <thead metal:define-slot="stepsBar">
               <tr>
                 <td colspan="7" class="num">
                   <input type="submit" tal:attributes="name options/nextStep/name; value options/nextStep/value"/>

@@ -112,25 +112,7 @@ for pjob in cart :
     infos.append(d)
 
 options['infos'] = infos
-
 options['lines_total'] = reduce(lambda a, b: a+b, [i['unit_price'] * i['pjob'].copies for i in infos], Price(0))
-# if len(prices) == 1:
-#     pricesTotal = prices[0]
-# elif len(prices) > 1 :
-#     pricesTotal = reduce(lambda a, b : a + b, prices)
-#
-#
-# if prices :
-#     options['pricesTotal'] = pricesTotal
-#     options['quantityTotal'] = quantityTotal
-#     discount = 0
-#     if context.get('photoprint_discount') :
-#         discount = context.photoprint_discount(pricesTotal, quantityTotal)
-#     options['discount'] = discount
-#     shippingFees = pptool.getShippingFeesFor(price=pricesTotal)
-#     options['shippingFees'] = shippingFees
-#     coeff = (100 - discount) / 100.
-#     options['totalAmount'] = pricesTotal * coeff + shippingFees
 
 breadcrumbs = [
     { 'id'      : 'root'

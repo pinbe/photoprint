@@ -14,7 +14,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Unknown\n"
-"POT-Creation-Date: Mon Sep 21 23:43:30 2020\n"
+"POT-Creation-Date: Tue Sep 29 11:12:50 2020\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
@@ -68,10 +68,14 @@ msgstr ""
 #: t/skins/cartrpc.py:60
 #: t/skins/cartrpc.py:65
 #: t/skins/cartrpc.py:66
-#: t/skins/my_cart_template.pt:50
-#: t/skins/my_cart_template.pt:72
-#: t/skins/my_cart_template.pt:87
-#: t/skins/my_cart_template.pt:99
+#: t/skins/my_cart_template.pt:59
+#: t/skins/my_cart_template.pt:81
+#: t/skins/my_cart_template.pt:96
+#: t/skins/my_cart_template.pt:108
+#: t/skins/order_view_template.pt:110
+#: t/skins/order_view_template.pt:122
+#: t/skins/order_view_template.pt:134
+#: t/skins/order_view_template.pt:146
 msgid "price_and_currency"
 msgstr ""
 
@@ -99,39 +103,39 @@ msgstr ""
 msgid "Log in"
 msgstr ""
 
-#: t/skins/customer_add_control.py:21
+#: t/skins/customer_add_control.py:22
 msgid "Please enter a given name."
 msgstr ""
 
-#: t/skins/customer_add_control.py:22
+#: t/skins/customer_add_control.py:23
 msgid "Please enter a name."
 msgstr ""
 
-#: t/skins/customer_add_control.py:23
+#: t/skins/customer_add_control.py:24
 msgid "Please enter an email."
 msgstr ""
 
-#: t/skins/customer_add_control.py:24
+#: t/skins/customer_add_control.py:25
 msgid "Please enter a member id."
 msgstr ""
 
-#: t/skins/customer_add_control.py:25
+#: t/skins/customer_add_control.py:26
 msgid "Please enter a billing address."
 msgstr ""
 
-#: t/skins/customer_add_control.py:26
+#: t/skins/customer_add_control.py:27
 msgid "Please enter a city."
 msgstr ""
 
-#: t/skins/customer_add_control.py:27
+#: t/skins/customer_add_control.py:28
 msgid "Please enter zip code."
 msgstr ""
 
-#: t/skins/customer_add_control.py:28
+#: t/skins/customer_add_control.py:29
 msgid "Please enter a country."
 msgstr ""
 
-#: t/skins/customer_add_control.py:29
+#: t/skins/customer_add_control.py:30
 msgid "Please enter a phone."
 msgstr ""
 
@@ -176,57 +180,49 @@ msgstr ""
 msgid "Password (confirm)"
 msgstr ""
 
-#: t/skins/customer_join_template.pt:73
-msgid "Access to private Images"
-msgstr ""
-
-#: t/skins/customer_join_template.pt:75
-msgid "Please enter the access code to view / purchase private images."
-msgstr ""
-
-#: t/skins/customer_join_template.pt:104
+#: t/skins/customer_join_template.pt:106
 #: t/skins/personalize_form.pt:46
 msgid "Billing informations"
 msgstr ""
 
-#: t/skins/customer_join_template.pt:108
-#: t/skins/order_view_template.pt:35
-#: t/skins/order_view_template.pt:60
+#: t/skins/customer_join_template.pt:110
+#: t/skins/order_view_template.pt:39
+#: t/skins/order_view_template.pt:65
 #: t/skins/personalize_form.pt:50
 msgid "Address"
 msgstr ""
 
-#: t/skins/customer_join_template.pt:115
-#: t/skins/order_view_template.pt:39
-#: t/skins/order_view_template.pt:64
+#: t/skins/customer_join_template.pt:117
+#: t/skins/order_view_template.pt:43
+#: t/skins/order_view_template.pt:69
 #: t/skins/personalize_form.pt:57
 msgid "City"
 msgstr ""
 
-#: t/skins/customer_join_template.pt:121
-#: t/skins/order_view_template.pt:43
-#: t/skins/order_view_template.pt:68
+#: t/skins/customer_join_template.pt:123
+#: t/skins/order_view_template.pt:47
+#: t/skins/order_view_template.pt:73
 #: t/skins/personalize_form.pt:63
 msgid "Zip code"
 msgstr ""
 
-#: t/skins/customer_join_template.pt:127
-#: t/skins/order_view_template.pt:47
-#: t/skins/order_view_template.pt:72
+#: t/skins/customer_join_template.pt:129
+#: t/skins/order_view_template.pt:51
+#: t/skins/order_view_template.pt:77
 #: t/skins/personalize_form.pt:69
 msgid "Country"
 msgstr ""
 
-#: t/skins/customer_join_template.pt:137
+#: t/skins/customer_join_template.pt:139
 #: t/skins/personalize_form.pt:79
 msgid "Phone"
 msgstr ""
 
-#: t/skins/customer_join_template.pt:147
+#: t/skins/customer_join_template.pt:149
 msgid "Register"
 msgstr ""
 
-#: t/skins/customer_join_template.pt:148
+#: t/skins/customer_join_template.pt:150
 msgid "Cancel"
 msgstr ""
 
@@ -288,8 +284,8 @@ msgstr ""
 msgid "Shipping >>"
 msgstr ""
 
-#: t/skins/my_cart.py:141
-#: t/skins/my_cart_template.pt:112
+#: t/skins/my_cart.py:123
+#: t/skins/my_cart_template.pt:128
 msgid "My cart"
 msgstr ""
 
@@ -297,63 +293,61 @@ msgstr ""
 msgid "Added to cart"
 msgstr ""
 
-#: t/skins/my_cart_added_template.pt:23
+#: t/skins/my_cart_added_template.pt:25
 msgid "Continue shopping"
 msgstr ""
 
-#: t/skins/my_cart_added_template.pt:27
+#: t/skins/my_cart_added_template.pt:29
 msgid "See cart"
 msgstr ""
 
-#: t/skins/my_cart_template.pt:14
+#: t/skins/my_cart_template.pt:23
 #: t/skins/order_printing_list_template.pt:22
-#: t/skins/order_view_template.pt:96
 msgid "Image"
 msgstr ""
 
-#: t/skins/my_cart_template.pt:15
+#: t/skins/my_cart_template.pt:24
 msgid "Format"
 msgstr ""
 
-#: t/skins/my_cart_template.pt:16
+#: t/skins/my_cart_template.pt:25
 msgid "Finish"
 msgstr ""
 
-#: t/skins/my_cart_template.pt:17
+#: t/skins/my_cart_template.pt:26
 msgid "Frame"
 msgstr ""
 
-#: t/skins/my_cart_template.pt:18
-#: t/skins/order_view_template.pt:99
+#: t/skins/my_cart_template.pt:27
 msgid "Unit price"
 msgstr ""
 
-#: t/skins/my_cart_template.pt:19
+#: t/skins/my_cart_template.pt:28
 #. Default: "Copies"
 msgid "copies_number"
 msgstr ""
 
-#: t/skins/my_cart_template.pt:20
-#: t/skins/my_cart_template.pt:83
+#: t/skins/my_cart_template.pt:29
+#: t/skins/my_cart_template.pt:92
 msgid "Total"
 msgstr ""
 
-#: t/skins/my_cart_template.pt:43
+#: t/skins/my_cart_template.pt:52
 msgid "without framing"
 msgstr ""
 
-#: t/skins/my_cart_template.pt:95
-#: t/skins/order_view_template.pt:141
+#: t/skins/my_cart_template.pt:104
+#: t/skins/order_view_template.pt:130
 msgid "VAT"
 msgstr ""
 
-#: t/skins/my_cart_template.pt:113
+#: t/skins/my_cart_template.pt:129
 msgid "Your cart is currently empty."
 msgstr ""
 
 #: t/skins/my_orders.py:17
 #: t/skins/order_list.py:14
-#: t/skins/order_view_template.pt:185
+#: t/skins/order_view_template.pt:256
 msgid "Date"
 msgstr ""
 
@@ -390,8 +384,8 @@ msgstr ""
 #: t/skins/order_manual_payment_form.pt:19
 #: t/skins/order_notify_done_form.pt:19
 #: t/skins/order_notify_sent_form.pt:19
-#: t/skins/order_view_template.pt:86
-#: t/skins/order_view_template.pt:195
+#: t/skins/order_view_template.pt:94
+#: t/skins/order_view_template.pt:267
 msgid "${DYNAMIC_CONTENT}"
 msgstr ""
 
@@ -448,8 +442,8 @@ msgid "ascending sort"
 msgstr ""
 
 #: t/skins/order_list_template.pt:17
-#: t/skins/order_view_template.pt:31
-#: t/skins/order_view_template.pt:56
+#: t/skins/order_view_template.pt:35
+#: t/skins/order_view_template.pt:61
 #: t/skins/personalize_form.pt:33
 msgid "Name"
 msgstr ""
@@ -520,73 +514,46 @@ msgid "Format / type"
 msgstr ""
 
 #: t/skins/order_printing_list_template.pt:25
-#: t/skins/order_view_template.pt:98
 msgid "Quantity"
 msgstr ""
 
-#: t/skins/order_view_template.pt:23
+#: t/skins/order_view_template.pt:25
 msgid "Order Nb. ${order_number}"
 msgstr ""
 
-#: t/skins/order_view_template.pt:28
+#: t/skins/order_view_template.pt:32
 msgid "Billing"
 msgstr ""
 
-#: t/skins/order_view_template.pt:53
-#: t/skins/order_view_template.pt:137
+#: t/skins/order_view_template.pt:58
 msgid "Shipping"
 msgstr ""
 
-#: t/skins/order_view_template.pt:83
+#: t/skins/order_view_template.pt:91
 msgid "Processing"
 msgstr ""
 
-#: t/skins/order_view_template.pt:97
-msgid "Printing format and type"
+#: t/skins/order_view_template.pt:106
+msgid "Total items"
 msgstr ""
 
-#: t/skins/order_view_template.pt:100
-msgid "VAT (%)"
+#: t/skins/order_view_template.pt:118
+msgid "Shipping fees"
 msgstr ""
 
-#: t/skins/order_view_template.pt:101
-msgid "Amount<br />(tax incl.)"
-msgstr ""
-
-#: t/skins/order_view_template.pt:110
-msgid "image removed"
-msgstr ""
-
-#: t/skins/order_view_template.pt:133
-msgid "Discount"
-msgstr ""
-
-#: t/skins/order_view_template.pt:145
+#: t/skins/order_view_template.pt:142
 msgid "Total amount to pay"
 msgstr ""
 
-#: t/skins/order_view_template.pt:155
-msgid "Pay with PayPal:"
-msgstr ""
-
-#: t/skins/order_view_template.pt:156
-#: t/skins/order_view_template.pt:158
-msgid "Pay with PayPal"
-msgstr ""
-
-#: t/skins/order_view_template.pt:168
-msgid "Please check the preceding table and proceed to payment. By clicking on the PayPal button, you will temporarily leave the site: you will be redirected to the payment provider PayPal. Please follow given instructions. The transaction will be final as soon as you are back on the ${site_name} site. For your information, there is no need to create a PayPal account, even if you will be prompted: you can simply use your credit card. If you already have a PayPal account, you can, at your convenience, pay by PayPal transfer or by credit card."
-msgstr ""
-
-#: t/skins/order_view_template.pt:180
+#: t/skins/order_view_template.pt:251
 msgid "Order processing history"
 msgstr ""
 
-#: t/skins/order_view_template.pt:186
+#: t/skins/order_view_template.pt:257
 msgid "Actor"
 msgstr ""
 
-#: t/skins/order_view_template.pt:187
+#: t/skins/order_view_template.pt:258
 msgid "Action"
 msgstr ""
 
@@ -650,7 +617,7 @@ msgstr ""
 msgid "Delete options defined at this level"
 msgstr ""
 
-#: t/tool.py:223
+#: t/tool.py:225
 msgid "No printing options found at %r"
 msgstr ""
 

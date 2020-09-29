@@ -1,16 +1,14 @@
 ##parameters=
-from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.utils import getUtilityByInterfaceName
 from Products.photoprint.price import Price
 from Products.photoprint.cart import PrintCart
 
-uidh = getToolByName(context, 'portal_uidhandler')
-wtool = getToolByName(context, 'portal_workflow')
+uidh = getUtilityByInterfaceName('Products.CMFUid.interfaces.IUniqueIdHandler')
+wtool = getUtilityByInterfaceName('Products.CMFCore.interfaces.IWorkflowTool')
+pptool = getUtilityByInterfaceName('Products.photoprint.interfaces.IPhotoPrintTool')
+VAT = pptool.getProperty('vat_rate', 0.2)
 
 options = {}
-
-quantity = 0
-prices = []
-infos = []
 
 session = context.REQUEST.SESSION
 sg = session.get
@@ -24,7 +22,7 @@ if toBePaid :
     options['checkout'] = context.ppSetExpressCheckout()
 
 if cart.locked and \
-cart.pendingOrderPath == context.getPhysicalPath() :
+        cart.pendingOrderPath == context.getPhysicalPath() :
     options['orderIsCart'] = True
     if wfstate != 'recorded' :
         cart = PrintCart()
@@ -32,32 +30,27 @@ cart.pendingOrderPath == context.getPhysicalPath() :
 else :
     options['orderIsCart'] = False
 
-for item in context.items :
-    d = {'title' : item['title']
-        , 'description' : item['description']
-        , 'unit_price' : item['unit_price']
-        , 'quantity' : item['quantity']
-        , 'total' : item['unit_price'] * item['quantity']
+infos = []
+for pjob in context.pjobs :
+    item_data = pjob.data
+    b = uidh.getBrain(pjob.cmf_uid)
+    size = b.getThumbnailSize
+    unit_price_ttc = reduce(lambda a, b : a + b,
+                            [fff['price'] for fff in [item_data[k] for k in ('format', 'finish', 'frame')] if fff], 0)
+    d = {'thumbUrl' : '%s/getThumbnail' % b.getURL(),
+         'thumbHeight' : size['height'] / 2,
+         'thumbWidth' : size['width'] / 2,
+         'alt' : ('%s - %s' % (b.Title, b.Description)).strip(' -'),
+         'pjob' : pjob,
+         'unit_price' : Price(unit_price_ttc, VAT),
          }
-
-    b = uidh.queryBrain(item['cmf_uid'])
-    if b :
-        size = b.getThumbnailSize
-        thumbInfo = {'thumbUrl' : '%s/getThumbnail' % b.getURL()
-            , 'thumbHeight' : size['height'] / 2
-            , 'thumbWidth' : size['width'] / 2
-            , 'alt' : ('%s - %s' % (b.Title, b.Description)).strip(' -')
-                     }
-        d.update(thumbInfo)
-    quantity += d['quantity']
-    prices.append(d['total'])
     infos.append(d)
-
 options['infos'] = infos
-options['quantity'] = quantity
+options['lines_total'] = reduce(lambda a, b: a+b, [i['unit_price'] * i['pjob'].copies for i in infos], Price(0))
+
 options['pricesSum'] = context.price
 options['discount'] = getattr(context, 'discount', 0)
 options['shippingFees'] = shippingFees = context.shippingFees
-options['total'] = context.amountWithFees
+options['amountWithFees'] = context.amountWithFees
 
 return context.order_view_template(**options)

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Plinn 2.0\n"
-"POT-Creation-Date: Mon Sep 21 23:43:30 2020\n"
-"PO-Revision-Date: 2020-09-21 23:44+0200\n"
+"POT-Creation-Date: Tue Sep 29 11:12:50 2020\n"
+"PO-Revision-Date: 2020-09-29 11:20+0200\n"
 "Last-Translator:  Benoît PIN\n"
 "Language-Team: CRI http://cri.ensmp.fr\n"
 "Language: \n"
@@ -22,52 +22,56 @@ msgstr "${i},${d}"
 
 #: t/skins/add_to_cart.py:20
 msgid "You must enter an integer for quantity (found: %s)"
-msgstr ""
+msgstr "Vous devez entrer un nombre entier pour la quantité (trouvé : %s)."
 
 #: t/skins/add_to_cart.py:23
 msgid "You must enter a positive value for quantity (found: %s)"
-msgstr ""
+msgstr "Vous devez entrer une valeur positive pour la quantité (trouvé : %s)."
 
 #: t/skins/add_to_cart.py:49 t/skins/cartrpc.py:73
 msgid "Only %d available copies of this photo in this size."
-msgstr ""
+msgstr "Seulement %d exemplaires disponibles pour cette photo à ce format."
 
 #: t/skins/add_to_cart.py:51 t/skins/cartrpc.py:75
 msgid "Only one last available copy of this photo in this size."
-msgstr ""
+msgstr "Plus qu'un dernier exemplaire disponible pour cette photo à ce format. "
 
 #: t/skins/add_to_cart.py:53
 msgid "No more available copy of this photo in this size."
-msgstr ""
+msgstr "Plus d'exemplaire disponible pour cette photo à ce format."
 
 #: t/skins/add_to_cart.py:62
 msgid ""
 "Your cart is locked:\n"
 "please complete your current order first."
 msgstr ""
+"Votre panier est verrouillé :\\n\n"
+"veuillez terminer votre commande en cours."
 
 #: t/skins/add_to_cart.py:72 t/skins/add_to_cart.py:74
 msgid "Added to cart."
-msgstr ""
+msgstr "Ajouté au panier."
 
 #: t/skins/cartrpc.py:47
 msgid "This item is sold out."
 msgstr "Cet article est épuisé."
 
 #: t/skins/cartrpc.py:58 t/skins/cartrpc.py:60 t/skins/cartrpc.py:65
-#: t/skins/cartrpc.py:66 t/skins/my_cart_template.pt:50
-#: t/skins/my_cart_template.pt:72 t/skins/my_cart_template.pt:87
-#: t/skins/my_cart_template.pt:99
+#: t/skins/cartrpc.py:66 t/skins/my_cart_template.pt:59
+#: t/skins/my_cart_template.pt:81 t/skins/my_cart_template.pt:96
+#: t/skins/my_cart_template.pt:108 t/skins/order_view_template.pt:110
+#: t/skins/order_view_template.pt:122 t/skins/order_view_template.pt:134
+#: t/skins/order_view_template.pt:146
 msgid "price_and_currency"
 msgstr "${price} €"
 
 #: t/skins/cartrpc.py:77
 msgid "No more available copy of this photo and in this size."
-msgstr ""
+msgstr "Plus d'exemplaire de cette photo disponible dans ce format."
 
 #: t/skins/cartrpc.py:87
 msgid "Wrong value for quantity."
-msgstr ""
+msgstr "Valeur incorrecte pour la quantité."
 
 #: t/skins/confirm_join_template.pt:12
 msgid "You have been registered as a member."
@@ -89,39 +93,39 @@ msgstr "Cliquez sur le bouton pour vous connecter immédiatement."
 msgid "Log in"
 msgstr "Connexion"
 
-#: t/skins/customer_add_control.py:21
+#: t/skins/customer_add_control.py:22
 msgid "Please enter a given name."
 msgstr "Veuillez entrer un prénom."
 
-#: t/skins/customer_add_control.py:22
+#: t/skins/customer_add_control.py:23
 msgid "Please enter a name."
 msgstr "Veuillez entrer un nom."
 
-#: t/skins/customer_add_control.py:23
+#: t/skins/customer_add_control.py:24
 msgid "Please enter an email."
 msgstr "Veuillez entrer un email."
 
-#: t/skins/customer_add_control.py:24
+#: t/skins/customer_add_control.py:25
 msgid "Please enter a member id."
 msgstr "Veuillez entrer un login."
 
-#: t/skins/customer_add_control.py:25
+#: t/skins/customer_add_control.py:26
 msgid "Please enter a billing address."
 msgstr "Veuillez entrer une addresse de facturation."
 
-#: t/skins/customer_add_control.py:26
+#: t/skins/customer_add_control.py:27
 msgid "Please enter a city."
 msgstr "Veuillez entrer une ville."
 
-#: t/skins/customer_add_control.py:27
+#: t/skins/customer_add_control.py:28
 msgid "Please enter zip code."
 msgstr "Veuillez entrer un code postal."
 
-#: t/skins/customer_add_control.py:28
+#: t/skins/customer_add_control.py:29
 msgid "Please enter a country."
 msgstr "Veuillez entrer un pays."
 
-#: t/skins/customer_add_control.py:29
+#: t/skins/customer_add_control.py:30
 msgid "Please enter a phone."
 msgstr "Veuillez entrer un numéro de téléphone."
 
@@ -172,48 +176,39 @@ msgstr "Mot de passe"
 msgid "Password (confirm)"
 msgstr "Mot de passe (confirmation)"
 
-#: t/skins/customer_join_template.pt:73
-msgid "Access to private Images"
-msgstr "Accès à des images privées"
-
-#: t/skins/customer_join_template.pt:75
-msgid "Please enter the access code to view / purchase private images."
-msgstr ""
-"Veuillez entrer le code d'accès pour voir / acheter des images privées."
-
-#: t/skins/customer_join_template.pt:104 t/skins/personalize_form.pt:46
+#: t/skins/customer_join_template.pt:106 t/skins/personalize_form.pt:46
 msgid "Billing informations"
 msgstr "Informations de facturation"
 
-#: t/skins/customer_join_template.pt:108 t/skins/order_view_template.pt:35
-#: t/skins/order_view_template.pt:60 t/skins/personalize_form.pt:50
+#: t/skins/customer_join_template.pt:110 t/skins/order_view_template.pt:39
+#: t/skins/order_view_template.pt:65 t/skins/personalize_form.pt:50
 msgid "Address"
 msgstr "Adresse"
 
-#: t/skins/customer_join_template.pt:115 t/skins/order_view_template.pt:39
-#: t/skins/order_view_template.pt:64 t/skins/personalize_form.pt:57
+#: t/skins/customer_join_template.pt:117 t/skins/order_view_template.pt:43
+#: t/skins/order_view_template.pt:69 t/skins/personalize_form.pt:57
 msgid "City"
 msgstr "Ville"
 
-#: t/skins/customer_join_template.pt:121 t/skins/order_view_template.pt:43
-#: t/skins/order_view_template.pt:68 t/skins/personalize_form.pt:63
+#: t/skins/customer_join_template.pt:123 t/skins/order_view_template.pt:47
+#: t/skins/order_view_template.pt:73 t/skins/personalize_form.pt:63
 msgid "Zip code"
 msgstr "Code postal"
 
-#: t/skins/customer_join_template.pt:127 t/skins/order_view_template.pt:47
-#: t/skins/order_view_template.pt:72 t/skins/personalize_form.pt:69
+#: t/skins/customer_join_template.pt:129 t/skins/order_view_template.pt:51
+#: t/skins/order_view_template.pt:77 t/skins/personalize_form.pt:69
 msgid "Country"
 msgstr "Pays"
 
-#: t/skins/customer_join_template.pt:137 t/skins/personalize_form.pt:79
+#: t/skins/customer_join_template.pt:139 t/skins/personalize_form.pt:79
 msgid "Phone"
 msgstr "Téléphone"
 
-#: t/skins/customer_join_template.pt:147
+#: t/skins/customer_join_template.pt:149
 msgid "Register"
 msgstr "S'enregistrer"
 
-#: t/skins/customer_join_template.pt:148
+#: t/skins/customer_join_template.pt:150
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -286,7 +281,7 @@ msgstr "Commander >>"
 msgid "Shipping >>"
 msgstr "Livraison >>"
 
-#: t/skins/my_cart.py:141 t/skins/my_cart_template.pt:112
+#: t/skins/my_cart.py:123 t/skins/my_cart_template.pt:128
 msgid "My cart"
 msgstr "Mon panier"
 
@@ -294,58 +289,57 @@ msgstr "Mon panier"
 msgid "Added to cart"
 msgstr "Ajouté au panier"
 
-#: t/skins/my_cart_added_template.pt:23
+#: t/skins/my_cart_added_template.pt:25
 msgid "Continue shopping"
 msgstr "Continuer mes achats"
 
-#: t/skins/my_cart_added_template.pt:27
+#: t/skins/my_cart_added_template.pt:29
 msgid "See cart"
 msgstr "Voir le panier"
 
-#: t/skins/my_cart_template.pt:14 t/skins/order_printing_list_template.pt:22
-#: t/skins/order_view_template.pt:96
+#: t/skins/my_cart_template.pt:23 t/skins/order_printing_list_template.pt:22
 msgid "Image"
 msgstr "Image"
 
-#: t/skins/my_cart_template.pt:15
+#: t/skins/my_cart_template.pt:24
 msgid "Format"
 msgstr "Format"
 
-#: t/skins/my_cart_template.pt:16
+#: t/skins/my_cart_template.pt:25
 msgid "Finish"
 msgstr "Finition"
 
-#: t/skins/my_cart_template.pt:17
+#: t/skins/my_cart_template.pt:26
 msgid "Frame"
 msgstr "Cadre"
 
-#: t/skins/my_cart_template.pt:18 t/skins/order_view_template.pt:99
+#: t/skins/my_cart_template.pt:27
 msgid "Unit price"
 msgstr "Prix unitaire"
 
 #. Default: "Copies"
-#: t/skins/my_cart_template.pt:19
+#: t/skins/my_cart_template.pt:28
 msgid "copies_number"
 msgstr "Exemplaires"
 
-#: t/skins/my_cart_template.pt:20 t/skins/my_cart_template.pt:83
+#: t/skins/my_cart_template.pt:29 t/skins/my_cart_template.pt:92
 msgid "Total"
-msgstr ""
+msgstr "Total"
 
-#: t/skins/my_cart_template.pt:43
+#: t/skins/my_cart_template.pt:52
 msgid "without framing"
 msgstr "sans encadrement"
 
-#: t/skins/my_cart_template.pt:95 t/skins/order_view_template.pt:141
+#: t/skins/my_cart_template.pt:104 t/skins/order_view_template.pt:130
 msgid "VAT"
 msgstr "TVA"
 
-#: t/skins/my_cart_template.pt:113
+#: t/skins/my_cart_template.pt:129
 msgid "Your cart is currently empty."
 msgstr "Votre panier est actuellement vide."
 
 #: t/skins/my_orders.py:17 t/skins/order_list.py:14
-#: t/skins/order_view_template.pt:185
+#: t/skins/order_view_template.pt:256
 msgid "Date"
 msgstr "Date"
 
@@ -373,8 +367,8 @@ msgstr "Mes commandes"
 #: t/skins/order_list_template.pt:33 t/skins/order_list_template.pt:35
 #: t/skins/order_list_template.pt:37 t/skins/order_list_template.pt:50
 #: t/skins/order_manual_payment_form.pt:19 t/skins/order_notify_done_form.pt:19
-#: t/skins/order_notify_sent_form.pt:19 t/skins/order_view_template.pt:86
-#: t/skins/order_view_template.pt:195
+#: t/skins/order_notify_sent_form.pt:19 t/skins/order_view_template.pt:94
+#: t/skins/order_view_template.pt:267
 msgid "${DYNAMIC_CONTENT}"
 msgstr ""
 
@@ -431,8 +425,8 @@ msgstr "tri décroissant"
 msgid "ascending sort"
 msgstr "tri croissant"
 
-#: t/skins/order_list_template.pt:17 t/skins/order_view_template.pt:31
-#: t/skins/order_view_template.pt:56 t/skins/personalize_form.pt:33
+#: t/skins/order_list_template.pt:17 t/skins/order_view_template.pt:35
+#: t/skins/order_view_template.pt:61 t/skins/personalize_form.pt:33
 msgid "Name"
 msgstr "Nom"
 
@@ -508,88 +502,47 @@ msgstr "Fichier"
 msgid "Format / type"
 msgstr "Format / type"
 
-#: t/skins/order_printing_list_template.pt:25 t/skins/order_view_template.pt:98
+#: t/skins/order_printing_list_template.pt:25
 msgid "Quantity"
 msgstr "Quantité"
 
-#: t/skins/order_view_template.pt:23
+#: t/skins/order_view_template.pt:25
 msgid "Order Nb. ${order_number}"
 msgstr "Commande N° ${order_number}"
 
-#: t/skins/order_view_template.pt:28
+#: t/skins/order_view_template.pt:32
 msgid "Billing"
 msgstr "Facturation"
 
-#: t/skins/order_view_template.pt:53 t/skins/order_view_template.pt:137
+#: t/skins/order_view_template.pt:58
 msgid "Shipping"
 msgstr "Livraison"
 
-#: t/skins/order_view_template.pt:83
+#: t/skins/order_view_template.pt:91
 msgid "Processing"
 msgstr "Traitement"
 
-#: t/skins/order_view_template.pt:97
-msgid "Printing format and type"
-msgstr "Format d'impression et type de support"
+#: t/skins/order_view_template.pt:106
+msgid "Total items"
+msgstr "Total articles"
 
-#: t/skins/order_view_template.pt:100
-msgid "VAT (%)"
-msgstr "TVA (%)"
+#: t/skins/order_view_template.pt:118
+msgid "Shipping fees"
+msgstr "Frais de port"
 
-#: t/skins/order_view_template.pt:101
-msgid "Amount<br />(tax incl.)"
-msgstr "Montant (TTC)"
-
-#: t/skins/order_view_template.pt:110
-msgid "image removed"
-msgstr "image supprimée"
-
-#: t/skins/order_view_template.pt:133
-msgid "Discount"
-msgstr "Remise"
-
-#: t/skins/order_view_template.pt:145
+#: t/skins/order_view_template.pt:142
 msgid "Total amount to pay"
 msgstr "Montant total à payer"
 
-#: t/skins/order_view_template.pt:155
-msgid "Pay with PayPal:"
-msgstr "Payer avec PayPal :"
-
-#: t/skins/order_view_template.pt:156 t/skins/order_view_template.pt:158
-msgid "Pay with PayPal"
-msgstr "Payer avec PayPal"
-
-#: t/skins/order_view_template.pt:168
-msgid ""
-"Please check the preceding table and proceed to payment. By clicking on the "
-"PayPal button, you will temporarily leave the site: you will be redirected "
-"to the payment provider PayPal. Please follow given instructions. The "
-"transaction will be final as soon as you are back on the ${site_name} site. "
-"For your information, there is no need to create a PayPal account, even if "
-"you will be prompted: you can simply use your credit card. If you already "
-"have a PayPal account, you can, at your convenience, pay by PayPal transfer "
-"or by credit card."
-msgstr ""
-"Veuillez vérifier le tableau ci-dessus et procéder au paiement. En cliquant "
-"sur le bouton PayPal, vous allez temporairement quitter le site pour être "
-"redirigé vers le prestataire de paiement PayPal. Merci de suivre ses "
-"instructions. La transaction sera définitive dès que vous serez revenu sur "
-"le site ${site_name}. Pour votre information, il n'est pas nécessaire de "
-"créer un compte PayPal, même si vous y serez incité : vous pouvez simplement "
-"utiliser votre carte bancaire. Si vous disposez déjà d'un compte PayPal, "
-"vous pourrez, à votre convenance, payer par virement PayPal ou par carte "
-"bancaire."
-
-#: t/skins/order_view_template.pt:180
+#: t/skins/order_view_template.pt:251
 msgid "Order processing history"
 msgstr "Historique du traitement de la commande"
 
-#: t/skins/order_view_template.pt:186
+#: t/skins/order_view_template.pt:257
 msgid "Actor"
 msgstr "Acteur"
 
-#: t/skins/order_view_template.pt:187
+#: t/skins/order_view_template.pt:258
 msgid "Action"
 msgstr "Action"
 
@@ -658,7 +611,7 @@ msgstr "Définir des options d'impression"
 msgid "Delete options defined at this level"
 msgstr "Supprimer les options définies à ce niveau"
 
-#: t/tool.py:223
+#: t/tool.py:225
 msgid "No printing options found at %r"
 msgstr "Aucune option d'impression trouvée sur %r"
 
@@ -760,6 +713,54 @@ msgstr "[%s] expédition de la commande %s"
 
 msgid "paypal_pay"
 msgstr "Paiement PayPal"
+
+#~ msgid "Access to private Images"
+#~ msgstr "Accès à des images privées"
+
+#~ msgid "Please enter the access code to view / purchase private images."
+#~ msgstr ""
+#~ "Veuillez entrer le code d'accès pour voir / acheter des images privées."
+
+#~ msgid "Printing format and type"
+#~ msgstr "Format d'impression et type de support"
+
+#~ msgid "VAT (%)"
+#~ msgstr "TVA (%)"
+
+#~ msgid "Amount<br />(tax incl.)"
+#~ msgstr "Montant (TTC)"
+
+#~ msgid "image removed"
+#~ msgstr "image supprimée"
+
+#~ msgid "Discount"
+#~ msgstr "Remise"
+
+#~ msgid "Pay with PayPal:"
+#~ msgstr "Payer avec PayPal :"
+
+#~ msgid "Pay with PayPal"
+#~ msgstr "Payer avec PayPal"
+
+#~ msgid ""
+#~ "Please check the preceding table and proceed to payment. By clicking on "
+#~ "the PayPal button, you will temporarily leave the site: you will be "
+#~ "redirected to the payment provider PayPal. Please follow given "
+#~ "instructions. The transaction will be final as soon as you are back on "
+#~ "the ${site_name} site. For your information, there is no need to create a "
+#~ "PayPal account, even if you will be prompted: you can simply use your "
+#~ "credit card. If you already have a PayPal account, you can, at your "
+#~ "convenience, pay by PayPal transfer or by credit card."
+#~ msgstr ""
+#~ "Veuillez vérifier le tableau ci-dessus et procéder au paiement. En "
+#~ "cliquant sur le bouton PayPal, vous allez temporairement quitter le site "
+#~ "pour être redirigé vers le prestataire de paiement PayPal. Merci de "
+#~ "suivre ses instructions. La transaction sera définitive dès que vous "
+#~ "serez revenu sur le site ${site_name}. Pour votre information, il n'est "
+#~ "pas nécessaire de créer un compte PayPal, même si vous y serez incité : "
+#~ "vous pouvez simplement utiliser votre carte bancaire. Si vous disposez "
+#~ "déjà d'un compte PayPal, vous pourrez, à votre convenance, payer par "
+#~ "virement PayPal ou par carte bancaire."
 
 #~ msgid "${price} €"
 #~ msgstr "${price} €"
