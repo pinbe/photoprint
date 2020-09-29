@@ -30,22 +30,22 @@ msgstr ""
 msgid "notify_sent"
 msgstr ""
 
-msgid "canceled"
+msgid "order-wfstate-canceled"
 msgstr ""
 
-msgid "done"
+msgid "order-wfstate-done"
 msgstr ""
 
-msgid "paid"
+msgid "order-wfstate-paid"
 msgstr ""
 
-msgid "recorded"
+msgid "order-wfstate-recorded"
 msgstr ""
 
-msgid "refused"
+msgid "order-wfstate-refused"
 msgstr ""
 
-msgid "sent"
+msgid "order-wfstate-sent"
 msgstr ""
 
 msgid "Manual payment"

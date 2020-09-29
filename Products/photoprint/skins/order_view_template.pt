@@ -8,7 +8,7 @@
 
   </head>
   <body i18n:domain="photoprint">
-    <div metal:fill-slot="main_no_tabs" tal:omit-tag="">
+    <div metal:fill-slot="main_no_tabs" id="order-page">
 
       <!-- sell steps -->
       <div tal:condition="options/orderIsCart" tal:omit-tag="">
@@ -27,13 +27,13 @@
                         i18n:name="order_number"/>
         <span class="rel-anchor" i18n:name="wfstate">
           <span class="order-wf-state"
-                tal:content="options/wfstate"
+                tal:content="python:'order-wfstate-%s' % options['wfstate']"
                 i18n:translate=""></span>
         </span>
       </h1>
 
       <!-- billing, shipping, status, workflow -->
-      <div>
+      <div class="invoice-infos">
         <!-- billing -->
         <div>
           <h2 i18n:translate="">Billing</h2>
@@ -87,7 +87,7 @@
           </table>
         </div>
         <!-- workflow -->
-        <div>
+        <div tal:condition="workflow_actions">
           <h3 i18n:translate="">Processing</h3>
           <ul>
             <li tal:repeat="action workflow_actions">

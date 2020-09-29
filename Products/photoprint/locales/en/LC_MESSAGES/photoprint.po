@@ -14,8 +14,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Meaningless\n"
-"POT-Creation-Date: Tue Sep 29 12:34:48 2020\n"
-"PO-Revision-Date: 2020-09-29 12:22+0200\n"
+"POT-Creation-Date: Tue Sep 29 13:08:25 2020\n"
+"PO-Revision-Date: 2020-09-29 13:13+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
 "Language: \n"
@@ -680,28 +680,28 @@ msgid "manual_payment"
 msgstr "manual_payment"
 
 msgid "notify_done"
-msgstr "notify_done"
+msgstr "Order made"
 
 msgid "notify_sent"
-msgstr "notify_sent"
+msgstr "Shipped"
 
-msgid "canceled"
+msgid "order-wfstate-canceled"
 msgstr "canceled"
 
-msgid "done"
-msgstr "done"
+msgid "order-wfstate-done"
+msgstr "made"
 
-msgid "paid"
+msgid "order-wfstate-paid"
 msgstr "paid"
 
-msgid "recorded"
-msgstr "recorded"
+msgid "order-wfstate-recorded"
+msgstr "saved"
 
-msgid "refused"
+msgid "order-wfstate-refused"
 msgstr "refused"
 
-msgid "sent"
-msgstr "sent"
+msgid "order-wfstate-sent"
+msgstr "shipped"
 
 msgid "Manual payment"
 msgstr "Manual payment"
@@ -723,6 +723,24 @@ msgstr "[%s] order %s sending notification"
 
 msgid "paypal_pay"
 msgstr "Payment: PayPal"
+
+#~ msgid "canceled"
+#~ msgstr "canceled"
+
+#~ msgid "done"
+#~ msgstr "done"
+
+#~ msgid "paid"
+#~ msgstr "paid"
+
+#~ msgid "recorded"
+#~ msgstr "recorded"
+
+#~ msgid "refused"
+#~ msgstr "refused"
+
+#~ msgid "sent"
+#~ msgstr "sent"
 
 #~ msgid "recorded-en.gif"
 #~ msgstr "recorded-en.gif"

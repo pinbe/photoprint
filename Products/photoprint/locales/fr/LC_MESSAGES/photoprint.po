@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Plinn 2.0\n"
-"POT-Creation-Date: Tue Sep 29 12:34:48 2020\n"
-"PO-Revision-Date: 2020-09-29 12:22+0200\n"
+"POT-Creation-Date: Tue Sep 29 13:08:25 2020\n"
+"PO-Revision-Date: 2020-09-29 13:11+0200\n"
 "Last-Translator:  Benoît PIN\n"
 "Language-Team: CRI http://cri.ensmp.fr\n"
 "Language: \n"
@@ -687,22 +687,22 @@ msgstr "Commande effectuée"
 msgid "notify_sent"
 msgstr "Commande expédiée"
 
-msgid "canceled"
+msgid "order-wfstate-canceled"
 msgstr "annulée"
 
-msgid "done"
+msgid "order-wfstate-done"
 msgstr "effectuée"
 
-msgid "paid"
+msgid "order-wfstate-paid"
 msgstr "payée"
 
-msgid "recorded"
+msgid "order-wfstate-recorded"
 msgstr "enregistrée"
 
-msgid "refused"
+msgid "order-wfstate-refused"
 msgstr "refusée"
 
-msgid "sent"
+msgid "order-wfstate-sent"
 msgstr "expédiée"
 
 msgid "Manual payment"
@@ -725,6 +725,24 @@ msgstr "[%s] expédition de la commande %s"
 
 msgid "paypal_pay"
 msgstr "Paiement PayPal"
+
+#~ msgid "canceled"
+#~ msgstr "annulée"
+
+#~ msgid "done"
+#~ msgstr "effectuée"
+
+#~ msgid "paid"
+#~ msgstr "payée"
+
+#~ msgid "recorded"
+#~ msgstr "enregistrée"
+
+#~ msgid "refused"
+#~ msgstr "refusée"
+
+#~ msgid "sent"
+#~ msgstr "expédiée"
 
 #~ msgid "recorded-en.gif"
 #~ msgstr "recorded-fr.gif"

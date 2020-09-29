@@ -200,20 +200,33 @@ td.num input[type="text"] {
 	border-left-color:&dtml-tabsBorderColor;;
 }
 
-.order-wf-state {
+/* Order page */
+
+#order-page .order-wf-state {
   font-family: sriracha-regular;
   text-transform: uppercase;
   font-size: 30px;
   display: inline-block;
   transform: rotate(-7deg);
-  /*border: 1px dotted gray;*/
   top: -15px;
   left: 20px;
   color: #e63600;
 }
 
-.order-num {
+#order-page .order-num {
   font-weight: bold;
+}
+
+#order-page .invoice-infos {
+  display: flex;
+  margin-bottom: 20px;
+}
+#order-page .invoice-infos > div {
+  margin-right: 20px;
+}
+
+#order-page table.listing {
+  border-collapse: collapse;
 }
 
 /* </dtml-with> */
