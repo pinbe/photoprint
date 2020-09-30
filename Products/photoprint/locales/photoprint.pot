@@ -14,7 +14,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Unknown\n"
-"POT-Creation-Date: Tue Sep 29 13:08:25 2020\n"
+"POT-Creation-Date: Wed Sep 30 02:04:20 2020\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
@@ -376,7 +376,7 @@ msgid "My orders"
 msgstr ""
 
 #: t/skins/my_orders_template.pt:34
-#: t/skins/order_cancel_form.pt:19
+#: t/skins/order_cancel_form.pt:20
 #: t/skins/order_list_template.pt:33
 #: t/skins/order_list_template.pt:35
 #: t/skins/order_list_template.pt:37
@@ -394,39 +394,39 @@ msgstr ""
 msgid "Cancel order \"${order_reference}\""
 msgstr ""
 
-#: t/skins/order_cancel_form.pt:12
+#: t/skins/order_cancel_form.pt:13
 msgid "Cancel the order and relist reserved copies."
 msgstr ""
 
-#: t/skins/order_cancel_form.pt:18
+#: t/skins/order_cancel_form.pt:19
 #: t/skins/order_manual_payment_form.pt:18
 #: t/skins/order_notify_done_form.pt:18
 #: t/skins/order_notify_sent_form.pt:18
 msgid "Current state:"
 msgstr ""
 
-#: t/skins/order_cancel_form.pt:23
+#: t/skins/order_cancel_form.pt:24
 #: t/skins/order_notify_sent_form.pt:24
 #. Default: "Subject"
 msgid "mail_subject"
 msgstr ""
 
-#: t/skins/order_cancel_form.pt:31
+#: t/skins/order_cancel_form.pt:32
 #: t/skins/order_notify_done_form.pt:21
 #: t/skins/order_notify_sent_form.pt:32
 msgid "Comments"
 msgstr ""
 
-#: t/skins/order_cancel_form.pt:39
+#: t/skins/order_cancel_form.pt:40
 msgid "Due to a lack of payment since ${creation_date}, your order has been canceled. The ${store_name} team."
 msgstr ""
 
-#: t/skins/order_cancel_form.pt:46
+#: t/skins/order_cancel_form.pt:47
 #: t/skins/order_notify_sent_form.pt:59
 msgid "Send email"
 msgstr ""
 
-#: t/skins/order_cancel_form.pt:60
+#: t/skins/order_cancel_form.pt:61
 msgid "Cancel the order"
 msgstr ""
 
@@ -670,15 +670,6 @@ msgstr ""
 msgid "auto_transaction_failed"
 msgstr ""
 
-msgid "manual_payment"
-msgstr ""
-
-msgid "notify_done"
-msgstr ""
-
-msgid "notify_sent"
-msgstr ""
-
 msgid "order-wfstate-canceled"
 msgstr ""
 
@@ -715,6 +706,17 @@ msgstr ""
 msgid "[%s] order %s sending notification"
 msgstr ""
 
-msgid "paypal_pay"
+msgid "order-wfaction-cancel"
 msgstr ""
 
+msgid "order-wfaction-manual_payment"
+msgstr ""
+
+msgid "order-wfaction-notify_done"
+msgstr ""
+
+msgid "order-wfaction-notify_sent"
+msgstr ""
+
+msgid "order-wfaction-paypal_pay"
+msgstr ""

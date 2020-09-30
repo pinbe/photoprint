@@ -21,15 +21,6 @@ msgstr ""
 msgid "auto_transaction_failed"
 msgstr ""
 
-msgid "manual_payment"
-msgstr ""
-
-msgid "notify_done"
-msgstr ""
-
-msgid "notify_sent"
-msgstr ""
-
 msgid "order-wfstate-canceled"
 msgstr ""
 
@@ -66,6 +57,17 @@ msgstr ""
 msgid "[%s] order %s sending notification"
 msgstr ""
 
-msgid "paypal_pay"
+msgid "order-wfaction-cancel"
 msgstr ""
 
+msgid "order-wfaction-manual_payment"
+msgstr ""
+
+msgid "order-wfaction-notify_done"
+msgstr ""
+
+msgid "order-wfaction-notify_sent"
+msgstr ""
+
+msgid "order-wfaction-paypal_pay"
+msgstr ""

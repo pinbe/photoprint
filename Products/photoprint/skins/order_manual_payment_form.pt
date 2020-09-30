@@ -16,7 +16,7 @@
       <form method="post" tal:attributes="action string:${here/absolute_url}/content_status_modify">
         <p>
           <span i18n:translate="" tal:omit-tag="">Current state:</span>
-          <span tal:content="review_state" i18n:translate="" tal:omit-tag="">state</span>
+          <span tal:content="python:'order-wfstate-%s' % review_state" i18n:translate="" tal:omit-tag="">state</span>
         </p>
         <h3 i18n:translate="">Payment description</h3>
         <textarea name="comment" cols="60" rows="5"></textarea>

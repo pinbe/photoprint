@@ -176,15 +176,22 @@ class PrintOrder(PortalContent, DefaultDublinCoreImpl) :
 
     security.declareProtected(ManagePrintOrders, 'resetCopiesCounters')
     def resetCopiesCounters(self) :
-        pptool = getToolByName(self, 'portal_photo_print')
-        uidh = getToolByName(self, 'portal_uidhandler')
+        pptool = getUtilityByInterfaceName('Products.photoprint.interfaces.IPhotoPrintTool')
+        uidh = getUtilityByInterfaceName('Products.CMFUid.interfaces.IUniqueIdHandler')
 
-        for item in self.items :
-            photo = uidh.getObject(item['cmf_uid'])
-            counters = getattr(photo, COPIES_COUNTERS, None)
-            if counters :
-                counters.cancel(item['productReference'],
-                                item['quantity'])
+        for pjob in self.pjobs :
+            photo = uidh.getObject(pjob.cmf_uid)
+            counters = pptool.getCountersFor(photo)
+            format = pjob.data['format']
+            if format['copies'] > 0 : # eg: if limited edition
+                counters.cancel(format['reference'], pjob.copies)
+
+        # for item in self.items :
+        #     photo = uidh.getObject(item['cmf_uid'])
+        #     counters = getattr(photo, COPIES_COUNTERS, None)
+        #     if counters :
+        #         counters.cancel(item['productReference'],
+        #                         item['quantity'])
 
     def _initPayPalInterface(self) :
         config = getPayPalConfig()

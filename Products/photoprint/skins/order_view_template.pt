@@ -292,7 +292,7 @@
             <td tal:condition="python:not item['action'].startswith('auto_')"
                      tal:content="python:mtool.getMemberFullNameById(item['actor'], nameBefore=0)">actor
             </td>
-            <td tal:content="item/action" i18n:translate=""></td>
+            <td tal:content="python:'order-wfaction-%s' % item['action']" i18n:translate=""></td>
           </tr>
         </div>
       </table>

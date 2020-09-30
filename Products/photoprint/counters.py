@@ -83,3 +83,5 @@ class CopiesCounters(Persistent, Implicit) :
 
     def __str__(self) :
         return str(self._mapping)
+
+    __repr__ = __str__
