@@ -136,7 +136,7 @@ class PhotoPrintTool(UniqueObject, OrderedFolder) :
                        fmt['prices_ranges'] and \
                        already_sold + 1 >= fmt['prices_ranges'][0]['start'] :
                         for price_range in fmt['prices_ranges'] :
-                            if price_range['start'] <= available_copies+1 <= price_range['stop'] :
+                            if price_range['start'] <= already_sold+1 <= price_range['stop'] :
                                 effective_price = price_range['price']
                                 break
                 del fmt['prices_ranges']
@@ -171,7 +171,7 @@ class PhotoPrintTool(UniqueObject, OrderedFolder) :
                     format['prices_ranges'] and \
                     already_sold + 1 >= format['prices_ranges'][0]['start'] :
                 for price_range in format['prices_ranges'] :
-                    if price_range['start'] <= available_copies + 1 <= price_range['stop'] :
+                    if price_range['start'] <= already_sold + 1 <= price_range['stop'] :
                         format_price = price_range['price']
                         break
             format['price'] = format_price
