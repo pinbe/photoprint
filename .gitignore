@@ -2,7 +2,7 @@ node_modules
 *.pyc
 *.egg-info
 .idea
-jsbuild
+Products/photoprint/skins/photoprint/jsbuild/*.js*
 *.po~
 .DS_Store
 graphics/
