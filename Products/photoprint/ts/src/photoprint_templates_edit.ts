@@ -750,8 +750,8 @@ class PrintOptionsEditor {
             }
         }
         const sectionSel = d3.select(this.editorSelector).select(`.section.${sectionInfo.section}`);
-        let updateSel = sectionSel
-            .selectAll('foreignObject.item')
+        let updateSel = <d3.Selection<SVGForeignObjectElement, any, HTMLElement, any>>
+            sectionSel.selectAll('foreignObject.item')
         ;
         if (items !== null)
             updateSel = updateSel.data(items);
