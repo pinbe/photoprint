@@ -3,6 +3,7 @@ node_modules
 *.egg-info
 .idea
 Products/photoprint/skins/photoprint/jsbuild/*.js*
+*_old.json
 *.po~
 .DS_Store
 graphics/
