@@ -106,6 +106,10 @@ class PrintOrder(PortalContent, DefaultDublinCoreImpl) :
     def amountWithFees(self) :
         return self.price + self.shippingFees
 
+    @property
+    def quantity(self) :
+        return reduce(lambda a,b:a+b, map(lambda pjob: pjob.copies, self.pjobs), 0)
+
     security.declareProtected(ModifyPortalContent, 'editBilling')
     def editBilling(self
                     , name

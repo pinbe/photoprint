@@ -46,7 +46,14 @@
               <a tal:content="order/reference" tal:attributes="href order/url">reference</a>
             </td>
             <td tal:content="order/quantity">quantity</td>
-            <td tal:content="order/price/taxed">price</td>
+            <td>
+              <span i18n:translate="price_and_currency"
+                       tal:omit-tag="">
+                <span i18n:name="price"
+                         tal:content="python:order['amount'].taxed"
+                         tal:omit-tag=""/> €
+              </span>
+            </td>
             <td tal:content="order/state" i18n:translate="">state</td>
           </tr>
         </table>
