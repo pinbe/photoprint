@@ -12,7 +12,7 @@
          tal:define="folders options/folders;
                      orders options/orders;
                      columns options/columns">
-      <table class="listing" cellspacing="0" tal:condition="folders">
+      <table class="listing" tal:condition="folders">
         <tr>
           <th i18n:translate="">Name</th>
         </tr>
@@ -45,8 +45,8 @@
             <td>
               <a tal:content="order/reference" tal:attributes="href order/url">reference</a>
             </td>
-            <td tal:content="order/quantity">quantity</td>
-            <td>
+            <td class="num" tal:content="order/quantity">quantity</td>
+            <td class="num">
               <span i18n:translate="price_and_currency"
                        tal:omit-tag="">
                 <span i18n:name="price"

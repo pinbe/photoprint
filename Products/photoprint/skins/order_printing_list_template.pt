@@ -17,7 +17,7 @@
       <input type="text"
              tal:define="rss string:${context/absolute_url}/order_printing_list/xml"
              tal:attributes="value rss; size python:len(rss)"/>
-      <table class="listing" cellspacing="0">
+      <table class="listing">
         <tr>
           <th i18n:translate="">Image</th>
           <th i18n:translate="">File</th>

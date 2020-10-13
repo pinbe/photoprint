@@ -15,7 +15,7 @@
         <div tal:define="batch orders" tal:omit-tag="">
           <span metal:use-macro="here/batch_macros/macros/navigation">batch navigation</span>
         </div>
-        <table class="listing" cellspacing="0">
+        <table class="listing">
           <thead id="FolderListingHeader">
     				<tr>
     					<th tal:attributes="width column_info/width; colspan column_info/colspan"
@@ -29,8 +29,15 @@
             <td>
               <a tal:content="order/reference" tal:attributes="href order/url"></a>
             </td>
-            <td tal:content="order/quantity"></td>
-            <td tal:content="order/price/taxed"></td>
+            <td class="num" tal:content="order/quantity"></td>
+            <td class="num">
+              <span i18n:translate="price_and_currency"
+                       tal:omit-tag="">
+                <span i18n:name="price"
+                         tal:content="python:order['amount'].taxed"
+                         tal:omit-tag=""/> €
+              </span>
+            </td>
             <td tal:content="order/state" i18n:translate=""></td>
           </tr>
         </table>

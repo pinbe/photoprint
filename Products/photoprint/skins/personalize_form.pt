@@ -21,8 +21,8 @@
           <h1 i18n:translate="">Member Preferences</h1>
           <span tal:condition="request/msg|nothing" tal:replace="request/msg" />
           <p i18n:translate=""><span i18n:name="link"><a href="password_form" i18n:translate="">Click here</a></span> to change your password.</p>
-          <form action="personalize" method="post" tal:attributes="action string:${purl}/personalize">
-            <table class="TwoColumnForm" cellspacing="0">
+          <form method="post" tal:attributes="action string:${purl}/personalize">
+            <table class="TwoColumnForm">
               <tr>
                 <th i18n:translate="">Given Name</th>
                 <td>
