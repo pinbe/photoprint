@@ -228,7 +228,7 @@ class PrintOrder(PortalContent, DefaultDublinCoreImpl) :
                    'RETURNURL' : '%s/photoprint_order_confirm' % self.absolute_url(),
                    'CANCELURL' : '%s/photoprint_order_cancel' % self.absolute_url(),
                    'ALLOWNOTE' : 0,  # The buyer is unable to enter a note to the merchant.
-                   'HDRIMG' : '%s/logo.gif' % portal_url,
+                   'HDRIMG' : '%s/logo.png' % portal_url,
                    'EMAIL' : member.getProperty('email'),
                    'SOLUTIONTYPE' : 'Sole',
                    # Buyer does not need to create a PayPal account to check out. This is referred to as PayPal Account Optional.
