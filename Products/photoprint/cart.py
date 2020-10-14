@@ -39,13 +39,7 @@ msecurity.declarePublic('PrintCart')
 
 
 class PrintCart(Persistent, Implicit) :
-    """
-        items are store like that:
-        {<uid>:
-            {<template>:quantity
-            ,...}
-        , ...
-        }
+    """ Print Cart
     """
 
     __allow_access_to_unprotected_subobjects__ = 1
@@ -125,6 +119,29 @@ class PrintCart(Persistent, Implicit) :
             counters[format_reference] += delta
 
         job.copies = quantity
+
+    def remove(self, jobid) :
+        if self.locked :
+            raise CartLockedError
+
+        job = self._orders[jobid]
+        reified_order = job.data
+
+        if reified_order['format']['copies'] > 0 : # Édition limitée
+            job = self._orders[jobid]
+            reified_order = job.data
+
+            if reified_order['format']['copies'] > 0 :  # Édition limitée
+                uidh = getUtilityByInterfaceName('Products.CMFUid.interfaces.IUniqueIdHandler')
+                photo = uidh.getObject(job.cmf_uid)
+                counters = getattr(photo, COPIES_COUNTERS)
+                format_reference = reified_order['format']['reference']
+                counters[format_reference] -= job.copies
+
+        del self._orders[jobid]
+        sequence = list(self._sequence_order)
+        sequence.remove(jobid)
+        self._sequence_order = tuple(sequence)
 
     def __iter__(self) :
         for order_id in self._sequence_order :

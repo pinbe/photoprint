@@ -327,7 +327,7 @@ class PhotoOrder {
                             .attr('class', 'modal fade')
                             .attr('tabindex', '-1')
                         ;
-                        modal.html(resp.result.html)
+                        modal.html(resp.result.html);
                         $(modal.node())
                             .modal('show')
                             .on('hidden.bs.modal', () => modal.remove())

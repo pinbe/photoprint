@@ -133,6 +133,10 @@
 
 /* cart */
 
+#cart-form .btn.del {
+  font-size: 15px;
+}
+
 tbody.total th {
 }
 
@@ -153,29 +157,30 @@ td.num input[type="text"] {
 }
 
 .sell_steps_bar {
-  /*border: 2px dashed red;*/
+  margin-top: 10px;
   height: 40px;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 .sell_steps_bar ul {
-	padding-left:&dtml-borderRadius;px;
-	margin-left:0;
+  display: flex;
 }
 
 .sell_steps_bar ul li {
-	margin-right:18px;
-	padding: 10px;
-	display:inline;
+  padding: 0 10px;
+  margin-right: 20px;
+	display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 30px;
 	position: relative;
 	font-weight:bold;
 	color:&dtml-fontColor;;
-	background: &dtml-tabsBorderColor;;
+  border: 1px solid &dtml-tabsBorderColor;;
 }
 
-.sell_steps_bar ul li.active {
-	color:#fff;
+.sell_steps_bar ul li.done {
 	background:&dtml-tabsBorderColor;;
 }
 
@@ -187,13 +192,9 @@ td.num input[type="text"] {
 	width: 0;
 	position: absolute;
 	pointer-events: none;
-}
 
-.sell_steps_bar ul li:after {
 	border-left-color:&dtml-tabsBorderColor;;
-	top: 50%;
-	border-width: 17px;
-	margin-top: -16px;
+	border-width: 16px;
 }
 
 .sell_steps_bar ul li.active:after {

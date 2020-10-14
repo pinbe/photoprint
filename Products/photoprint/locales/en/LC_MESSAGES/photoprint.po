@@ -14,8 +14,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Meaningless\n"
-"POT-Creation-Date: Wed Sep 30 02:04:20 2020\n"
-"PO-Revision-Date: 2020-09-30 02:07+0200\n"
+"POT-Creation-Date: Tue Oct 13 23:29:25 2020\n"
+"PO-Revision-Date: 2020-10-13 23:34+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
 "Language: \n"
@@ -65,9 +65,10 @@ msgid "This item is sold out."
 msgstr "This item is sold out."
 
 #: t/skins/cartrpc.py:58 t/skins/cartrpc.py:60 t/skins/cartrpc.py:65
-#: t/skins/cartrpc.py:66 t/skins/my_cart_template.pt:59
-#: t/skins/my_cart_template.pt:81 t/skins/my_cart_template.pt:96
-#: t/skins/my_cart_template.pt:108 t/skins/order_view_template.pt:112
+#: t/skins/cartrpc.py:66 t/skins/my_cart_template.pt:58
+#: t/skins/my_cart_template.pt:85 t/skins/my_cart_template.pt:100
+#: t/skins/my_cart_template.pt:112 t/skins/my_orders_template.pt:36
+#: t/skins/order_list_template.pt:52 t/skins/order_view_template.pt:112
 #: t/skins/order_view_template.pt:124 t/skins/order_view_template.pt:136
 #: t/skins/order_view_template.pt:148
 msgid "price_and_currency"
@@ -285,7 +286,7 @@ msgstr "Order >>"
 msgid "Shipping >>"
 msgstr "Shipping >>"
 
-#: t/skins/my_cart.py:123 t/skins/my_cart_template.pt:128
+#: t/skins/my_cart.py:123 t/skins/my_cart_template.pt:132
 msgid "My cart"
 msgstr "My cart"
 
@@ -326,50 +327,59 @@ msgstr "Unit price"
 msgid "copies_number"
 msgstr "Copies"
 
-#: t/skins/my_cart_template.pt:29 t/skins/my_cart_template.pt:92
+#: t/skins/my_cart_template.pt:29 t/skins/my_cart_template.pt:96
 msgid "Total"
 msgstr "Total"
 
-#: t/skins/my_cart_template.pt:52
+#: t/skins/my_cart_template.pt:51
 msgid "without framing"
 msgstr "without framing"
 
-#: t/skins/my_cart_template.pt:104 t/skins/order_view_template.pt:132
+#: t/skins/my_cart_template.pt:67
+msgid "delete this line"
+msgstr "delete this line"
+
+#: t/skins/my_cart_template.pt:108 t/skins/order_view_template.pt:132
 msgid "VAT"
 msgstr "VAT"
 
-#: t/skins/my_cart_template.pt:129
+#: t/skins/my_cart_template.pt:133
 msgid "Your cart is currently empty."
 msgstr "Your cart is currently empty."
 
-#: t/skins/my_orders.py:17 t/skins/order_list.py:14
+#: t/skins/my_orders.py:16 t/skins/order_list.py:14
 #: t/skins/order_view_template.pt:284
 msgid "Date"
 msgstr "Date"
 
-#: t/skins/my_orders.py:21 t/skins/order_list.py:22
+#: t/skins/my_orders.py:20 t/skins/order_list.py:22
 msgid "Reference"
 msgstr "Reference"
 
-#: t/skins/my_orders.py:25 t/skins/order_list.py:26
+#: t/skins/my_orders.py:24 t/skins/order_list.py:26
 msgid "Prints"
 msgstr "Prints"
 
-#: t/skins/my_orders.py:29 t/skins/order_list.py:30
+#: t/skins/my_orders.py:28 t/skins/order_list.py:30
 msgid "Amount"
 msgstr "Amount"
 
-#: t/skins/my_orders.py:33 t/skins/order_list.py:34
+#: t/skins/my_orders.py:32 t/skins/order_list.py:34
 msgid "State"
 msgstr "State"
+
+#. Default: "review_state"
+#: t/skins/my_orders.py:56 t/skins/order_list.py:62
+msgid "order-wfstate-%s"
+msgstr "order-wfstate-%s"
 
 #: t/skins/my_orders.py:69
 msgid "My orders"
 msgstr "My orders"
 
-#: t/skins/my_orders_template.pt:34 t/skins/order_cancel_form.pt:20
+#: t/skins/my_orders_template.pt:41 t/skins/order_cancel_form.pt:20
 #: t/skins/order_list_template.pt:33 t/skins/order_list_template.pt:35
-#: t/skins/order_list_template.pt:37 t/skins/order_list_template.pt:50
+#: t/skins/order_list_template.pt:37 t/skins/order_list_template.pt:57
 #: t/skins/order_manual_payment_form.pt:19 t/skins/order_notify_done_form.pt:19
 #: t/skins/order_notify_sent_form.pt:19 t/skins/order_view_template.pt:29
 #: t/skins/order_view_template.pt:94 t/skins/order_view_template.pt:295

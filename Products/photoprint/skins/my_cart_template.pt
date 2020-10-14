@@ -37,7 +37,6 @@
                             alt info/alt;
                             height info/thumbHeight;
                             width info/thumbWidth"/>
-
                   </td>
                   <td tal:define="format data/format">
                     <span tal:replace="format/label"/><br/>
@@ -65,6 +64,11 @@
                   <td class="num">
                     <span metal:define-slot="copies"
                           tal:omit-tag="">
+                      <a href="#" class="btn del"
+                         title="delete this line"
+                         i18n:attributes="title">
+                        <i class="fas fa-backspace" style="display: inline"></i>
+                      </a>
                       <input type="text"
                              pattern="[1-9]\d*"
                              required

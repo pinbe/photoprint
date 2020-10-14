@@ -14,7 +14,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Unknown\n"
-"POT-Creation-Date: Wed Sep 30 02:04:20 2020\n"
+"POT-Creation-Date: Tue Oct 13 23:33:37 2020\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
@@ -68,10 +68,12 @@ msgstr ""
 #: t/skins/cartrpc.py:60
 #: t/skins/cartrpc.py:65
 #: t/skins/cartrpc.py:66
-#: t/skins/my_cart_template.pt:59
-#: t/skins/my_cart_template.pt:81
-#: t/skins/my_cart_template.pt:96
-#: t/skins/my_cart_template.pt:108
+#: t/skins/my_cart_template.pt:58
+#: t/skins/my_cart_template.pt:85
+#: t/skins/my_cart_template.pt:100
+#: t/skins/my_cart_template.pt:112
+#: t/skins/my_orders_template.pt:36
+#: t/skins/order_list_template.pt:52
 #: t/skins/order_view_template.pt:112
 #: t/skins/order_view_template.pt:124
 #: t/skins/order_view_template.pt:136
@@ -285,7 +287,7 @@ msgid "Shipping >>"
 msgstr ""
 
 #: t/skins/my_cart.py:123
-#: t/skins/my_cart_template.pt:128
+#: t/skins/my_cart_template.pt:132
 msgid "My cart"
 msgstr ""
 
@@ -328,59 +330,69 @@ msgid "copies_number"
 msgstr ""
 
 #: t/skins/my_cart_template.pt:29
-#: t/skins/my_cart_template.pt:92
+#: t/skins/my_cart_template.pt:96
 msgid "Total"
 msgstr ""
 
-#: t/skins/my_cart_template.pt:52
+#: t/skins/my_cart_template.pt:51
 msgid "without framing"
 msgstr ""
 
-#: t/skins/my_cart_template.pt:104
+#: t/skins/my_cart_template.pt:67
+msgid "delete this line"
+msgstr ""
+
+#: t/skins/my_cart_template.pt:108
 #: t/skins/order_view_template.pt:132
 msgid "VAT"
 msgstr ""
 
-#: t/skins/my_cart_template.pt:129
+#: t/skins/my_cart_template.pt:133
 msgid "Your cart is currently empty."
 msgstr ""
 
-#: t/skins/my_orders.py:17
+#: t/skins/my_orders.py:16
 #: t/skins/order_list.py:14
 #: t/skins/order_view_template.pt:284
 msgid "Date"
 msgstr ""
 
-#: t/skins/my_orders.py:21
+#: t/skins/my_orders.py:20
 #: t/skins/order_list.py:22
 msgid "Reference"
 msgstr ""
 
-#: t/skins/my_orders.py:25
+#: t/skins/my_orders.py:24
 #: t/skins/order_list.py:26
 msgid "Prints"
 msgstr ""
 
-#: t/skins/my_orders.py:29
+#: t/skins/my_orders.py:28
 #: t/skins/order_list.py:30
 msgid "Amount"
 msgstr ""
 
-#: t/skins/my_orders.py:33
+#: t/skins/my_orders.py:32
 #: t/skins/order_list.py:34
 msgid "State"
+msgstr ""
+
+#: t/skins/my_orders.py:56
+#: t/skins/order_list.py:62
+#. Default: "review_state"
+msgid "order-wfstate-%s"
 msgstr ""
 
 #: t/skins/my_orders.py:69
 msgid "My orders"
 msgstr ""
 
-#: t/skins/my_orders_template.pt:34
+#: t/skins/my_orders_template.pt:41
 #: t/skins/order_cancel_form.pt:20
 #: t/skins/order_list_template.pt:33
 #: t/skins/order_list_template.pt:35
 #: t/skins/order_list_template.pt:37
-#: t/skins/order_list_template.pt:50
+#: t/skins/order_list_template.pt:57
 #: t/skins/order_manual_payment_form.pt:19
 #: t/skins/order_notify_done_form.pt:19
 #: t/skins/order_notify_sent_form.pt:19
