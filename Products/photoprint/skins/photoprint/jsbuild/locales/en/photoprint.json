@@ -28,5 +28,6 @@
   "Price": "Price",
   "Copies": "Copies",
   "Scarcity": "Scarcity",
-  "Description": "Description"
+  "Description": "Description",
+  "Shipping fees": "Shipping fees"
 }

@@ -32,12 +32,14 @@ interface Format extends IPrintOfferItem {
 interface Finish extends IPrintOfferItem {
     description: I18NString;
     formats_prices: RefPrice[];
+    formats_shipping_prices: RefPrice[];
 }
 
 
 interface Frame extends IPrintOfferItem {
     description: I18NString,
     formats_prices: RefPrice[];
+    formats_shipping_prices: RefPrice[];
     finishes: string[];
 }
 
@@ -951,7 +953,6 @@ class PrintOptionsEditor {
             <th>${_("Price")}</th>
             <td><br/></td>
           </tr>
-          
         `;
 
         const fmtPrices: { [ref: string]: number } = {};
@@ -968,6 +969,32 @@ class PrintOptionsEditor {
                 <span data-name="formats_prices.price:records"
                       data-pattern="${FLOAT_PATTERN}"
                       data-rec='${JSON.stringify({reference: format.reference, price: price})}'>${price}</span> €
+              </td>
+            </tr>
+            `;
+        }
+
+        rows += `
+          <tr>
+            <th>${_("Shipping fees")}</th>
+            <td><br/></td>
+          </tr>
+        `;
+
+        const fmtShippingPrices: { [ref: string]: number } = {};
+        for (let fmtShippingPrice of finish.formats_shipping_prices) {
+            fmtShippingPrices[fmtShippingPrice.reference] = fmtShippingPrice.price; // eg. Object.fromEntries…
+        }
+
+        for (let format of item.getRelatedFormats()) {
+            const shippingPrice: number = fmtShippingPrices[format.reference] || 0;
+            rows += `
+            <tr>
+              <th>${(<Format><unknown>format).short_edge} × ${(<Format><unknown>format).long_edge}</th>
+              <td>
+                <span data-name="formats_shipping_prices.price:records"
+                      data-pattern="${FLOAT_PATTERN}"
+                      data-rec='${JSON.stringify({reference: format.reference, price: shippingPrice})}'>${shippingPrice}</span> €
               </td>
             </tr>
             `;
@@ -1030,6 +1057,31 @@ class PrintOptionsEditor {
             `;
         }
 
+        rows += `
+          <tr>
+            <th>${_("Shipping fees")}</th>
+            <td><br/></td>
+          </tr>
+        `;
+
+        const fmtShippingPrices: { [ref: string]: number } = {};
+        for (let fmtShippingPrice of frame.formats_shipping_prices) {
+            fmtShippingPrices[fmtShippingPrice.reference] = fmtShippingPrice.price; // eg. Object.fromEntries…
+        }
+
+        for (let format of item.getRelatedFormats()) {
+            const shippingPrice: number = fmtShippingPrices[format.reference] || 0;
+            rows += `
+            <tr>
+              <th>${(<Format><unknown>format).short_edge} × ${(<Format><unknown>format).long_edge}</th>
+              <td>
+                <span data-name="formats_shipping_prices.price:records"
+                      data-pattern="${FLOAT_PATTERN}"
+                      data-rec='${JSON.stringify({reference: format.reference, price: shippingPrice})}'>${shippingPrice}</span> €
+              </td>
+            </tr>
+            `;
+        }
         return PrintOptionsEditor.htmlViewLayout(rows);
     }
 

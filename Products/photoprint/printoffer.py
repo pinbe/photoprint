@@ -48,12 +48,14 @@ class PrintOffer(SimpleItem) :
             'label' : {},
             'description' : {},
             'formats_prices' : [],
+            'formats_shipping_prices' : [],
         },
         'frames' : {
             'reference' : '',
             'label' : {},
             'description' : {},
             'formats_prices' : [],
+            'formats_shipping_prices' : [],
             'finishes' : [],
         }
     }
