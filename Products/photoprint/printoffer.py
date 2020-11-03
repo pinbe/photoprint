@@ -182,7 +182,12 @@ class PrintOffer(SimpleItem) :
                 payload['formats_prices'] = []
             for fp in payload['formats_prices'] :
                 fp['price'] = PrintOffer.parseFloat(fp['price'])
-            # payload['price'] = PrintOffer.parseFloat(payload['price'])
+
+            if not payload.has_key('formats_shipping_prices') :
+                payload['formats_shipping_prices'] = []
+            for fsp in payload['formats_shipping_prices'] :
+                fsp['price'] = PrintOffer.parseFloat(fsp['price'])
+
 
         data = self.data
         if index < len(data[section]) :

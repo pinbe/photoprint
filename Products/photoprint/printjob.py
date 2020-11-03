@@ -65,6 +65,17 @@ class PrintJob(SimpleItem) :
             price += opt['price']
         return price * self.copies
 
+    @property
+    def shipping_price(self) :
+        d = self.data
+        price = 0.
+        for name in ('finish', 'frame') :
+            opt = d.get(name)
+            if not opt:
+                continue
+            price = max(price, opt['shipping_price'])
+        return price
+
     @data.setter
     def data(self, value) :
         self._data = json.dumps(value, encoding='utf-8', ensure_ascii=False)
@@ -101,6 +112,17 @@ class PrintOrder(PortalContent, DefaultDublinCoreImpl) :
         pptool = getUtilityByInterfaceName('Products.photoprint.interfaces.IPhotoPrintTool')
         VAT = pptool.getProperty('vat_rate', 0.2)
         return reduce(lambda a, b: a+b, [Price(pjob.price, VAT) for pjob in self.pjobs], Price(0, VAT))
+
+    @property
+    def shipping_price(self) :
+        # Frais de la livraison :
+        # prix de l'élément le plus cher à expédier.
+        # Ceci-dit, l'outil (tool.getShippingFeesFor) a le dernier mot
+        # pour déterminer le prix de l'expédition à imputer au client.
+        pptool = getUtilityByInterfaceName('Products.photoprint.interfaces.IPhotoPrintTool')
+        VAT = pptool.getProperty('vat_rate', 0.2)
+        return reduce(lambda a, b: max(a, b), [Price(pjob.shipping_price, VAT) for pjob in self.pjobs], Price(0, VAT))
+
 
     @property
     def amountWithFees(self) :
@@ -173,7 +195,9 @@ class PrintOrder(PortalContent, DefaultDublinCoreImpl) :
             , 'country' : sg('shipping_country')}
         self.editShipping(**shipping)
 
-        self.shippingFees = pptool.getShippingFeesFor(shippable=self)
+        # C'est à ce moment là que les frais de livraison sont
+        # complètement définis.
+        self.shippingFees = pptool.getShippingFeesFor(self)
 
         cart._confirmed = True
         cart.pendingOrderPath = self.getPhysicalPath()

@@ -57,9 +57,9 @@ class PhotoPrintTool(UniqueObject, OrderedFolder) :
     implements(IPhotoPrintTool)
     id = 'portal_photo_print'
     meta_type = 'Photo print tool'
-    
+
     security = ClassSecurityInfo()
-    
+
     incomingOrderPath = 'commandes'
     no_shipping_threshold = 150
     shipping = 6.0
@@ -68,7 +68,7 @@ class PhotoPrintTool(UniqueObject, OrderedFolder) :
     store_name = ''
     _order_counter = 0
     _transaction_id_counter = 0
-    
+
     _properties = OrderedFolder._properties + (
         {'id' : 'incomingOrderPath',         'type' : 'string',    'mode' : 'w'},
         {'id' : 'no_shipping_threshold',    'type' : 'int',        'mode' : 'w'},
@@ -77,19 +77,19 @@ class PhotoPrintTool(UniqueObject, OrderedFolder) :
         {'id' : 'shipping_vat',             'type' : 'float',     'mode' : 'w'},
         {'id' : 'store_name',                 'type' : 'string',     'mode' : 'w'}
         )
-    
-    
+
+
     security.declarePublic('getPrintingOptionsFor')
     def getPrintingOptionsFor(self, ob) :
         "returns printing options for the given ob."
         optionsContainer = getattr(aq_inner(ob), PRINTING_OPTIONS_ID, None)
         if optionsContainer is None :
             return None
-        
+
         counters = self.getCountersFor(ob)
         if counters.get(SOLD_OUT) :
             return None
-        
+
         options = []
         for fmt in optionsContainer.printoffer.data['formats'] :
             if fmt['copies'] == 0 or \
@@ -182,6 +182,9 @@ class PhotoPrintTool(UniqueObject, OrderedFolder) :
             finish_price = filter(lambda fp: fp['reference'] == order_options['format'], finish['formats_prices'])[0]['price']
             finish['price'] = finish_price
             del finish['formats_prices']
+            finish_shipping_price = filter(lambda fp: fp['reference'] == order_options['format'], finish['formats_shipping_prices'])[0]['price']
+            finish['shipping_price'] = finish_shipping_price
+            del finish['formats_shipping_prices']
 
             # frame (optional)
             if order_options.get('frame') :
@@ -189,6 +192,9 @@ class PhotoPrintTool(UniqueObject, OrderedFolder) :
                 frame_price = filter(lambda fp: fp['reference'] == order_options['format'], frame['formats_prices'])[0]['price']
                 frame['price'] = frame_price
                 del frame['formats_prices']
+                frame_shipping_price = filter(lambda fp: fp['reference'] == order_options['format'], frame['formats_shipping_prices'])[0]['price']
+                frame['shipping_price'] = frame_shipping_price
+                del frame['formats_shipping_prices']
                 del frame['finishes']
             else :
                 frame = None
@@ -204,36 +210,36 @@ class PhotoPrintTool(UniqueObject, OrderedFolder) :
         """getPrintingOptionsContainerFor
         """
         return getattr(aq_inner(ob), PRINTING_OPTIONS_ID, None)
-    
+
     security.declarePrivate('getCountersFor')
     def getCountersFor(self, ob):
         if hasattr(ob.aq_self, COPIES_COUNTERS) :
             return getattr(ob, COPIES_COUNTERS)
         else :
             return {}
-    
-    
+
+
     security.declareProtected(ManagePrintOrderTemplate, 'createPrintingOptionsContainer')
     def createPrintingOptionsContainer(self, ob):
         container = PrintingOptionsContainer()
         setattr(ob, PRINTING_OPTIONS_ID, container)
         return getattr(ob, PRINTING_OPTIONS_ID)
-    
+
     security.declareProtected(ManagePrintOrderTemplate, 'deletePrintingOptionsContainer')
     def deletePrintingOptionsContainer(self, ob):
         if not self.hasPrintingOptions(ob) :
             raise ValueError( _('No printing options found at %r') % ob.absolute_url() )
         else :
             delattr(ob, PRINTING_OPTIONS_ID)
-    
+
     security.declareProtected(ManagePrintOrderTemplate, 'hasPrintingOptions')
     def hasPrintingOptions(self, ob):
         """ return boolean that instruct if there's printing
-            options especially defined on ob 
+            options especially defined on ob
         """
         return hasattr(aq_base(ob), PRINTING_OPTIONS_ID)
-    
-    
+
+
     security.declareProtected(ManagePrintOrderTemplate, 'getPrintingOptionsSrc')
     def getPrintingOptionsSrc(self, ob) :
         optionsContainer = getattr(ob, PRINTING_OPTIONS_ID, None)
@@ -241,7 +247,7 @@ class PhotoPrintTool(UniqueObject, OrderedFolder) :
             return None
         src = optionsContainer.aq_inner.aq_parent
         return src
-    
+
     security.declareProtected(ManagePrintOrderTemplate, 'getPrintOrderOptionsContainerFor')
     def getPrintOrderOptionsContainerFor(self, ob) :
         """
@@ -281,29 +287,19 @@ class PhotoPrintTool(UniqueObject, OrderedFolder) :
         return ob
 
     security.declarePublic('getShippingFeesFor')
-    def getShippingFeesFor(self, shippable=None):
-        # returns Fees
+    def getShippingFeesFor(self, shippable):
         # TODO: use adapters
-        # for the moment, shippable objet must provide a 'price' attribute
+        # For the moment, shippable objet must provide a
+        # 'price' and a 'shipping_price attributes.
 
-        # if shippable and price :
-        #     raise AttributeError("'shippable' and 'price' are mutually exclusive.")
-        #
-        # if shippable :
-        #     amount = shippable.price.getValues()['taxed']
-        # else :
-        #     amount = price.getValues()['taxed']
-        #
-        # threshold = self.getProperty('no_shipping_threshold')
-        #
-        # if amount < threshold :
-        #     fees = Price(self.getProperty('shipping')
-        #                 , self.getProperty('shipping_vat'))
-        # else :
-        #     fees = Price(0,0)
-        # return fees
-        return Price(0,0)
-    
+        amount = shippable.price.getValues()['taxed']
+        threshold = self.getProperty('no_shipping_threshold')
+
+        if amount < threshold :
+            return shippable.shipping_price
+        else :
+            return Price(0,0)
+
     security.declarePrivate('getNextTransactionId')
     def getNextTransactionId(self):
         trid = self._transaction_id_counter
@@ -319,12 +315,12 @@ InitializeClass(PhotoPrintTool)
 class PrintingOptionsContainer(OrderedFolder) :
     meta_type = 'Printing options container'
     security = ClassSecurityInfo()
-    
+
     def __init__(self) :
         self.id = PRINTING_OPTIONS_ID
         offer = PrintOffer()
         self._setObject(offer.id, offer)
 
-    
+
     def __getitem__(self, k) :
         sd = context.session_data_manager.getSessionData(create = 1)

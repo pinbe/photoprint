@@ -62,7 +62,7 @@ class Price(object, Persistent) :
     def _setTaxed(self, value) :
         self._taxed = value
         self._price = value / (1 + self._rate)
-    
+
     @property
     def taxed(self) :
         return self._localeStrNum(self._taxed)
@@ -112,3 +112,21 @@ class Price(object, Persistent) :
 
     def __repr__(self):
         return '%s with VAT' % self.taxed
+
+    def __lt__(self, other) :
+        return self._taxed < other._taxed
+
+    def __le__(self, other) :
+        return self._taxed <= other._taxed
+
+    def __eq__(self, other) :
+        return self._taxed == other._taxed
+
+    def __ne__(self, other) :
+        return self._taxed != other._taxed
+
+    def __ge__(self, other) :
+        return self._taxed >= other._taxed
+
+    def __gt__(self, other) :
+        return self._taxed > other._taxed

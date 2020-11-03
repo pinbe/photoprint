@@ -69,12 +69,17 @@ class Link {
         this.arc =
             arc.datum(this)
                 .on('mouseover', function () {
+                    this.classList.add('over');
                     if ((<MouseEvent>d3.event).altKey) {
-                        this.classList.add('over')
+                        this.classList.add('ready-to-remove');
                     }
+                    from.highlightOn();
+                    to.highlightOn();
                 })
                 .on('mouseout', function () {
-                    this.classList.remove('over');
+                    this.classList.remove('over', 'ready-to-remove');
+                    from.highlightOff();
+                    to.highlightOff();
                 })
                 .on('click', () => {
                     if ((<MouseEvent>d3.event).altKey)
@@ -103,6 +108,14 @@ class Link {
                         .remove();
                 return ok;
             });
+    }
+
+    highlightOn() {
+        this.arc.node().classList.add('over');
+    }
+
+    highlightOff() {
+        this.arc.node().classList.remove('over');
     }
 }
 
@@ -186,6 +199,8 @@ class PrintOfferItem implements IPrintOfferItem {
             .on('click', () => {
                 this.onClick();
             })
+            .on('mouseover', () => this.highlightOn())
+            .on('mouseout', () => this.highlightOff())
         ;
         this.sel
             // foreignObject need to be sized explicitly
@@ -577,6 +592,30 @@ class PrintOfferItem implements IPrintOfferItem {
         (<Format[]><unknown>formats).sort(
             (a, b) => a.long_edge * a.short_edge - b.long_edge * b.short_edge);
         return formats;
+    }
+
+    public highlightOn() {
+        this.sel.node().classList.add('over');
+        this.inlet?.node().classList.add('over');
+        this.outlet?.node().classList.add('over');
+        for (let link of Object.values(this.outgoingLinks)) {
+            link.highlightOn();
+        }
+        for (let link of Object.values(this.incomingLinks)) {
+            link.highlightOn();
+        }
+    }
+
+    public highlightOff() {
+        this.sel.node().classList.remove('over');
+        this.inlet?.node().classList.remove('over');
+        this.outlet?.node().classList.remove('over');
+        for (let link of Object.values(this.outgoingLinks)) {
+            link.highlightOff();
+        }
+        for (let link of Object.values(this.incomingLinks)) {
+            link.highlightOff();
+        }
     }
 
 }
