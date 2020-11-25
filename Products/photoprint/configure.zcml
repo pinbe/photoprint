@@ -3,13 +3,22 @@
     xmlns:meta="http://namespaces.zope.org/meta"
     xmlns:cmf="http://namespaces.zope.org/cmf"
     xmlns:five="http://namespaces.zope.org/five"
-    xmlns:i18n="http://namespaces.zope.org/i18n">
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
 
   <include file="permissions.zcml"/>
 
   <cmf:registerDirectory directory="skins" name="photoprint" recursive="True"/>
   <i18n:registerTranslations directory="locales"/>
   <meta:redefinePermission from="zope2.Public" to="zope.Public" />
+
+  <genericsetup:registerProfile
+    name="photoprint"
+    title="Photoprint extensions"
+    description="Extension for online sale of fine art prints"
+    provides="Products.GenericSetup.interfaces.EXTENSION"
+    for="Products.CMFCore.interfaces.ISiteRoot"
+    />
 
   <five:registerClass
       class=".printjob.PrintOrder"

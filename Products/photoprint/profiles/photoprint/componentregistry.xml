@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<componentregistry>
+ <adapters/>
+ <subscribers/>
+ <utilities>
+  <utility interface="Products.photoprint.interfaces.IPhotoPrintTool"
+     object="portal_photo_print"/>
+ </utilities>
+</componentregistry>
