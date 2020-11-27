@@ -1,7 +1,7 @@
 export interface IJsonRpcRequest {
     jsonrpc: '2.0';
     method: string;
-    params: Object;
+    params: any;
     id: number | string;
 }
 
@@ -21,19 +21,19 @@ export class JsonRpcRequest {
         this.url = url;
     }
 
-    send<Result>(method: string, params: Object): Promise<JsonRpcResponse<Result>> {
-        let jsonreq: IJsonRpcRequest = {
+    send<Result>(method: string, params: any): Promise<JsonRpcResponse<Result>> {
+        const jsonreq: IJsonRpcRequest = {
             jsonrpc: '2.0',
             method: method,
             params: params,
             id: new Date().valueOf()
         };
-        let p: Promise<JsonRpcResponse<Result>> = new Promise(
+        return new Promise<JsonRpcResponse<Result>>(
             (resolve, reject) => {
-                let req = new XMLHttpRequest();
+                const req = new XMLHttpRequest();
                 req.open('POST', this.url);
                 req.addEventListener('load', (e) => {
-                    let resp: XMLHttpRequest = <XMLHttpRequest>(e.target);
+                    const resp: XMLHttpRequest = <XMLHttpRequest>(e.target);
                     let jsonrpcresp: JsonRpcResponse<Result>;
                     if(resp.status === 200) {
                         try {
@@ -69,11 +69,10 @@ export class JsonRpcRequest {
 
                 });
                 const fd = new FormData();
-                fd.append('req', JSON.stringify(jsonreq))
+                fd.append('req', JSON.stringify(jsonreq));
                 req.send(fd);
             }
         );
-        return p;
     }
 
 }

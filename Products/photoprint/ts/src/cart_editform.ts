@@ -6,6 +6,9 @@ import "./custom.scss";
 import i18next, {TOptions} from "i18next";
 import HttpApi from "i18next-http-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
+import {portal_url} from "plinn/src/components/utils";
+import {FormManager} from "plinn/src/components/form_manager";
+import SubmitEvent = JQuery.SubmitEvent;
 
 const _ = (s: string, options?: TOptions): string => i18next.t(s, options);
 
@@ -18,16 +21,19 @@ interface Totals {
 
 class CartEditForm {
     static readonly INPUT_TIMEOUT = 1000; // ms
-    private form: HTMLFormElement;
-    private portal_url: string;
+    private readonly form: HTMLFormElement;
     private timeoutId: number;
+    private focusedElement: HTMLElement;
 
-    constructor(form: HTMLFormElement, portal_url: string) {
+    constructor(form: HTMLFormElement) {
         this.form = form;
-        this.portal_url = portal_url;
+        this.focusedElement = null;
         this.form.addEventListener('change', (e) => this.onFormChange(e));
         this.form.addEventListener('input', (e) => this.onInput(e));
         this.form.addEventListener('click', (e) => this.onClick(e));
+        this.form.addEventListener('submit', (e) => this.onSubmit(e));
+        this.form.addEventListener('focusin', (e) => this.focusedElement = <HTMLElement>e.target);
+        this.form.addEventListener('focusout', (e) => this.focusedElement = null);
     }
 
     private onFormChange(e: Event) {
@@ -36,7 +42,7 @@ class CartEditForm {
             return;
         switch (target.name) {
             case 'quantity' :
-                new JsonRpcRequest(`${this.portal_url}/cartrpc`)
+                new JsonRpcRequest(`${portal_url()}/cartrpc`)
                     .send<{ lines: Line[], totals: Totals }>(
                         'update_quantity',
                         {
@@ -64,6 +70,10 @@ class CartEditForm {
 
     private onClick(e: Event) {
         let target: HTMLElement = <HTMLElement>e.target;
+        // if (target.tagName === 'INPUT' && (<HTMLInputElement>target).type === 'submit') {
+        //     this.form.submit();
+        //     return;
+        // }
         while (target !== this.form) {
             target = target.parentElement;
             if (target.tagName === 'A')
@@ -73,9 +83,8 @@ class CartEditForm {
             target.classList.contains('del')) {
             e.preventDefault();
             target.blur();
-            const self = this;
 
-            let modal = d3.select(document.body)
+            const modal = d3.select(document.body)
                 .append('div')
                 .attr('class', 'modal fade')
                 .attr('tabindex', '-1')
@@ -114,7 +123,7 @@ class CartEditForm {
                             .node())
                             .getAttribute('data-jobid');
 
-                    new JsonRpcRequest(`${this.portal_url}/cartrpc`)
+                    new JsonRpcRequest(`${portal_url()}/cartrpc`)
                         .send<{ lines: Line[], totals: Totals }>(
                             'delete_job',
                             {jobid: jobid}
@@ -124,11 +133,11 @@ class CartEditForm {
                         }
                         d3.select(target).remove();
                         if (resp.result.lines.length === 0) {
-                            window.location.href = self.portal_url + '/my_cart';
+                            window.location.href = `${portal_url()}/my_cart`;
                             return;
                         }
-                        self.updateLines(resp.result.lines);
-                        self.updateTotals(resp.result.totals);
+                        this.updateLines(resp.result.lines);
+                        this.updateTotals(resp.result.totals);
                         $(modal.node())
                             .modal('hide');
                     }, (resp: JsonRpcResponse<unknown>) => {
@@ -151,7 +160,7 @@ class CartEditForm {
             const row = rows[i];
             const cells = row.getElementsByTagName('td');
             cells[4].innerHTML = lines[i][0]; // unit price
-            cells[5].getElementsByTagName('input')[0].value = (new Number(lines[i][1])).toString(); // quantity
+            cells[5].getElementsByTagName('input')[0].value = (Number(lines[i][1])).toString(); // quantity
             cells[6].innerHTML = lines[i][2]; // line total
         }
     }
@@ -161,6 +170,11 @@ class CartEditForm {
             .innerHTML = totals.lines_total;
         this.form.querySelector('.total').querySelector('.tax')
             .innerHTML = totals.tax;
+    }
+
+    private onSubmit(e: Event) {
+        if (!(this.focusedElement.tagName === 'INPUT' && (<HTMLInputElement>this.focusedElement).type === 'submit'))
+            e.preventDefault();
     }
 }
 
@@ -193,11 +207,8 @@ function main() {
                 ],
             },
         })
-        .then(() => {
-            new CartEditForm(
-                <HTMLFormElement>document.getElementById('cart-form'),
-                portal_url)
-        });
+        .then(() => new CartEditForm(<HTMLFormElement>document.getElementById('cart-form')))
+    ;
 
 }
 
