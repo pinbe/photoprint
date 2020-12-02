@@ -56,7 +56,7 @@ class PhotoOrder {
     private static FORMATS_CHOICES_CLS = 'formats';
     private static FINISHES_CHOICES_CLS = 'finishes';
     private static FRAMES_CHOICES_CLS = 'frames';
-    private selectedOptions: SelectedOptions;
+    private readonly selectedOptions: SelectedOptions;
 
     constructor(portal_url: string,
                 uid: string,
@@ -68,7 +68,7 @@ class PhotoOrder {
         this.selectedOptions = {};
 
         const params = new FormData();
-        params.append('cmf_uid', this.uid)
+        params.append('cmf_uid', this.uid);
         d3.json(
             `${this.portal_url}/portal_photo_print/getEffectivePrintingOptionsFor`,
             {
@@ -94,7 +94,7 @@ class PhotoOrder {
             .text(_('Format'))
         ;
         const formats = this.printInfos.formats
-            .filter((v) => v.available_copies === true || v.available_copies > 0)
+            .filter((v) => v.available_copies === true || v.available_copies > 0);
         form
             .append('div')
             .attr('class', `choices ${PhotoOrder.FORMATS_CHOICES_CLS}`)
@@ -184,9 +184,9 @@ class PhotoOrder {
     }
 
     private updateFinishes() {
-        let finishes: Finish[] = [];
-        for (let finish of this.printInfos.finishes) {
-            for (let fmt_price of finish.formats_prices) {
+        const finishes: Finish[] = [];
+        for (const finish of this.printInfos.finishes) {
+            for (const fmt_price of finish.formats_prices) {
                 if (fmt_price.reference === this.selectedOptions.format)
                     finishes.push(finish);
             }
@@ -224,10 +224,10 @@ class PhotoOrder {
     }
 
     private updateFrames() {
-        let frames: Frame[] = [];
+        const frames: Frame[] = [];
         const form = <HTMLFormElement>d3.select(this.wrapper).select('form').node();
         const fmtRef = (<RadioNodeList>form.elements.namedItem('format')).value;
-        for (let frame of this.printInfos.frames) {
+        for (const frame of this.printInfos.frames) {
             if ((new Set(frame.finishes)).has(this.selectedOptions.finish) &&
                 (new Set(frame.formats_prices.map((e) => e.reference))).has(fmtRef))
                 frames.push(frame);
@@ -289,7 +289,7 @@ class PhotoOrder {
             const frames = this.printInfos.frames
                 .filter((v) => {
                     return v.reference === this.selectedOptions.frame &&
-                        (new Set(v.finishes)).has(this.selectedOptions.finish)
+                        (new Set(v.finishes)).has(this.selectedOptions.finish);
                 });
             if (frames.length === 1) {
                 const formatsPrices = frames[0].formats_prices
@@ -299,7 +299,7 @@ class PhotoOrder {
             }
         }
 
-        let txt = '';
+        let txt:string;
         if (fmtPrice === undefined || finishPrice === undefined || framePrice === undefined) {
             txt = _('[Please select options]');
             (<HTMLElement>d3.select(this.wrapper).select('.cart-btn-wrapper')
@@ -316,13 +316,13 @@ class PhotoOrder {
     }
 
     private addToCart() {
-        const req = new JsonRpcRequest(`${this.portal_url}/cartrpc`)
-        const params = Object.assign({cmf_uid: this.uid}, this.selectedOptions)
+        const req = new JsonRpcRequest(`${this.portal_url}/cartrpc`);
+        const params = Object.assign({cmf_uid: this.uid}, this.selectedOptions);
         req.send<{ ok: boolean, html: string }>('add_to_cart', params)
             .then(
                 (resp) => {
                     if (resp.result.ok) {
-                        let modal = d3.select(document.body)
+                        const modal = d3.select(document.body)
                             .append('div')
                             .attr('class', 'modal fade')
                             .attr('tabindex', '-1')

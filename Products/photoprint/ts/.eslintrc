@@ -11,6 +11,9 @@
   ],
   "rules": {
     "semi": 2,
-    "@typescript-eslint/no-explicit-any": "off"
+    "@typescript-eslint/no-explicit-any": "off",
+    "no-irregular-whitespace": "off",
+    "no-case-declarations": "off",
+    "no-useless-escape": "off"
   }
 }

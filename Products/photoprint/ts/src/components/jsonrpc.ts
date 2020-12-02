@@ -21,6 +21,7 @@ export class JsonRpcRequest {
         this.url = url;
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     send<Result>(method: string, params: any): Promise<JsonRpcResponse<Result>> {
         const jsonreq: IJsonRpcRequest = {
             jsonrpc: '2.0',

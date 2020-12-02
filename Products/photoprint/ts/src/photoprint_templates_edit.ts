@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import i18next, {TOptions} from "i18next";
 import HttpApi from 'i18next-http-backend';
-import LanguageDetector from 'i18next-browser-languagedetector'
+import LanguageDetector from 'i18next-browser-languagedetector';
 
 const _ = (s: string, options?: TOptions): string => i18next.t(s, options);
 const TR_DURATION = 500; // ms
@@ -147,7 +147,7 @@ class PrintOfferItem implements IPrintOfferItem {
     }
 
     private updateData(itemJsonData: IPrintOfferItem) {
-        for (let [name, value] of Object.entries(itemJsonData))
+        for (const [name, value] of Object.entries(itemJsonData))
             (<any>this)[name] = value;
     }
 
@@ -165,7 +165,7 @@ class PrintOfferItem implements IPrintOfferItem {
 
             switch (this.sectionInfo.section) {
                 case 'finishes' :
-                    for (let ref of (<Finish><unknown>this).formats_prices) {
+                    for (const ref of (<Finish><unknown>this).formats_prices) {
                         const format = this.editor.getFormatItemByRef(ref);
                         const arc = <d3.Selection<SVGPathElement, Link, any, any>>this.editor.arcsSel.append('path')
                             .attr('class', 'link')
@@ -176,7 +176,7 @@ class PrintOfferItem implements IPrintOfferItem {
                     break;
 
                 case 'frames' :
-                    for (let ref of (<Frame><unknown>this).finishes) {
+                    for (const ref of (<Frame><unknown>this).finishes) {
                         const finish = this.editor.getFinishItemByRef(ref);
                         const arc = <d3.Selection<SVGPathElement, Link, any, any>>this.editor.arcsSel.append('path')
                             .attr('class', 'link')
@@ -245,7 +245,7 @@ class PrintOfferItem implements IPrintOfferItem {
         ;
 
         d3.event.on('drag', () => {
-            arc.attr('d', Bézier({x: origin.x, y: origin.y}, {x: d3.event.x, y: d3.event.y}))
+            arc.attr('d', Bézier({x: origin.x, y: origin.y}, {x: d3.event.x, y: d3.event.y}));
         });
         d3.event.on('end', () => {
             if (targetItem === null)
@@ -256,11 +256,11 @@ class PrintOfferItem implements IPrintOfferItem {
     }
 
     moveTo(x: number, y: number, notransition = false) {
-        const duration = (notransition) ? 0 : TR_DURATION
+        const duration = (notransition) ? 0 : TR_DURATION;
         this.position.x = x;
         this.position.y = y;
         this.sel.transition().duration(duration)
-            .attr('transform', `translate(${x}, ${y})`)
+            .attr('transform', `translate(${x}, ${y})`);
 
         const rect = (<HTMLDivElement>this.sel.select('div').node()).getBoundingClientRect();
         if (this.outlet !== null)
@@ -280,7 +280,7 @@ class PrintOfferItem implements IPrintOfferItem {
     getInletPosition(): Coords2D | null {
         const rect = (<HTMLDivElement>this.sel.select('div').node()).getBoundingClientRect();
         if (this.inlet !== null) {
-            return {x: this.position.x, y: this.position.y + rect.height / 2}
+            return {x: this.position.x, y: this.position.y + rect.height / 2};
         }
         return null;
     }
@@ -288,7 +288,7 @@ class PrintOfferItem implements IPrintOfferItem {
     getOutletPosition(): Coords2D | null {
         const rect = (<HTMLDivElement>this.sel.select('div').node()).getBoundingClientRect();
         if (this.outlet !== null) {
-            return {x: this.position.x + rect.width, y: this.position.y + rect.height / 2}
+            return {x: this.position.x + rect.width, y: this.position.y + rect.height / 2};
         }
         return null;
     }
@@ -340,14 +340,14 @@ class PrintOfferItem implements IPrintOfferItem {
                         ;
                         break;
                     case 'UL' :
-                        let txt: string = '';
+                        let txt = '';
                         const re = new RegExp(elt.getAttribute('data-line_pattern'));
                         elt.querySelectorAll('li').forEach((li: HTMLLIElement) => {
                             const res = re.exec(li.textContent);
                             for (let j = 1; j < res.length; j++)
                                 txt += res[j];
                             txt += '\n';
-                        })
+                        });
                         txt = txt.trim();
                         input =
                             <HTMLElement>
@@ -364,7 +364,7 @@ class PrintOfferItem implements IPrintOfferItem {
                 }
                 parent.replaceChild(input, elt);
             });
-        const height = this.editor.getHtmlHeight(this.sel.select('div').style('height', undefined).html())
+        const height = this.editor.getHtmlHeight(this.sel.select('div').style('height', undefined).html());
         this.sel.select('div')
             .style('height', `${height}px`)
         ;
@@ -391,8 +391,8 @@ class PrintOfferItem implements IPrintOfferItem {
             return;
         }
 
-        let promises: Promise<boolean>[] = Object.values(this.incomingLinks).map(link => link.remove());
-        promises.concat(Object.values(this.outgoingLinks).map(link => link.remove()))
+        const promises: Promise<boolean>[] = Object.values(this.incomingLinks).map(link => link.remove());
+        promises.concat(Object.values(this.outgoingLinks).map(link => link.remove()));
         Promise.all<boolean>(promises).then((res: boolean[]) => {
                 if (res.reduce((a, b) => a && b, true)) { // if all ok
                     const url = `${this.editor.absUrl}/printingOptions/printoffer/removeOfferItem`;
@@ -457,7 +457,7 @@ class PrintOfferItem implements IPrintOfferItem {
                 .reduce((a, b) => a && b, true);
 
         if (inpustok && textareasok) {
-            let kv: { [name: string]: any } = {};
+            const kv: { [name: string]: any } = {};
             itemSel.selectAll('input, textarea')
                 .each((d, i, g) => {
                     const input = <HTMLInputElement | HTMLTextAreaElement>g[i];
@@ -468,7 +468,7 @@ class PrintOfferItem implements IPrintOfferItem {
                         if (kv[base_name] == undefined) {
                             kv[base_name] = [];
                         }
-                        const rec = JSON.parse(input.getAttribute('data-rec'))
+                        const rec = JSON.parse(input.getAttribute('data-rec'));
                         rec[rec_name] = input.value;
                         kv[base_name].push(rec);
                     } else {
@@ -481,8 +481,8 @@ class PrintOfferItem implements IPrintOfferItem {
                 kv.finishes = (<Frame><unknown>this).finishes;
             }
 
-            let req = new XMLHttpRequest();
-            req.open('POST', `${this.editor.absUrl}/printingOptions/printoffer/saveOfferItem`)
+            const req = new XMLHttpRequest();
+            req.open('POST', `${this.editor.absUrl}/printingOptions/printoffer/saveOfferItem`);
             req.addEventListener('load', ev => {
                 const resp = <XMLHttpRequest>(ev.target);
                 if (resp.status == 200) {
@@ -513,7 +513,7 @@ class PrintOfferItem implements IPrintOfferItem {
                 formdata.append('section', this.sectionInfo.section);
                 formdata.append('index:int', Number(this.getItemIndex()).toString(10));
                 formdata.append('reference', from.reference);
-                let url = `${this.editor.absUrl}/printingOptions/printoffer/addInLink`;
+                const url = `${this.editor.absUrl}/printingOptions/printoffer/addInLink`;
                 d3.json(
                     url,
                     {
@@ -525,7 +525,7 @@ class PrintOfferItem implements IPrintOfferItem {
                         const link = new Link(from, this, arc);
                         this.incomingLinks[from.reference] = link;
                         from.outgoingLinks[this.reference] = link;
-                        this.updateData(item)
+                        this.updateData(item);
                         this.editor.refreshAll();
                     },
                     () => arc.remove());
@@ -546,7 +546,7 @@ class PrintOfferItem implements IPrintOfferItem {
             formdata.append('section', this.sectionInfo.section);
             formdata.append('index:int', Number(this.getItemIndex()).toString(10));
             formdata.append('reference', link.from.reference);
-            let url = `${this.editor.absUrl}/printingOptions/printoffer/removeInLink`;
+            const url = `${this.editor.absUrl}/printingOptions/printoffer/removeInLink`;
             d3.json(
                 url,
                 {
@@ -580,9 +580,9 @@ class PrintOfferItem implements IPrintOfferItem {
 
             case 'frames' :
                 const finishes = Object.values(this.incomingLinks).map(l => l.from);
-                let formatsSet: Set<PrintOfferItem> = new Set<PrintOfferItem>();
-                for (let finish of finishes) {
-                    for (let format of Object.values(finish.incomingLinks).map(l => l.from)) {
+                const formatsSet: Set<PrintOfferItem> = new Set<PrintOfferItem>();
+                for (const finish of finishes) {
+                    for (const format of Object.values(finish.incomingLinks).map(l => l.from)) {
                         formatsSet.add(format);
                     }
                 }
@@ -598,10 +598,10 @@ class PrintOfferItem implements IPrintOfferItem {
         this.sel.node().classList.add('over');
         this.inlet?.node().classList.add('over');
         this.outlet?.node().classList.add('over');
-        for (let link of Object.values(this.outgoingLinks)) {
+        for (const link of Object.values(this.outgoingLinks)) {
             link.highlightOn();
         }
-        for (let link of Object.values(this.incomingLinks)) {
+        for (const link of Object.values(this.incomingLinks)) {
             link.highlightOn();
         }
     }
@@ -610,10 +610,10 @@ class PrintOfferItem implements IPrintOfferItem {
         this.sel.node().classList.remove('over');
         this.inlet?.node().classList.remove('over');
         this.outlet?.node().classList.remove('over');
-        for (let link of Object.values(this.outgoingLinks)) {
+        for (const link of Object.values(this.outgoingLinks)) {
             link.highlightOff();
         }
-        for (let link of Object.values(this.incomingLinks)) {
+        for (const link of Object.values(this.incomingLinks)) {
             link.highlightOff();
         }
     }
@@ -625,13 +625,13 @@ interface Coords2D {
     y: number;
 }
 
-function Bézier(from: Coords2D, to: Coords2D, strength: number = 2): string {
+function Bézier(from: Coords2D, to: Coords2D, strength = 2): string {
     const Δx = to.x - from.x;
     return `M${from.x} ${from.y} C${from.x + Δx / strength} ${from.y}, ${to.x - Δx / strength} ${to.y}, ${to.x} ${to.y}`;
 }
 
 
-const FLOAT_PATTERN = '^\\s*\\d+[\\.,]?\\d*\\s*$'
+const FLOAT_PATTERN = '^\\s*\\d+[\\.,]?\\d*\\s*$';
 
 class PrintOptionsEditor {
     private static COLS_MARGIN = 100;
@@ -669,7 +669,7 @@ class PrintOptionsEditor {
                 btnTitle: _("Add new frame…"),
                 html: PrintOptionsEditor.frameViewHtml
             },
-        ]
+        ];
         this.absUrl = absUrl;
         this.editorSelector = editorSelector;
         this.formatsIndex = {};
@@ -758,9 +758,9 @@ class PrintOptionsEditor {
     }
 
     getHtmlHeight(html: string): number {
-        this.htmlTmpShape.html(html)
+        this.htmlTmpShape.html(html);
         const height = this.htmlTmpShape.node().getBoundingClientRect().height;
-        this.htmlTmpShape.html('')
+        this.htmlTmpShape.html('');
         return height;
     }
 
@@ -780,12 +780,12 @@ class PrintOptionsEditor {
             switch (sectionInfo.section) {
                 case 'formats':
                     this.formatsIndex = {};
-                    for (let item of items) {
+                    for (const item of items) {
                         this.formatsIndex[item.reference] = item;
                     }
                     break;
                 case 'finishes':
-                    for (let item of items)
+                    for (const item of items)
                         this.finishesIndex[item.reference] = item;
                     break;
             }
@@ -849,7 +849,7 @@ class PrintOptionsEditor {
             .each((d, i, g) => {
                 let divs = <HTMLDivElement[]>d3.select(g[i])
                     .selectAll('foreignObject.item > div')
-                    .nodes()
+                    .nodes();
 
                 let colHeight = 0;
                 for (let j = 0; j < divs.length; j++) {
@@ -903,11 +903,11 @@ class PrintOptionsEditor {
     private static formatViewHtml(item: IPrintOfferItem): string {
         const fmt = <Format>item;
         let lbl = '';
-        for (let [lang, value] of Object.entries(fmt.label)) {
-            lbl += `<li>${value}@${lang}</li>`
+        for (const [lang, value] of Object.entries(fmt.label)) {
+            lbl += `<li>${value}@${lang}</li>`;
         }
         let prices_ranges = '';
-        for (let range of fmt.prices_ranges) {
+        for (const range of fmt.prices_ranges) {
             prices_ranges += `<li>[${range.start}, ${range.stop}] ${range.price}</li>`;
         }
         const rows = `
@@ -995,11 +995,11 @@ class PrintOptionsEditor {
         `;
 
         const fmtPrices: { [ref: string]: number } = {};
-        for (let fmtPrice of finish.formats_prices) {
+        for (const fmtPrice of finish.formats_prices) {
             fmtPrices[fmtPrice.reference] = fmtPrice.price; // eg. Object.fromEntries…
         }
 
-        for (let format of item.getRelatedFormats()) {
+        for (const format of item.getRelatedFormats()) {
             const price: number = fmtPrices[format.reference] || 0;
             rows += `
             <tr>
@@ -1021,11 +1021,11 @@ class PrintOptionsEditor {
         `;
 
         const fmtShippingPrices: { [ref: string]: number } = {};
-        for (let fmtShippingPrice of finish.formats_shipping_prices) {
+        for (const fmtShippingPrice of finish.formats_shipping_prices) {
             fmtShippingPrices[fmtShippingPrice.reference] = fmtShippingPrice.price; // eg. Object.fromEntries…
         }
 
-        for (let format of item.getRelatedFormats()) {
+        for (const format of item.getRelatedFormats()) {
             const shippingPrice: number = fmtShippingPrices[format.reference] || 0;
             rows += `
             <tr>
@@ -1078,11 +1078,11 @@ class PrintOptionsEditor {
 
 
         const fmtPrices: { [ref: string]: number } = {};
-        for (let fmtPrice of frame.formats_prices) {
+        for (const fmtPrice of frame.formats_prices) {
             fmtPrices[fmtPrice.reference] = fmtPrice.price; // eg. Object.fromEntries…
         }
 
-        for (let format of item.getRelatedFormats()) {
+        for (const format of item.getRelatedFormats()) {
             const price: number = fmtPrices[format.reference] || 0;
             rows += `
             <tr>
@@ -1104,11 +1104,11 @@ class PrintOptionsEditor {
         `;
 
         const fmtShippingPrices: { [ref: string]: number } = {};
-        for (let fmtShippingPrice of frame.formats_shipping_prices) {
+        for (const fmtShippingPrice of frame.formats_shipping_prices) {
             fmtShippingPrices[fmtShippingPrice.reference] = fmtShippingPrice.price; // eg. Object.fromEntries…
         }
 
-        for (let format of item.getRelatedFormats()) {
+        for (const format of item.getRelatedFormats()) {
             const shippingPrice: number = fmtShippingPrices[format.reference] || 0;
             rows += `
             <tr>
@@ -1127,7 +1127,7 @@ class PrintOptionsEditor {
     static checkTextareaLines(ta: HTMLTextAreaElement): boolean {
         const lines: string[] = ta.value.split('\n');
         const reline = new RegExp(ta.getAttribute('data-line_pattern'));
-        for (let line of lines) {
+        for (const line of lines) {
             if (!reline.test(line)) {
                 ta.classList.add('invalid');
                 return false;
@@ -1153,9 +1153,9 @@ class PrintOptionsEditor {
     }
 
     private createPrintOfferItem(sectionInfo: SectionInfo) {
-        let params: FormData = new FormData();
+        const params: FormData = new FormData();
         params.append('section', sectionInfo.section);
-        let url = `${this.absUrl}/printingOptions/printoffer/getTemplate`;
+        const url = `${this.absUrl}/printingOptions/printoffer/getTemplate`;
         d3.json(
             url,
             {
@@ -1166,7 +1166,7 @@ class PrintOptionsEditor {
             const data = d3.select(this.editorSelector)
                 .select(`.section.${sectionInfo.section}`)
                 .selectAll('foreignObject.item')
-                .data()
+                .data();
             data.push(new PrintOfferItem(this, sectionInfo, item));
             this.updateSection(sectionInfo, <PrintOfferItem[]>data, true);
             this.updateLayout();
@@ -1226,7 +1226,7 @@ class PrintOptionsEditor {
         d3.json(`${this.absUrl}/printingOptions/printoffer/json`, {method: 'POST', body: formData})
             .then((infos: PrintInfos | any) => {
                 if (infos.error === 'no earlier revision') {
-                    this.currentRevision++
+                    this.currentRevision++;
                     return;
                 }
                 this.clearAll(); // TODO: improve
@@ -1248,7 +1248,7 @@ class PrintOptionsEditor {
         const formData = new FormData();
         formData.append('revision:int', Number(this.currentRevision).toString(10));
         d3.json(`${this.absUrl}/printingOptions/printoffer/restoreRevision`, {method: 'POST', body: formData})
-            .then((ret: { ok?: Boolean, error?: string }) => {
+            .then((ret: { ok?: boolean, error?: string }) => {
                 if (ret.ok) {
                     this.currentRevision = 0;
                     d3.select(this.editorSelector)

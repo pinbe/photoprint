@@ -7,8 +7,6 @@ import i18next, {TOptions} from "i18next";
 import HttpApi from "i18next-http-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
 import {portal_url} from "plinn/src/components/utils";
-import {FormManager} from "plinn/src/components/form_manager";
-import SubmitEvent = JQuery.SubmitEvent;
 
 const _ = (s: string, options?: TOptions): string => i18next.t(s, options);
 
@@ -33,7 +31,7 @@ class CartEditForm {
         this.form.addEventListener('click', (e) => this.onClick(e));
         this.form.addEventListener('submit', (e) => this.onSubmit(e));
         this.form.addEventListener('focusin', (e) => this.focusedElement = <HTMLElement>e.target);
-        this.form.addEventListener('focusout', (e) => this.focusedElement = null);
+        this.form.addEventListener('focusout', () => this.focusedElement = null);
     }
 
     private onFormChange(e: Event) {
