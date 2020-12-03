@@ -6,6 +6,7 @@ import {JsonRpcRequest} from "./components/jsonrpc";
 import "./custom.scss";
 import * as $ from "jquery";
 import "bootstrap";
+import {PHOTO_ORDER_OPTIONS_CHANGED_EVENT, PhotoOrderOptionsChangedEventDetail} from "./components/event";
 
 const PHOTO_LOADED_EVENT = 'PHOTO_LOADED_EVENT';
 
@@ -18,7 +19,7 @@ interface IPrintOfferItem {
     label: string;
 }
 
-interface Format extends IPrintOfferItem {
+export interface Format extends IPrintOfferItem {
     short_edge: number;
     long_edge: number;
     price: number;
@@ -30,9 +31,15 @@ interface Finish extends IPrintOfferItem {
     formats_prices: RefPrice[];
 }
 
-interface Frame extends IPrintOfferItem {
+export interface BorderPreviewImg {
+    url: string;
+    real_width: number;
+}
+
+export interface Frame extends IPrintOfferItem {
     description: string;
     finishes: string[];
+    preview_img?: BorderPreviewImg;
     formats_prices: RefPrice[];
 }
 
@@ -181,6 +188,7 @@ class PhotoOrder {
                 this.selectedOptions.frame = target.value;
         }
         this.updatePrice();
+        this.notifyOptionChanges();
     }
 
     private updateFinishes() {
@@ -299,7 +307,7 @@ class PhotoOrder {
             }
         }
 
-        let txt:string;
+        let txt: string;
         if (fmtPrice === undefined || finishPrice === undefined || framePrice === undefined) {
             txt = _('[Please select options]');
             (<HTMLElement>d3.select(this.wrapper).select('.cart-btn-wrapper')
@@ -342,6 +350,22 @@ class PhotoOrder {
                 (resp) => {
                     console.error(resp.error.message);
                 });
+    }
+
+    private notifyOptionChanges() {
+        const frame: Frame = this.printInfos.frames.filter((v)=>v.reference===this.selectedOptions.frame)[0];
+        const format: Format = this.printInfos.formats.filter((v)=>v.reference===this.selectedOptions.format)[0];
+        const evt = new CustomEvent<PhotoOrderOptionsChangedEventDetail>(
+            PHOTO_ORDER_OPTIONS_CHANGED_EVENT,
+            {
+                detail: {
+                    format: format,
+                    frame: frame
+                }
+
+            }
+        );
+        document.dispatchEvent(evt);
     }
 }
 

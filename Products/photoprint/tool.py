@@ -46,6 +46,7 @@ from utils import Message as _
 PRINTING_OPTIONS_ID = 'printingOptions'
 COPIES_COUNTERS = '_copies_counters'
 SOLD_OUT = 'SOLD_OUT'
+INSITU_IMAGES = 'insitu_images'
 
 
 class PhotoPrintTool(UniqueObject, OrderedFolder) :
@@ -149,6 +150,17 @@ class PhotoPrintTool(UniqueObject, OrderedFolder) :
                     field_langs = item[field].keys()
                     lang = getBestTranslationLanguage(field_langs, self)
                     item[field] = item[field][lang]
+
+            insitu = self.get(INSITU_IMAGES)
+            if insitu :
+                for frame in data['frames'] :
+                    preview_img = insitu.get('%s.png' % frame['reference'])
+                    if preview_img :
+                        frame['preview_img'] = {
+                            'url' : preview_img.absolute_url(),
+                            'real_width' : preview_img.getProperty('real_width', 10.)
+                        }
+
 
         return json.dumps(ret)
 
