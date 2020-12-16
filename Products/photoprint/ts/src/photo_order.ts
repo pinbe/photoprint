@@ -93,7 +93,7 @@ class PhotoOrder {
         const form = d3.select(this.wrapper)
             .append('form')
             .attr('action', '#')
-            .on('change', () => this.onFormChange(d3.event))
+            .on('change', (evt: Event) => this.onFormChange(evt))
         ;
         form
             .append('div')

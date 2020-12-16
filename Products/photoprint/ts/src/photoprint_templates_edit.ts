@@ -68,9 +68,9 @@ class Link {
         this.to = to;
         this.arc =
             arc.datum(this)
-                .on('mouseover', function () {
+                .on('mouseover', function (evt: MouseEvent) {
                     this.classList.add('over');
-                    if ((<MouseEvent>d3.event).altKey) {
+                    if (evt.altKey) {
                         this.classList.add('ready-to-remove');
                     }
                     from.highlightOn();
@@ -81,8 +81,8 @@ class Link {
                     from.highlightOff();
                     to.highlightOff();
                 })
-                .on('click', () => {
-                    if ((<MouseEvent>d3.event).altKey)
+                .on('click', (evt: MouseEvent) => {
+                    if (evt.altKey)
                         this.remove();
 
                 })
@@ -131,6 +131,7 @@ class PrintOfferItem implements IPrintOfferItem {
     private readonly incomingLinks: { [reference: string]: Link };
     private readonly outgoingLinks: { [reference: string]: Link };
     private position: Coords2D;
+    private targetItem: PrintOfferItem;
 
     constructor(editor: PrintOptionsEditor,
                 sectionInfo: SectionInfo,
@@ -196,8 +197,8 @@ class PrintOfferItem implements IPrintOfferItem {
             .style('width', `${width}px`)
             .style('height', `${height}px`)
             .html(html)
-            .on('click', () => {
-                this.onClick();
+            .on('click', (e) => {
+                this.onClick(e);
             })
             .on('mouseover', () => this.highlightOn())
             .on('mouseout', () => this.highlightOff())
@@ -215,14 +216,14 @@ class PrintOfferItem implements IPrintOfferItem {
                 .attr('d', 'M0-8A8,8,0,0,1,8,0,8,8,0,0,1,0,8Z')
                 .attr('transform', `translate(${width}, ${height / 2})`)
             ;
-            const d = d3.drag();
-            d.on('start', () => this.onDragStart());
-            this.outlet.call(d);
+            const b: d3.DragBehavior<SVGPathElement, PrintOfferItem, any> = d3.drag();
+            b.on('start', (evt:d3.D3DragEvent<SVGPathElement, PrintOfferItem, any>) => this.onDragStart(evt, b));
+            this.outlet.call(b);
         }
     }
 
-    private onDragStart() {
-        const origin: d3.D3DragEvent<SVGPathElement, PrintOfferItem, any> = d3.event;
+    private onDragStart(origin: d3.D3DragEvent<SVGPathElement, PrintOfferItem, any>,
+                        behaviour: d3.DragBehavior<SVGPathElement, PrintOfferItem, any>) {
         const arc = <d3.Selection<SVGPathElement, Link, any, any>>this.editor.arcsSel.append('path')
             .attr('class', 'link new')
         ;
@@ -237,21 +238,26 @@ class PrintOfferItem implements IPrintOfferItem {
                 endTargetSelector = '.plug.inlet.frames';
 
         }
-        let targetItem: PrintOfferItem = null;
+        this.targetItem = null;
         this.editor.dotsSel
             .selectAll(endTargetSelector)
-            .on('mouseover', (d: PrintOfferItem) => targetItem = d)
-            .on('mouseout', () => targetItem = null)
+            .on('mouseover', (e, d: PrintOfferItem) => this.targetItem = d)
+            .on('mouseout', () => this.targetItem = null)
         ;
 
-        d3.event.on('drag', () => {
-            arc.attr('d', Bézier({x: origin.x, y: origin.y}, {x: d3.event.x, y: d3.event.y}));
+        behaviour.on('drag',
+            (e: d3.D3DragEvent<SVGPathElement, PrintOfferItem, any>) => {
+            arc.attr('d', Bézier({x: origin.x, y: origin.y}, {x: e.x, y: e.y}));
         });
-        d3.event.on('end', () => {
-            if (targetItem === null)
+        behaviour.on('end', () => {
+            if (this.targetItem === null){
+
                 arc.remove();
-            else
-                targetItem.createIncomingLink(this, arc, true);
+                console.info('arc remove');
+            }
+            else {
+                this.targetItem.createIncomingLink(this, arc, true);
+            }
         });
     }
 
@@ -293,9 +299,8 @@ class PrintOfferItem implements IPrintOfferItem {
         return null;
     }
 
-    private onClick() {
-        const evt = d3.event;
-        const target = evt.target;
+    private onClick(evt: Event) {
+        const target = <HTMLElement>evt.target;
         if (target.classList.contains('btn')) {
             evt.stopPropagation();
             evt.preventDefault();
@@ -356,7 +361,7 @@ class PrintOfferItem implements IPrintOfferItem {
                                     .attr('name', name)
                                     .attr('data-line_pattern', elt.getAttribute('data-line_pattern'))
                                     .text(txt)
-                                    .on('input', (d, i, g) => PrintOptionsEditor.checkTextareaLines(<HTMLTextAreaElement>g[i]))
+                                    .on('input', (evt: Event) => PrintOptionsEditor.checkTextareaLines(<HTMLTextAreaElement>evt.target))
                                     .node()
                         ;
                         break;
@@ -687,7 +692,7 @@ class PrintOptionsEditor {
         <AnySel>d3.select(editorSelector)
             .append('div')
             .attr('class', 'history-bar')
-            .on('click', () => this.onHistoryBarClick())
+            .on('click', (evt: MouseEvent) => this.onHistoryBarClick(evt))
             .html(`
               <a href="#" title="${_("Restore this version")}" class="hidden">
                 <i class="btn restore fas fa-trash-restore"></i>
@@ -833,7 +838,7 @@ class PrintOptionsEditor {
                     .attr('width', `${this.colwidth}px`)
                     .attr('height', `${height}px`)
                     .html(html)
-                    .on('click', () => this.onBottomBtnClick(sectionInfo))
+                    .on('click', (evt: MouseEvent) => this.onBottomBtnClick(evt, sectionInfo))
                     .select('div')
                     .style('height', `${height}px`)
                 ;
@@ -1138,9 +1143,8 @@ class PrintOptionsEditor {
         return true;
     }
 
-    private onBottomBtnClick(sectionInfo: SectionInfo) {
-        const evt = d3.event;
-        const target = evt.target;
+    private onBottomBtnClick(evt: MouseEvent, sectionInfo: SectionInfo) {
+        const target = <HTMLElement>evt.target;
         if (target.classList.contains('btn')) {
             evt.stopPropagation();
             evt.preventDefault();
@@ -1174,9 +1178,8 @@ class PrintOptionsEditor {
 
     }
 
-    private onHistoryBarClick() {
-        const evt = d3.event;
-        const target = evt.target;
+    private onHistoryBarClick(evt: MouseEvent) {
+        const target = <HTMLElement>evt.target;
         if (target.classList.contains('btn')) {
             evt.stopPropagation();
             evt.preventDefault();
