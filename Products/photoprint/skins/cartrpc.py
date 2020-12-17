@@ -35,8 +35,11 @@ def get_cart_table_data() :
     return {
         'lines' : lines,
         'totals' : {
+            # price_and_currency, eg.: 789,78 € / 789.78 €
             'lines_total' : _('price_and_currency', mapping={'price' : (cart_infos['lines_total']).taxed}),
-            'tax' : _('price_and_currency', mapping={'price' : (cart_infos['lines_total']).tax}),}
+            'tax' : _('price_and_currency', mapping={'price' : (cart_infos['lines_total']).tax}),
+            'cart_length' : len(cart)
+        },
     }
 
 
@@ -60,6 +63,7 @@ if method == 'add_to_cart' :
 
         resp['result'] = {
             'ok' : True,
+            'cart_length' : len(cart),
             'html' : context.my_cart_added_template(infos=[d])
         }
     except SoldOutError :

@@ -15,6 +15,7 @@ type Line = [string, number, string];
 interface Totals {
     lines_total: string;
     tax: string;
+    cart_length: number;
 }
 
 class CartEditForm {
@@ -168,6 +169,11 @@ class CartEditForm {
             .innerHTML = totals.lines_total;
         this.form.querySelector('.total').querySelector('.tax')
             .innerHTML = totals.tax;
+        const quantitySticker = document.querySelector('#main-cart .cart-length');
+        if(quantitySticker)
+            quantitySticker.innerHTML = (totals.cart_length > 0) ?
+                Number(totals.cart_length).toString() :
+                '';
     }
 
     private onSubmit(e: Event) {

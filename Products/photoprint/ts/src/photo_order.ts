@@ -326,10 +326,13 @@ class PhotoOrder {
     private addToCart() {
         const req = new JsonRpcRequest(`${this.portal_url}/cartrpc`);
         const params = Object.assign({cmf_uid: this.uid}, this.selectedOptions);
-        req.send<{ ok: boolean, html: string }>('add_to_cart', params)
+        req.send<{ ok: boolean, cart_length: number, html: string }>('add_to_cart', params)
             .then(
                 (resp) => {
                     if (resp.result.ok) {
+                        const quantitySticker = document.querySelector('#main-cart .cart-length');
+                        if(quantitySticker)
+                            quantitySticker.innerHTML = Number(resp.result.cart_length).toString();
                         const modal = d3.select(document.body)
                             .append('div')
                             .attr('class', 'modal fade')

@@ -155,3 +155,6 @@ class PrintCart(Persistent, Implicit) :
             return getattr(self, item)
         else :
             return self._orders[item]
+
+    def __len__(self) :
+        return reduce(lambda a,b: a+b, [order.copies for order in self._orders.values()], 0)
