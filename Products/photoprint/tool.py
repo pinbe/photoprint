@@ -158,7 +158,8 @@ class PhotoPrintTool(UniqueObject, OrderedFolder) :
                     if preview_img :
                         frame['preview_img'] = {
                             'url' : preview_img.absolute_url(),
-                            'real_width' : preview_img.getProperty('real_width', 10.)
+                            'real_width' : preview_img.getProperty('real_width', 10.),
+                            'background' : preview_img.getProperty('background', 'white')
                         }
 
 

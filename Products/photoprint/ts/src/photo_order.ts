@@ -34,6 +34,7 @@ interface Finish extends IPrintOfferItem {
 export interface BorderPreviewImg {
     url: string;
     real_width: number;
+    background: string;
 }
 
 export interface Frame extends IPrintOfferItem {
