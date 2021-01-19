@@ -154,12 +154,12 @@ class PhotoPrintTool(UniqueObject, OrderedFolder) :
             insitu = self.get(INSITU_IMAGES)
             if insitu :
                 for frame in data['frames'] :
-                    preview_img = insitu.get('%s.png' % frame['reference'])
-                    if preview_img :
-                        frame['preview_img'] = {
-                            'url' : preview_img.absolute_url(),
-                            'real_width' : preview_img.getProperty('real_width', 10.),
-                            'background' : preview_img.getProperty('background', 'white')
+                    frame_border_description = insitu.get('%s.png' % frame['reference'])
+                    if frame_border_description :
+                        frame['frame_border_description'] = {
+                            'url' : frame_border_description.absolute_url(),
+                            'real_width' : frame_border_description.getProperty('real_width', 10.),
+                            'background' : frame_border_description.getProperty('background', 'white')
                         }
 
 

@@ -7,54 +7,14 @@ import "./custom.scss";
 import * as $ from "jquery";
 import "bootstrap";
 import {PHOTO_ORDER_OPTIONS_CHANGED_EVENT, PhotoOrderOptionsChangedEventDetail} from "./components/event";
+import {Finish, Format, Frame, PrintInfos, SelectedOptions} from "./components/interfaces";
 
 const PHOTO_LOADED_EVENT = 'PHOTO_LOADED_EVENT';
 
 const _ = (s: string, options?: TOptions): string => i18next.t(s, options);
 
-type RefPrice = { reference: string, price: number };
 
-interface IPrintOfferItem {
-    reference: string;
-    label: string;
-}
 
-export interface Format extends IPrintOfferItem {
-    short_edge: number;
-    long_edge: number;
-    price: number;
-    available_copies: number | boolean;
-}
-
-interface Finish extends IPrintOfferItem {
-    description: string;
-    formats_prices: RefPrice[];
-}
-
-export interface BorderPreviewImg {
-    url: string;
-    real_width: number;
-    background: string;
-}
-
-export interface Frame extends IPrintOfferItem {
-    description: string;
-    finishes: string[];
-    preview_img?: BorderPreviewImg;
-    formats_prices: RefPrice[];
-}
-
-interface PrintInfos {
-    formats: Format[];
-    finishes: Finish[];
-    frames: Frame[];
-}
-
-interface SelectedOptions {
-    format?: string;
-    finish?: string;
-    frame?: string;
-}
 
 class PhotoOrder {
     private readonly uid: string;
