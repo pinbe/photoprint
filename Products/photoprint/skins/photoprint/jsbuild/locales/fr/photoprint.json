@@ -8,6 +8,7 @@
   "Price:": "Prix :",
   "[Please select options]": "[Veuillez choisir les options]",
   "Add to cart": "Ajouter au panier",
+  "DECIMAL_SEP": ",",
   "€": "€",
   "Save": "Enregistrer",
   "Formats": "Formats",

@@ -8,12 +8,11 @@ import * as $ from "jquery";
 import "bootstrap";
 import {PHOTO_ORDER_OPTIONS_CHANGED_EVENT, PhotoOrderOptionsChangedEventDetail} from "./components/event";
 import {Finish, Format, Frame, PrintInfos, SelectedOptions} from "./components/interfaces";
+import {PhotoLoadedEventDetail} from "portfolio/src/components/event";
 
 const PHOTO_LOADED_EVENT = 'PHOTO_LOADED_EVENT';
 
 const _ = (s: string, options?: TOptions): string => i18next.t(s, options);
-
-
 
 
 class PhotoOrder {
@@ -28,7 +27,9 @@ class PhotoOrder {
 
     constructor(portal_url: string,
                 uid: string,
-                wrapper: HTMLElement) {
+                wrapper: HTMLElement,
+                selectedOptions: SelectedOptions = {}
+    ) {
         this.uid = uid;
         this.portal_url = portal_url;
         this.wrapper = wrapper;
@@ -45,11 +46,11 @@ class PhotoOrder {
             })
             .then((value: PrintInfos) => {
                 this.printInfos = value;
-                this.draw();
+                this.draw(selectedOptions);
             });
     }
 
-    draw() {
+    draw(selectedOptions: SelectedOptions) {
         /** Formats */
         const form = d3.select(this.wrapper)
             .append('form')
@@ -71,19 +72,26 @@ class PhotoOrder {
             .enter()
             .append('div')
             .html(
-                (d: Format) =>
-                    `
+                (d: Format) => {
+                    const selected = selectedOptions.format === d.reference;
+                    if (selected)
+                        this.selectedOptions.format = d.reference;
+                    return `
                 <span>
                   <label>
-                    <input type="radio" name="format" value="${d.reference}">
+                    <input type="radio"
+                           name="format"
+                           value="${d.reference}"
+                           ${(selected) ? 'checked="checked"' : ''}>
                     ${d.label} – ${d.short_edge} × ${d.long_edge} cm
                   </label>
                 </span>
-                `
+                `;
+                }
             )
         ;
 
-        /* Finishes */
+        /** Finishes */
         form
             .append('div')
             .attr('class', 'section-option-label')
@@ -93,8 +101,9 @@ class PhotoOrder {
             .append('div')
             .attr('class', `choices ${PhotoOrder.FINISHES_CHOICES_CLS}`)
         ;
+        this.updateFinishes(selectedOptions);
 
-        /* Frames */
+        /** Frames */
         form
             .append('div')
             .attr('class', 'section-option-label')
@@ -118,6 +127,7 @@ class PhotoOrder {
             .attr('class', 'total')
             .text(_('[Please select options]'))
         ;
+        this.updateFrames(selectedOptions);
 
         const orderBtnWrapper = d3.select(this.wrapper)
             .append('div')
@@ -129,6 +139,7 @@ class PhotoOrder {
             .text(_('Add to cart'))
             .on('click', () => this.addToCart())
         ;
+        this.updatePrice();
     }
 
     private onFormChange(event: Event) {
@@ -152,7 +163,7 @@ class PhotoOrder {
         this.notifyOptionChanges();
     }
 
-    private updateFinishes() {
+    private updateFinishes(selectedOptions: SelectedOptions = {}) {
         const finishes: Finish[] = [];
         for (const finish of this.printInfos.finishes) {
             for (const fmt_price of finish.formats_prices) {
@@ -166,7 +177,10 @@ class PhotoOrder {
             .data(finishes)
             .enter()
             .append('div')
-            .html((d: Finish) => `
+            .html((d: Finish) => {
+                if (selectedOptions.finish === d.reference)
+                    this.selectedOptions.finish = d.reference;
+                return `
                 <div>
                   <label>
                     <input type="radio" name="finish"
@@ -177,7 +191,8 @@ class PhotoOrder {
                     ${d.description}
                   </div>
                 </div>
-            `);
+            `
+            });
 
         if (this.selectedOptions.finish) {
             const selected =
@@ -192,7 +207,7 @@ class PhotoOrder {
         }
     }
 
-    private updateFrames() {
+    private updateFrames(selectedOptions: SelectedOptions = {}) {
         const frames: Frame[] = [];
         const form = <HTMLFormElement>d3.select(this.wrapper).select('form').node();
         const fmtRef = (<RadioNodeList>form.elements.namedItem('format')).value;
@@ -207,7 +222,10 @@ class PhotoOrder {
             .data(frames)
             .enter()
             .append('div')
-            .html((d: Finish) => `
+            .html((d: Finish) => {
+                if (selectedOptions.frame === d.reference)
+                    this.selectedOptions.frame = d.reference;
+                return `
                 <div>
                   <label>
                     <input type="radio" name="frame" value="${d.reference}">
@@ -217,7 +235,8 @@ class PhotoOrder {
                     ${d.description}
                   </div>
                 </div>
-            `);
+            `;
+            });
 
         if (this.selectedOptions.frame) {
             const selected = <HTMLInputElement>d3.select(this.wrapper)
@@ -275,7 +294,9 @@ class PhotoOrder {
                 .node())
                 .classList.add('hidden');
         } else {
-            txt = `${fmtPrice + finishPrice + framePrice} ${_('€')}`;
+            let p: string = d3.format('.2f')(fmtPrice + finishPrice + framePrice);
+            p = p.replace('.', _('DECIMAL_SEP'));
+            txt = `${p} ${_('€')}`;
             (<HTMLElement>d3.select(this.wrapper).select('.cart-btn-wrapper')
                 .node())
                 .classList.remove('hidden');
@@ -292,7 +313,7 @@ class PhotoOrder {
                 (resp) => {
                     if (resp.result.ok) {
                         const quantitySticker = document.querySelector('#main-cart .cart-length');
-                        if(quantitySticker)
+                        if (quantitySticker)
                             quantitySticker.innerHTML = Number(resp.result.cart_length).toString();
                         const modal = d3.select(document.body)
                             .append('div')
@@ -317,13 +338,15 @@ class PhotoOrder {
     }
 
     private notifyOptionChanges() {
-        const frame: Frame = this.printInfos.frames.filter((v)=>v.reference===this.selectedOptions.frame)[0];
-        const format: Format = this.printInfos.formats.filter((v)=>v.reference===this.selectedOptions.format)[0];
+        const frame: Frame = this.printInfos.frames.filter((v) => v.reference === this.selectedOptions.frame)[0];
+        const finish: Finish = this.printInfos.finishes.filter((v) => v.reference === this.selectedOptions.finish)[0];
+        const format: Format = this.printInfos.formats.filter((v) => v.reference === this.selectedOptions.format)[0];
         const evt = new CustomEvent<PhotoOrderOptionsChangedEventDetail>(
             PHOTO_ORDER_OPTIONS_CHANGED_EVENT,
             {
                 detail: {
                     format: format,
+                    finish: finish,
                     frame: frame
                 }
 
@@ -367,11 +390,17 @@ function main() {
             const wrapper = document.getElementById('sale-options');
             new PhotoOrder(portal_url, uid, wrapper);
             document.addEventListener(PHOTO_LOADED_EVENT,
-                (evt: CustomEvent) => {
+                (evt: CustomEvent<PhotoLoadedEventDetail>) => {
+                    const selectedOptions = (evt.detail.selectedOrderOptions) ? {
+                        format: evt.detail.selectedOrderOptions.format?.reference,
+                        finish: evt.detail.selectedOrderOptions.finish?.reference,
+                        frame: evt.detail.selectedOrderOptions.frame?.reference,
+                    } : undefined;
                     if (evt.detail.buyable)
                         new PhotoOrder(portal_url,
                             evt.detail.cmf_uid,
-                            document.getElementById('sale-options'));
+                            document.getElementById('sale-options'),
+                            selectedOptions);
                 });
         });
 
