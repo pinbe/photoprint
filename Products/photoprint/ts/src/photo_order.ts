@@ -140,6 +140,13 @@ class PhotoOrder {
             .on('click', () => this.addToCart())
         ;
         this.updatePrice();
+
+        for (const name of ['format', 'finish', 'frame']) {
+            if (this.selectedOptions[<keyof SelectedOptions>name] != selectedOptions[<keyof SelectedOptions>name]) {
+                this.notifyOptionChanges();
+                break;
+            }
+        }
     }
 
     private onFormChange(event: Event) {
