@@ -227,6 +227,11 @@ td.num input[type="text"] {
   color: #e63600;
 }
 
+#order-page h1 {
+  font-size: 23px;
+  padding: 18px 0;
+}
+
 #order-page .order-num {
   font-weight: bold;
 }
