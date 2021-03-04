@@ -14,7 +14,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Unknown\n"
-"POT-Creation-Date: Tue Oct 13 23:33:37 2020\n"
+"POT-Creation-Date: Wed Mar  3 09:44:04 2021\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Zope 3 Developers <zope-dev@zope.org>\n"
@@ -36,12 +36,12 @@ msgid "You must enter a positive value for quantity (found: %s)"
 msgstr ""
 
 #: t/skins/add_to_cart.py:49
-#: t/skins/cartrpc.py:73
+#: t/skins/cartrpc.py:84
 msgid "Only %d available copies of this photo in this size."
 msgstr ""
 
 #: t/skins/add_to_cart.py:51
-#: t/skins/cartrpc.py:75
+#: t/skins/cartrpc.py:86
 msgid "Only one last available copy of this photo in this size."
 msgstr ""
 
@@ -50,6 +50,7 @@ msgid "No more available copy of this photo in this size."
 msgstr ""
 
 #: t/skins/add_to_cart.py:62
+#: t/skins/cartrpc.py:110
 msgid ""
 "Your cart is locked:\n"
 "please complete your current order first."
@@ -60,19 +61,15 @@ msgstr ""
 msgid "Added to cart."
 msgstr ""
 
-#: t/skins/cartrpc.py:47
-msgid "This item is sold out."
-msgstr ""
-
-#: t/skins/cartrpc.py:58
-#: t/skins/cartrpc.py:60
-#: t/skins/cartrpc.py:65
-#: t/skins/cartrpc.py:66
+#: t/skins/cartrpc.py:31
+#: t/skins/cartrpc.py:33
+#: t/skins/cartrpc.py:39
+#: t/skins/cartrpc.py:40
 #: t/skins/my_cart_template.pt:58
 #: t/skins/my_cart_template.pt:85
 #: t/skins/my_cart_template.pt:100
 #: t/skins/my_cart_template.pt:112
-#: t/skins/my_orders_template.pt:36
+#: t/skins/my_orders_template.pt:35
 #: t/skins/order_list_template.pt:52
 #: t/skins/order_view_template.pt:112
 #: t/skins/order_view_template.pt:124
@@ -81,11 +78,15 @@ msgstr ""
 msgid "price_and_currency"
 msgstr ""
 
-#: t/skins/cartrpc.py:77
+#: t/skins/cartrpc.py:72
+msgid "This item is sold out."
+msgstr ""
+
+#: t/skins/cartrpc.py:88
 msgid "No more available copy of this photo and in this size."
 msgstr ""
 
-#: t/skins/cartrpc.py:87
+#: t/skins/cartrpc.py:98
 msgid "Wrong value for quantity."
 msgstr ""
 
@@ -387,7 +388,7 @@ msgstr ""
 msgid "My orders"
 msgstr ""
 
-#: t/skins/my_orders_template.pt:41
+#: t/skins/my_orders_template.pt:40
 #: t/skins/order_cancel_form.pt:20
 #: t/skins/order_list_template.pt:33
 #: t/skins/order_list_template.pt:35
@@ -400,6 +401,18 @@ msgstr ""
 #: t/skins/order_view_template.pt:94
 #: t/skins/order_view_template.pt:295
 msgid "${DYNAMIC_CONTENT}"
+msgstr ""
+
+#: t/skins/my_orders_template.pt:46
+msgid "No orders currently recorded."
+msgstr ""
+
+#: t/skins/my_orders_template.pt:54
+msgid "You have a shopping cart in progress. Please finalize your order, and as soon as this is done, you can follow its execution here."
+msgstr ""
+
+#: t/skins/my_orders_template.pt:59
+msgid "Go to shopping cart >>>"
 msgstr ""
 
 #: t/skins/order_cancel_form.pt:11
@@ -643,7 +656,7 @@ msgstr ""
 msgid "Delete options defined at this level"
 msgstr ""
 
-#: t/tool.py:225
+#: t/tool.py:244
 msgid "No printing options found at %r"
 msgstr ""
 

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Plinn 2.0\n"
-"POT-Creation-Date: Tue Oct 13 23:33:37 2020\n"
-"PO-Revision-Date: 2020-10-13 23:34+0200\n"
+"POT-Creation-Date: Wed Mar  3 09:44:04 2021\n"
+"PO-Revision-Date: 2021-03-03 09:44+0100\n"
 "Last-Translator:  Benoît PIN\n"
 "Language-Team: CRI http://cri.ensmp.fr\n"
 "Language: \n"
@@ -28,11 +28,11 @@ msgstr "Vous devez entrer un nombre entier pour la quantité (trouvé : %s)."
 msgid "You must enter a positive value for quantity (found: %s)"
 msgstr "Vous devez entrer une valeur positive pour la quantité (trouvé : %s)."
 
-#: t/skins/add_to_cart.py:49 t/skins/cartrpc.py:73
+#: t/skins/add_to_cart.py:49 t/skins/cartrpc.py:84
 msgid "Only %d available copies of this photo in this size."
 msgstr "Seulement %d exemplaires disponibles pour cette photo à ce format."
 
-#: t/skins/add_to_cart.py:51 t/skins/cartrpc.py:75
+#: t/skins/add_to_cart.py:51 t/skins/cartrpc.py:86
 msgid "Only one last available copy of this photo in this size."
 msgstr ""
 "Plus qu'un dernier exemplaire disponible pour cette photo à ce format. "
@@ -41,7 +41,7 @@ msgstr ""
 msgid "No more available copy of this photo in this size."
 msgstr "Plus d'exemplaire disponible pour cette photo à ce format."
 
-#: t/skins/add_to_cart.py:62
+#: t/skins/add_to_cart.py:62 t/skins/cartrpc.py:110
 msgid ""
 "Your cart is locked:\n"
 "please complete your current order first."
@@ -53,25 +53,25 @@ msgstr ""
 msgid "Added to cart."
 msgstr "Ajouté au panier."
 
-#: t/skins/cartrpc.py:47
-msgid "This item is sold out."
-msgstr "Cet article est épuisé."
-
-#: t/skins/cartrpc.py:58 t/skins/cartrpc.py:60 t/skins/cartrpc.py:65
-#: t/skins/cartrpc.py:66 t/skins/my_cart_template.pt:58
+#: t/skins/cartrpc.py:31 t/skins/cartrpc.py:33 t/skins/cartrpc.py:39
+#: t/skins/cartrpc.py:40 t/skins/my_cart_template.pt:58
 #: t/skins/my_cart_template.pt:85 t/skins/my_cart_template.pt:100
-#: t/skins/my_cart_template.pt:112 t/skins/my_orders_template.pt:36
+#: t/skins/my_cart_template.pt:112 t/skins/my_orders_template.pt:35
 #: t/skins/order_list_template.pt:52 t/skins/order_view_template.pt:112
 #: t/skins/order_view_template.pt:124 t/skins/order_view_template.pt:136
 #: t/skins/order_view_template.pt:148
 msgid "price_and_currency"
 msgstr "${price} €"
 
-#: t/skins/cartrpc.py:77
+#: t/skins/cartrpc.py:72
+msgid "This item is sold out."
+msgstr "Cet article est épuisé."
+
+#: t/skins/cartrpc.py:88
 msgid "No more available copy of this photo and in this size."
 msgstr "Plus d'exemplaire de cette photo disponible dans ce format."
 
-#: t/skins/cartrpc.py:87
+#: t/skins/cartrpc.py:98
 msgid "Wrong value for quantity."
 msgstr "Valeur incorrecte pour la quantité."
 
@@ -374,7 +374,7 @@ msgstr "order-wfstate-%s"
 msgid "My orders"
 msgstr "Mes commandes"
 
-#: t/skins/my_orders_template.pt:41 t/skins/order_cancel_form.pt:20
+#: t/skins/my_orders_template.pt:40 t/skins/order_cancel_form.pt:20
 #: t/skins/order_list_template.pt:33 t/skins/order_list_template.pt:35
 #: t/skins/order_list_template.pt:37 t/skins/order_list_template.pt:57
 #: t/skins/order_manual_payment_form.pt:19 t/skins/order_notify_done_form.pt:19
@@ -382,6 +382,22 @@ msgstr "Mes commandes"
 #: t/skins/order_view_template.pt:94 t/skins/order_view_template.pt:295
 msgid "${DYNAMIC_CONTENT}"
 msgstr ""
+
+#: t/skins/my_orders_template.pt:46
+msgid "No orders currently recorded."
+msgstr "Aucune commande actuellement enregistrée."
+
+#: t/skins/my_orders_template.pt:54
+msgid ""
+"You have a shopping cart in progress. Please finalize your order, and as "
+"soon as this is done, you can follow its execution here."
+msgstr ""
+"Vous avez un panier en cours. Veuillez finaliser votre commande, et dès que "
+"cela sera fait, vous pourrez suivre son exécution ici."
+
+#: t/skins/my_orders_template.pt:59
+msgid "Go to shopping cart >>>"
+msgstr "Aller au panier >>>"
 
 #: t/skins/order_cancel_form.pt:11
 msgid "Cancel order \"${order_reference}\""
@@ -651,7 +667,7 @@ msgstr "Définir des options d'impression"
 msgid "Delete options defined at this level"
 msgstr "Supprimer les options définies à ce niveau"
 
-#: t/tool.py:225
+#: t/tool.py:244
 msgid "No printing options found at %r"
 msgstr "Aucune option d'impression trouvée sur %r"
 
@@ -738,6 +754,9 @@ msgstr "Commande expédiée"
 
 msgid "order-wfaction-paypal_pay"
 msgstr "Paiement PayPal"
+
+#~ msgid "Go to shopping cart >>>"
+#~ msgstr "Aller au panier >>>"
 
 #~ msgid "manual_payment"
 #~ msgstr "Paiement manuel"
