@@ -7,7 +7,7 @@ from ZTUtils import make_query
 wtool = getToolByName(context, 'portal_workflow')
 mtool = getToolByName(context, 'portal_membership')
 options = {}
-folders = context.contentValues({'portal_type' : 'Order Folder'})
+folders = context.listFolderContents({'portal_type' : 'Order Folder'})
 options['folders'] = folders
 
 columns = ({'key' : 'created',
