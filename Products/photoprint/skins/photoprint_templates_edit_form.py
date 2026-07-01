@@ -7,7 +7,7 @@ pptool = getToolByName(context, 'portal_photo_print')
 form = context.REQUEST.form.copy()
 
 if addTemplate:
-	context.REQUEST.RESPONSE.setHeader('Content-Type', 'text/xml;;charset=utf-8')
+	context.REQUEST.RESPONSE.setHeader('Content-Type', 'text/xml;charset=utf-8')
 	fg = form.get
 
 	try :
@@ -33,7 +33,7 @@ if addTemplate:
 		return '<error>%s</error>' % _(e)
 
 elif edit:
-	context.REQUEST.RESPONSE.setHeader('Content-Type', 'text/xml;;charset=utf-8');
+	context.REQUEST.RESPONSE.setHeader('Content-Type', 'text/xml;charset=utf-8');
 	id = form.pop('id')
 	try :
 		orderTemplate = pptool.editPrintOrderTemplate(context, id, **form)

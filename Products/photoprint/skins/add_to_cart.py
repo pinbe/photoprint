@@ -7,7 +7,7 @@ def _(message) : return translate(message, context).encode('utf-8')
 form = context.REQUEST.form
 ajax = form.get('ajax')
 if ajax :
-	context.REQUEST.RESPONSE.setHeader('Content-Type', 'text/xml;;charset=utf-8')
+	context.REQUEST.RESPONSE.setHeader('Content-Type', 'text/xml;charset=utf-8')
 
 atool = getToolByName(context, 'portal_actions')
 
